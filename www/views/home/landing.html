@@ -1,0 +1,40 @@
+<ion-view class="login-view auth-view" cache-view="false">
+  <ion-content has-bouncing="false">
+    <div class="row form-row" style="padding-top: 20px">
+      <div class="col">
+        <form name="login_form" class="form-container" style="margin: 15px" novalidate>
+          <center><img src="./img/common/white_logo.png" width="70%"></center>
+          <div class="input-list list list-inset">
+
+              <button class="button button-block button-default button-outline" style="color: #bdc3c7; border: none" ng-click="selectCalendarDate()">SELECT DATE<span style="padding-left: 10px; font-size: 18px" class="icon ion-calendar"></span></button>
+              <div class="row address-row" style="padding: 0">
+                <!-- Date Chooser -->
+                <div class="address-chooser" ng-click="openDatePopover($event)" style="width: 100%; text-overflow:ellipsis; overflow:hidden; white-space:nowrap;">
+                  <button class="button button-block icon-right addresses-popover-button-forlocation" style="text-overflow:ellipsis; overflow:hidden; white-space:nowrap;background: #c0392b; color: #FFF; " ng-class="{'ion-chevron-up': date_popover.isShown(), 'ion-chevron-down' : !date_popover.isShown()}"> {{dateSelected.name || 'Select Date'}}
+                  </button>
+                </div>
+              </div>
+
+
+          </div>
+          <p ng-show="error" class="message error">{{error}}</p>
+          <button type="submit" class="button button-block button-positive" ng-click="fetchSummary()" ng-disabled="login_form.$invalid">
+            Reservations Summary
+          </button>
+          <button type="submit" class="button button-block button-default" ng-click="fetchReservations()" ng-disabled="login_form.$invalid">
+            Reservations Dashboard
+          </button>
+          <button class="button button-block button-default" ng-click="viewFeedbacks()">
+            Customer Feedbacks
+          </button>
+		  
+
+		  
+
+        </form>
+
+      </div>
+    </div>
+  </ion-content>
+          <button class="button button-small button-clear" style="position: fixed; left: 10px; bottom: 10px; color: rgba(255, 255, 255, 0.31);" ng-click="logoutNow()">Logout</button>  
+</ion-view>

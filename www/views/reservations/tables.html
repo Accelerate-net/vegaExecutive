@@ -1,0 +1,37 @@
+<ion-view class="filters-view" cache-view="false">
+  <ion-header-bar class="filters-header">
+    <div class="buttons">
+      <button class="button button-clear cancel-button" ng-click="goBack()"><i class="icon ion-chevron-left"></i></button>
+    </div>
+    <h1 class="title" style="font-size: 16px; font-weight: 300; text-transform: uppercase; text-align: right">Table Status</h1>
+  </ion-header-bar>
+  <ion-content style="margin-top: 5px;">
+
+<center style="padding-bottom: 60px">
+									<div ng-repeat="section in seatPlan track by $index">
+										<p ng-if="section.tables.length > 0" style="margin-top: 10px; text-align: center; font-size: 18px;">{{section.sectionName}} Section as of <b style="color: #3498db;">{{fetchTime}}</b></p>
+										<button class="button" ng-attr-id="{{'seat_'+seat.name}}" ng-repeat="seat in section.tables" ng-class="getMyClass(seat)" " style="line-height: initial; width: 110px; max-width: 32%; height: 60px; margin: 3px; padding: 2px">
+										
+											
+											<tag class="seatName"  ng-class="{yellowText: seat.occupantData.reservationID == guestInfo.id}">{{seat.name}}</tag>
+											
+											<!-- Seater Count or Occuppied Guest Name -->
+											<tag ng-if="seat.status == 0" class="seatCapacity" ng-class="{yellowText: seat.occupantData.reservationID == guestInfo.id}">{{seat.capacity}} Seater</tag>
+											
+											<tag ng-if="seat.status != 0" class="seatCapacity" ng-class="{yellowText: seat.occupantData.reservationID == guestInfo.id}">{{seat.occupant}}</tag>
+											
+											
+											
+											<!-- Free or Occuppied Time -->
+											<tag ng-if="seat.status == 0" class="seatStatus" ng-class="{yellowText: seat.occupantData.reservationID == guestInfo.id}" ng-attr-id="{{'seatTag_'+seat.name}}">Free</tag>																						
+											<tag ng-if="seat.status == 1" class="seatTime" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" ng-class="{yellowText: seat.occupantData.reservationID == guestInfo.id}">{{seat.occupantData.seatedTime}}</tag>
+											
+											<tag ng-if="seat.status == 2" class="seatTime blink_me" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Billing</tag>
+											
+										</button>
+									</div>	
+																		
+</center>																
+
+  </ion-content>
+</ion-view>

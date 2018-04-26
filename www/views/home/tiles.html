@@ -1,0 +1,67 @@
+<ion-view class="login-view auth-view" cache-view="false">
+  <ion-content has-bouncing="false">
+    <div class="row form-row" style="padding-top: 20px">
+      <div class="col">
+        <form name="login_form" class="form-container" style="margin: 15px" novalidate>
+          <center><img src="./img/common/white_logo.png" width="70%"></center>
+
+          <div class="row">
+            <div class="tileBox">
+              <tag ng-click="openPage('OVERALL')">
+                <span style="display: block; font-size: 42px"><i class="icon ion-stats-bars"></i></span>
+                <span style="line-height: 16px; display: block">Summary</span>
+              </tag>
+            </div>
+
+            <div class="tileBox">
+              <tag ng-click="openPage('CUSTOMERS')">
+                <span style="display: block; font-size: 42px"><i class="icon ion-happy-outline"></i></span>
+                <span style="line-height: 16px; display: block">Customers</span>
+              </tag>
+            </div>
+
+          </div>
+
+          <div class="row">
+            <div class="tileBox">
+              <tag ng-click="openPage('FEEDBACKS')">
+                <span style="display: block; font-size: 42px"><i class="icon ion-android-star-half"></i></span>
+                <span style="line-height: 16px; display: block">Feedbacks</span>
+              </tag>
+            </div>
+
+            <div class="tileBox">
+              <tag ng-click="openPage('SALES')">
+                <span style="display: block; font-size: 42px"><i class="icon ion-arrow-graph-up-right"></i></span>
+                <span style="line-height: 16px; display: block">Sales</span>
+              </tag>
+            </div>
+          </div>
+
+
+          <div class="row">
+            <div class="tileBox">
+              <tag ng-click="openPage('STOCKS')">
+                <span style="display: block; font-size: 42px"><i class="icon ion-social-dropbox"></i></span>
+                <span style="line-height: 16px; display: block">Stocks</span>
+              </tag>
+            </div>
+
+            <div class="tileBox">
+              <tag ng-click="openPage('STAFF')">
+                <span style="display: block; font-size: 42px"><i class="icon ion-person-stalker"></i></span>
+                <span style="line-height: 16px; display: block">Staff Info</span>
+              </tag>
+            </div>
+          </div>
+
+
+
+
+        </form>
+
+      </div>
+    </div>
+  </ion-content>
+          <button class="button button-small button-clear" style="position: fixed; left: 10px; bottom: 10px; color: rgba(255, 255, 255, 0.31);" ng-click="logoutNow()">Logout</button>  
+</ion-view>
