@@ -1,0 +1,129 @@
+<ion-view class="feed-view" cache-view="false">
+    <div class="bar bar-header" style="background: #2c3e50" style="margin-bottom: 20px">
+      <button class="button icon ion-android-home" ng-click="goHome()"></button>
+      <h1 class="h1 title" style="color: #FFF; font-size: 18px">Customer Feedbacks</h1>
+      <button class="button icon ion-android-options" ng-click="filterFeeds()"></button>
+    </div>
+
+  <ion-content class="categories-feeds-content" style="padding-top: 60px" overflow-scroll="true">
+
+    <ion-header-bar class="search-header" ng-if="showSearch">
+      <div class="row item-input-inset search-row">
+        <div class="col col-90">
+          <label class="item-input-wrapper search-label">
+            <i class="icon ion-ios-search placeholder-icon"></i>
+            <input type="search" placeholder="Search" name="search_query" ng-model="search.query">
+          </label>
+        </div>
+        <div class="col">
+          <button class="button button-clear cancel-button ion-close" ng-click="resetSearch()">
+          </button>
+        </div>
+      </div>
+    </ion-header-bar>
+
+
+
+    <!-- FEED BACK TIMELINE -->
+    <div style="padding: 15px">
+      <div class="row">
+        <div class="col col-50" style="background: #27ae60; padding-top: 15px; margin-right: 5px;">
+          <h1 style="text-align: center; color: #FFF">{{feedFigures.overall}}</h1>
+          <p style="text-align: center; color: #FFF">OVERALL</p>
+        </div>
+        <div class="col col-50" style="background: #2980b9; padding-top: 15px;">
+          <h1 style="text-align: center; color: #FFF">{{feedFigures.food}}</h1>
+          <p style="text-align: center; color: #FFF">FOOD</p>
+        </div>
+      </div>
+
+      <div class="row" style="margin-top: 0px">
+        <div class="col col-50" style="background: #2980b9; padding-top: 15px; margin-right: 5px;">
+          <h1 style="text-align: center; color: #FFF">{{feedFigures.quality}}</h1>
+          <p style="text-align: center; color: #FFF">VALUE FOR MONEY</p>
+        </div>
+        <div class="col col-50" style="background: #2980b9; padding-top: 15px;">
+          <h1 style="text-align: center; color: #FFF">{{feedFigures.service}}</h1>
+          <p style="text-align: center; color: #FFF">SERVICE</p>
+        </div>
+      </div>
+
+      <div class="row" style="margin-top: 0px; margin-bottom: 20px">
+        <div class="col col-50" style="background: #2980b9; padding-top: 15px; margin-right: 5px;">
+          <h1 style="text-align: center; color: #FFF">{{feedFigures.delivery}}</h1>
+          <p style="text-align: center; color: #FFF">SERVICE TIME</p>
+        </div>
+        <div class="col col-50" style="background: #2980b9; padding-top: 15px;">
+          <h1 style="text-align: center; color: #FFF">{{feedFigures.app}}</h1>
+          <p style="text-align: center; color: #FFF">AMBIENCE</p>
+        </div>
+      </div>
+                                                <ul class="mini-timeline">
+                                                 <li ng-repeat="feed in feedbacks" ng-class="{'mini-timeline-positive':feed.feedback.rating == 5, 'mini-timeline-neutral':feed.feedback.rating < 5 && feed.feedback.rating > 1, 'mini-timeline-negative':feed.feedback.rating == 1}">
+                                                    <div class="timeline-icon"></div>
+                                                    <div class="timeline-body">
+                                                       <div class="timeline-content">
+                                                          <tag ng-if="feed.feedback.rating == 5" style="color: #2ecc71">
+                                                            <tag style="font-size: 120%" ng-if="feed.feedback.comment != ''">{{feed.feedback.comment}}<br></tag>
+                                                            <i style="font-size: 24px" class="icon ion-android-star" aria-hidden="true"></i><i style="font-size: 24px" class="icon ion-android-star" aria-hidden="true"></i><i style="font-size: 24px" class="icon ion-android-star" aria-hidden="true"></i><i style="font-size: 24px" class="icon ion-android-star" aria-hidden="true"></i><i style="font-size: 24px" class="icon ion-android-star" aria-hidden="true"></i>
+
+                                                          </tag>
+                                                          <tag ng-if="feed.feedback.rating == 4" style="color: #cddc39">
+                                                            <tag style="font-size: 120%" ng-if="feed.feedback.comment != ''">{{feed.feedback.comment}}<br></tag>
+                                                            <i style="font-size: 24px" class="icon ion-android-star" aria-hidden="true"></i><i style="font-size: 24px" class="icon ion-android-star" aria-hidden="true"></i><i style="font-size: 24px" class="icon ion-android-star" aria-hidden="true"></i><i style="font-size: 24px" class="icon ion-android-star" aria-hidden="true"></i><i style="font-size: 24px" class="icon ion-android-star-outline" aria-hidden="true"></i>
+                                                          </tag>
+                                                          <tag ng-if="feed.feedback.rating == 3" style="color: #cddc39">
+                                                            <tag style="font-size: 120%" ng-if="feed.feedback.comment != ''">{{feed.feedback.comment}}<br></tag>
+                                                            <i style="font-size: 24px" class="icon ion-android-star" aria-hidden="true"></i><i style="font-size: 24px" class="icon ion-android-star" aria-hidden="true"></i><i style="font-size: 24px" class="icon ion-android-star" aria-hidden="true"></i><i style="font-size: 24px" class="icon ion-android-star-outline" aria-hidden="true"></i><i style="font-size: 24px" class="icon ion-android-star-outline" aria-hidden="true"></i>
+                                                          </tag>
+                                                          <tag ng-if="feed.feedback.rating == 2" style="color: #cddc39">
+                                                            <tag style="font-size: 120%" ng-if="feed.feedback.comment != ''">{{feed.feedback.comment}}<br></tag>
+                                                            <i style="font-size: 24px" class="icon ion-android-star" aria-hidden="true"></i><i style="font-size: 24px" class="icon ion-android-star" aria-hidden="true"></i><i style="font-size: 24px" class="icon ion-android-star-outline" aria-hidden="true"></i><i style="font-size: 24px" class="icon ion-android-star-outline" aria-hidden="true"></i><i style="font-size: 24px" class="icon ion-android-star-outline" aria-hidden="true"></i>
+                                                          </tag>
+                                                          <tag ng-if="feed.feedback.rating == 1" style="color: #e74c3c">
+                                                            <tag style="font-size: 120%" ng-if="feed.feedback.comment != ''">{{feed.feedback.comment}}<br></tag>
+                                                            <i style="font-size: 24px" class="icon ion-android-star" aria-hidden="true"></i><i style="font-size: 24px" class="icon ion-android-star-outline" aria-hidden="true"></i><i style="font-size: 24px" class="icon ion-android-star-outline" aria-hidden="true"></i><i style="font-size: 24px" class="icon ion-android-star-outline" aria-hidden="true"></i><i style="font-size: 24px" class="icon ion-android-star-outline" aria-hidden="true"></i>
+                                                          </tag>
+                                                          <br>
+                                                          <positive ng-if="feed.feedback.rating == 5">
+                                                              <span ng-if="feed.feedback.food" style="border: 1px solid #2ecc71; color: #2ecc71; padding: 2px 5px; margin-right: 3px"><i class="icon ion-happy-outline"></i> Food</span>
+                                                              <span ng-if="feed.feedback.quality" style="border: 1px solid #2ecc71; color: #2ecc71; padding: 2px 4px; margin-right: 3px"><i class="icon ion-happy-outline"></i> Value</span>
+                                                              <span ng-if="feed.feedback.service" style="border: 1px solid #2ecc71; color: #2ecc71; padding: 2px 4px; margin-right: 3px"><i class="icon ion-happy-outline"></i> Service</span>
+                                                              <span ng-if="feed.feedback.delivery" style="border: 1px solid #2ecc71; color: #2ecc71; padding: 2px 4px; margin-right: 3px"><i class="icon ion-happy-outline"></i> Time</span>
+                                                              <span ng-if="feed.feedback.ambience" style="border: 1px solid #2ecc71; color: #2ecc71; padding: 2px 4px; margin-right: 3px"><i class="icon ion-happy-outline"></i> Ambience</span>
+                                                          </positive>
+                                                          <neutral ng-if="feed.feedback.rating != 1 && feed.feedback.rating != 5">
+                                                              <span ng-if="feed.feedback.food" style="border: 1px solid #cddc39; color: #cddc39; padding: 2px 5px; margin-right: 3px"><i class="icon ion-sad-outline"></i> Food</span>
+                                                              <span ng-if="feed.feedback.quality" style="border: 1px solid #cddc39; color: #cddc39; padding: 2px 4px; margin-right: 3px"><i class="icon ion-sad-outline"></i> Value</span>
+                                                              <span ng-if="feed.feedback.service" style="border: 1px solid #cddc39; color: #cddc39; padding: 2px 4px; margin-right: 3px"><i class="icon ion-sad-outline"></i> Service</span>
+                                                              <span ng-if="feed.feedback.delivery" style="border: 1px solid #cddc39; color: #cddc39; padding: 2px 4px; margin-right: 3px"><i class="icon ion-sad-outline"></i> Time</span>
+                                                              <span ng-if="feed.feedback.ambience" style="border: 1px solid #cddc39; color: #cddc39; padding: 2px 4px; margin-right: 3px"><i class="icon ion-sad-outline"></i> Ambience</span>
+                                                          </neutral>
+                                                          <negative ng-if="feed.feedback.rating == 1">
+                                                              <span ng-if="feed.feedback.food" style="border: 1px solid #e74c3c; color: #e74c3c; padding: 2px 5px; margin-right: 3px"><i class="icon ion-sad-outline"></i> Food</span>
+                                                              <span ng-if="feed.feedback.quality" style="border: 1px solid #e74c3c; color: #e74c3c; padding: 2px 4px; margin-right: 3px"><i class="icon ion-sad-outline"></i> Value</span>
+                                                              <span ng-if="feed.feedback.service" style="border: 1px solid #e74c3c; color: #e74c3c; padding: 2px 4px; margin-right: 3px"><i class="icon ion-sad-outline"></i> Service</span>
+                                                              <span ng-if="feed.feedback.delivery" style="border: 1px solid #e74c3c; color: #e74c3c; padding: 2px 4px; margin-right: 3px"><i class="icon ion-sad-outline"></i> Time</span>
+                                                              <span ng-if="feed.feedback.ambience" style="border: 1px solid #e74c3c; color: #e74c3c; padding: 2px 4px; margin-right: 3px"><i class="icon ion-sad-outline"></i> Ambience</span>
+                                                          </negative>
+                                                          <br><br>
+                                                          <tag class="name" style="color: #7f8c8d; font-weight: bold;">{{feed.userName}}, {{feed.userID}}</tag><br>
+                                                          <span class="time">{{feed.time}}</span>
+                                                       </div>
+                                                    </div>
+                                                 </li>
+
+                                              </ul>
+          </div>
+
+<i ng-if="!left"><center><img src=img/common/end.png></center></i>
+<ion-infinite-scroll
+  immediate-check="false"
+  ng-if="left"
+  on-infinite="loadMore()"
+  distance="1%">
+</ion-infinite-scroll>
+
+
+  </ion-content>
+</ion-view>
