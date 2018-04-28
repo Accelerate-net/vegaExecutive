@@ -122,8 +122,8 @@ angular.module('manager.controllers', ['ionic', 'ionic-timepicker', 'ionic-datep
                     $state.go('main.app.staff');
                     break;
                 }
-                case "STOCKS":{
-                    $state.go('main.app.stock');
+                case "ACCOUNTS":{
+                    $state.go('main.app.accounts');
                     break;
                 }
             }
@@ -159,7 +159,9 @@ angular.module('manager.controllers', ['ionic', 'ionic-timepicker', 'ionic-datep
                 return date;
     }
 
-
+    $scope.getFancyCurrency = function(x){
+        return x.toLocaleString('en-US', {maximumSignificantDigits : 9});
+    }
 
     //Filter Options
     $scope.resetFilter = function(){
@@ -843,12 +845,13 @@ angular.module('manager.controllers', ['ionic', 'ionic-timepicker', 'ionic-datep
 
 
         $scope.getFancyAmount = function(amount){
+            amount = Math.abs(amount);
             if(amount < 10000){
                 return amount;
             }
             else if(amount >= 10000 && amount < 100000){
                 amount = amount/1000;
-                amount = Math.round(amount * 100) / 100;
+                amount = Math.round(amount * 10) / 10;
                 return amount + "" + " K";
             }
             else if(amount >= 100000 && amount < 10000000){
@@ -1113,12 +1116,13 @@ $scope.getRatingColor = function(rating){
 
 
         $scope.getFancyAmount = function(amount){
+            amount = Math.abs(amount);
             if(amount < 10000){
                 return amount;
             }
             else if(amount >= 10000 && amount < 100000){
                 amount = amount/1000;
-                amount = Math.round(amount * 100) / 100;
+                amount = Math.round(amount * 10) / 10;
                 return amount + "" + " K";
             }
             else if(amount >= 100000 && amount < 10000000){
@@ -1136,6 +1140,231 @@ $scope.getRatingColor = function(rating){
 
 
     })
+
+
+
+
+
+
+
+ .controller('accountsCtrl', function(changeSlotService, $ionicSideMenuDelegate, $scope, $ionicPopup, ionicTimePicker, ionicDatePicker, $state, $http, $ionicPopover, $ionicLoading, $timeout, mappingService, currentBooking) {
+
+
+        //Already Logged in case
+      /*  if (!_.isUndefined(window.localStorage.admin) && window.localStorage.admin != '') {
+            $state.go('main.app.landing');
+        }
+    */
+
+
+        $scope.overallData = {
+    "status": true,
+    "error": "",
+    "current": [{
+        "index": 1,
+        "date": "19-04-2018",
+        "sales": "28670"
+    }, {
+        "index": 2,
+        "date": "20-04-2018",
+        "sales": "28907"
+    }, {
+        "index": 3,
+        "date": "21-04-2018",
+        "sales": "33034"
+    }, {
+        "index": 4,
+        "date": "22-04-2018",
+        "sales": "35029"
+    }, {
+        "index": 5,
+        "date": "23-04-2018",
+        "sales": "27841"
+    }, {
+        "index": 6,
+        "date": "24-04-2018",
+        "sales": "26533"
+    }, {
+        "index": 7,
+        "date": "25-04-2018",
+        "sales": "32817"
+    }],
+    "previous": [{
+        "index": 1,
+        "date": "12-04-2018",
+        "sales": "29629"
+    }, {
+        "index": 2,
+        "date": "13-04-2018",
+        "sales": "28087"
+    }, {
+        "index": 3,
+        "date": "14-04-2018",
+        "sales": "31498"
+    }, {
+        "index": 4,
+        "date": "15-04-2018",
+        "sales": "39487"
+    }, {
+        "index": 5,
+        "date": "16-04-2018",
+        "sales": "25234"
+    }, {
+        "index": 6,
+        "date": "17-04-2018",
+        "sales": "32268"
+    }, {
+        "index": 7,
+        "date": "18-04-2018",
+        "sales": "28670"
+    }],
+    "grandSalesSum": 452944,
+    "grandPurchaseSum": 212831,
+    "grandPaymentsSum": 214873,
+    "grandRevenueSum": 12311,
+    "grandSalarySum": 72840,
+    "currentCount": 940,
+    "rating": 3.8,
+    "averageTimeSpent": 62,
+    "averageAmountSpent": 340,
+    "previousCount": 951,
+    "totalUsers": "5386",
+    "ordersMobile": "5472",
+    "ordersWeb": "28479",
+    "ordersTotal": 33951,
+    "outletsTotal": 2127,
+    "outletInfo": [{
+        "name": "IIT Madras",
+        "amount": "790"
+    }, {
+        "name": "Adyar",
+        "amount": "454"
+    }, {
+        "name": "Velachery",
+        "amount": "283"
+    }, {
+        "name": "Royapettah",
+        "amount": "423"
+    }, {
+        "name": "Nungambakkam",
+        "amount": "121"
+    }, {
+        "name": "Anna Nagar",
+        "amount": "56"
+    }],
+    "incomeList": [{
+        "name": "Sales (Dine In)",
+        "amount": 1231444.13
+    }, {
+        "name": "Sales (Online)",
+        "amount": 24252
+    }, {
+        "name": "Takeaways",
+        "amount": 24253
+    }, {
+        "name": "Misc",
+        "amount": 1324
+    }],
+    "incomeTotal" : 132022,
+    "expenseList": [{
+        "name": "Sales (Dine In)",
+        "amount": 1231444.13
+    }, {
+        "name": "Sales (Online)",
+        "amount": 24252
+    }, {
+        "name": "Takeaways",
+        "amount": 24253
+    }, {
+        "name": "Misc",
+        "amount": 1324
+    }],
+    "expenseTotal" : 132022
+}
+
+$scope.getRatingColor = function(rating){
+
+        if(rating >= 4){
+            return {'color': '#305D02'}
+        }
+        else if(rating >= 3.5){
+            return {'color': '#cddc39'}
+        }
+        else if(rating >= 3){
+            return {'color': '#FFBA00'}
+        }
+        else if(rating >= 2){
+            return {'color': '#FF7800'}
+        }
+        else if(rating < 2){
+            return {'color': '#CD1C26'}             
+        }
+        else{
+            return {'color': '#34495e'}
+        }
+}
+
+$scope.getRevenueStyle = function(amount){
+    if(amount < 0){
+        return {'color': '#e74c3c'}
+    }
+    else if(amount > 0){
+        return {'color': '#27ae60'}
+    }
+}
+
+$scope.getFancyCurrency = function(x){
+    return x.toLocaleString('en-US', {maximumSignificantDigits : 9});
+}
+
+
+
+
+
+        $scope.showOptionsMenu = function() {
+            $ionicSideMenuDelegate.toggleLeft();
+            $scope.navToggled = !$scope.navToggled;
+        };
+
+        $scope.getRevenueClass = function(current, previous){
+            if(current >= previous){
+                return 'ion-arrow-graph-up-right specialGreen';
+            }
+            else{
+                return 'ion-arrow-graph-down-right specialRed';
+            }
+            
+        }
+
+
+        $scope.getFancyAmount = function(amount){
+
+            amount = Math.abs(amount);
+
+            if(amount < 10000){
+                return amount;
+            }
+            else if(amount >= 10000 && amount < 100000){
+                amount = amount/1000;
+                amount = Math.round(amount * 10) / 10;
+                return amount + "" + " K";
+            }
+            else if(amount >= 100000 && amount < 10000000){
+                amount = amount/100000;
+                amount = Math.round(amount * 100) / 100;
+                return amount + "" + " L";
+            }
+            else if(amount >= 10000000){
+                amount = amount/10000000;
+                amount = Math.round(amount * 100) / 100;
+                return amount + "" + " Cr";
+            }
+        }
+
+
+
+    })
+
 
 
 
@@ -1270,12 +1499,14 @@ $scope.getRatingColor = function(rating){
 
 
         $scope.getFancyAmount = function(amount){
+            amount = Math.abs(amount);
+
             if(amount < 10000){
                 return amount;
             }
             else if(amount >= 10000 && amount < 100000){
                 amount = amount/1000;
-                amount = Math.round(amount * 100) / 100;
+                amount = Math.round(amount * 10) / 10;
                 return amount + "" + " K";
             }
             else if(amount >= 100000 && amount < 10000000){
@@ -1651,12 +1882,13 @@ $scope.defaultDisplayTitle = 'Registered Employees';
 
 
         $scope.getFancyAmount = function(amount){
+            amount = Math.abs(amount);
             if(amount < 10000){
                 return amount;
             }
             else if(amount >= 10000 && amount < 100000){
                 amount = amount/1000;
-                amount = Math.round(amount * 100) / 100;
+                amount = Math.round(amount * 10) / 10;
                 return amount + "" + " K";
             }
             else if(amount >= 100000 && amount < 10000000){

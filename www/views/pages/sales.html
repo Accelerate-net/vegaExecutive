@@ -79,7 +79,7 @@
                 <table style="width: 100%">
                   <tr ng-repeat="order in overallData.orderTypes" style="height: 30px">
                     <td style="font-size: 16px; color: #34495e">{{order.name}}<span style="display: block; font-size: 60%; color: gray; text-transform: uppercase;">{{order.count}} Orders</span></td>
-                    <td style="text-align: right; font-size: 16px; font-weight: bold; color: #2980b9"><i class="fa fa-inr lightRupees"></i>{{order.amount}}</td>
+                    <td style="text-align: right; font-size: 16px; font-weight: bold; color: #2980b9"><i class="fa fa-inr lightRupees"></i>{{getFancyCurrency(order.amount)}}</td>
                   </tr>
                 </table>
             </div>
@@ -112,7 +112,7 @@
          <div class="week" ng-repeat="week in weeks">
             <span class="day" style="height: auto; line-height: 20px !important;" ng-repeat="day in week.days">
               <tag ng-style="getMyStyle(day)">{{day.number}}</tag>
-              <tag ng-style="getMyAmountStyle(day)">{{day.isCurrentMonth ? ((day.amount && day.amount != '') ? day.amount : '-') : '-'}}</tag>
+              <tag ng-style="getMyAmountStyle(day)">{{day.isCurrentMonth ? ((day.amount && day.amount != '') ? getFancyCurrency(day.amount) : '-') : '-'}}</tag>
             </span>
          </div>
       </calendar>
