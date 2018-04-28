@@ -1,0 +1,329 @@
+<ion-side-menus class="feed-view">
+
+  <ion-pane ion-side-menu-content>
+      <ion-header-bar class="feed-header">
+         <div class="buttons" style="position: absolute; top: 5px; left: 5px; bottom: 5px;">
+            <button class="button button-clear cart-button" style="margin: 0; color: #FFF; width: 35px;" ng-click="showOptionsMenu()">
+            <i class="icon ion-navicon"></i> 
+            </button>
+
+            <button class="button button-clear" style="text-align: left; margin-left: 10px; font-weight: 400; color: #FFF; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; font-size: 18px;">
+              Staff Records
+            </button>  
+
+         </div>
+      </ion-header-bar>
+
+    <ion-nav-view animation="slide-left-right">
+         <ion-content class="categories-feeds-content" overflow-scroll="true" has-bouncing="false" delegate-handle="feeds-content" style="background: #f5f5f5;">
+
+          <div class="row" style="padding: 10px 10px 0 10px">
+            <div class="input-group" style="padding: 10px 0; border: none;">
+              <input type="text" ng-model="searchID" class="form-control input-lg" style="text-align: center; width: 100%; height: 42px;" placeholder="Search Employees">
+              <span class="input-group-btn">
+                  <button class="button button-default btn-lg" type="button" ng-click="search(searchID)" style="min-height: 10px; height: 42px !important; color: gray; border-radius: 0"><i class="icon ion-android-search"></i></button>
+              </span>
+            </div>
+          </div>
+
+
+<!--           <div class="row" style="padding: 10px 10px 0 10px">
+            <div class="infoTile" style="width: 100%;">
+                <div class="infoTileIcon"><i class="icon ion-social-usd"></i></div>
+                <div class="infoTileHead"><span>Salary Expenses</span></div>
+                <div class="tinfoTileBody"><i class="fa fa-inr"></i>{{getFancyAmount(overallData.salarySum)}}</div>
+                <div class="infoTileFoot">
+
+                </div>
+            </div>
+          </div>
+
+
+          <div class="row" style="padding: 10px 10px 0 10px">
+            <div class="infoTile" style="width: 100%; padding: 16px 5px 5px 5px">
+                <div class="infoTileHead" style="text-align: center; margin-bottom: 10px; color: #2ecc71"><span>Today's Attendance</span></div>
+                <canvas id="doughnut" class="chart chart-doughnut" chart-options="optionsAttendance"
+                chart-data="dataAttendance" chart-labels="labelsAttendance" chart-colors="colorsAttendance">
+                </canvas> 
+                <span class="button button-small" style="width: 100%; margin-top: 10px">View Attendance</span>
+            </div>
+          </div> -->
+
+          <div class="row" style="padding: 10px 10px 0 10px">
+            <div class="infoTile" style="width: 100%; padding: 16px 0 0 0">
+                <div class="infoTileHead" style="text-align: center; margin-bottom: 10px"><span>{{defaultDisplayTitle}}</span></div>
+
+                <table class="StaffListingTable" style="border-collapse: collapse; width: 100%;">
+                  <tr ng-repeat="staff in staffData" ng-click="viewStaffProfile(staff)">
+                    <td><b style="color: #b3393b">{{staff.fName}} {{staff.lName}}</b><span class="StaffListingRole">{{staff.designation}} at <b>{{staff.currentBranch}}</b></span></td>
+                    <td style="text-align: right; color: #384448">{{staff.contact}}</td>
+                  </tr>
+                </table>
+                <p ng-if="errorMessage && errorMessage != ''" style="color: gray; text-align: center">{{errorMessage}}</p>
+            </div>
+          </div>
+
+<!--           <div class="row" style="padding: 10px 10px 0 10px">
+            <div class="infoTile" style="width: 100%; padding: 16px 5px 5px 5px">
+                <div class="infoTileHead" style="text-align: center; margin-bottom: 10px"><span>Branch-wise Staff Strength</span></div>
+                <canvas id="line" class="chart chart-bar" chart-data="data"
+                chart-labels="labels" chart-options="options"
+                chart-dataset-override="datasetOverride">
+                </canvas>
+            </div>
+          </div> -->
+
+
+
+
+
+
+
+
+
+
+
+
+      <div ng-if="isViewingProfile">
+        <div class="infoTile" style="width: 100%; padding: 16px 5px 5px 5px">
+         <div class="row user-info-row">
+          
+            <div class="col col-25">
+               <pre-img ratio="_1_1">
+                 <img class="profile-image" ng-if="viewingStaffData.photoURL && viewingStaffData.photoURL != ''" ng-src="{{viewingStaffData.photoURL}}" spinner-on-load/>
+
+                 <img class="profile-image" ng-if="!viewingStaffData.photoURL || viewingStaffData.photoURL == ''" src="img/common/default_user.png" spinner-on-load/>
+               </pre-img>
+            </div>
+            <div class="col col-75 col-center user-info-col">
+              <h3 class="user-welcome" style="font-weight: 400; font-size: 24px; color: #a71d2b">{{viewingStaffData.fName}} {{viewingStaffData.lName}}</h3>
+              <h3 class="user-welcome" style="font-weight: 300; font-size: 24px; color: #a71d2b">{{temp_name}}</h3>
+              <p class="user-email" style="font-weight: 300; color: #7d7d7d">{{viewingStaffData.designation}} at {{viewingStaffData.currentBranch}}</p>
+            </div>
+          </div>
+         </div>
+
+
+
+          <div class="row" style="padding: 10px 10px 0 10px">
+            <div class="infoTile" style="width: 100%; padding: 16px 5px 5px 5px">
+                <div class="infoTileHead" style="margin: 0 0 10px 10px"><span style="color: #3498db">Official Information</span></div>
+
+                                                   <table class="table" style="width: 100%">
+                                                      <col width="40%"> <col width="60%">
+                                                      <tbody>
+                                                         <tr>
+                                                            <td style="color: #4a4949; font-weight: 300;">Employee ID</td>
+                                                            <td style="color: #34495e">{{viewingStaffData.employeeID}}</td>
+                                                         </tr>
+                                                         <tr>
+                                                            <td style="color: #4a4949; font-weight: 300;">Name</td>
+                                                            <td style="color: #34495e">{{viewingStaffData.fName}}</td>
+                                                         </tr>
+                                                         <tr>
+                                                            <td style="color: #4a4949; font-weight: 300;">Designation</td>
+                                                            <td style="color: #34495e">{{viewingStaffData.designation}}</td>
+                                                         </tr>
+                                                         <tr>
+                                                            <td style="color: #4a4949; font-weight: 300;">Date of Join</td>
+                                                            <td style="color: #34495e">{{viewingStaffData.joinDate}}</td>
+                                                         </tr>
+                                                         <tr>
+                                                            <td style="color: #4a4949; font-weight: 300;">Joined Branch</td>
+                                                            <td style="color: #34495e">{{viewingStaffData.joinBranch}}</td>
+                                                         </tr>
+                                                         <tr>
+                                                            <td style="color: #4a4949; font-weight: 300;">Current Branch</td>
+                                                            <td style="color: #34495e">{{viewingStaffData.currentBranch}}</td>
+                                                         </tr>
+                                                      </tbody>
+                                                   </table>                
+                
+            </div>
+          </div>
+
+          <div class="row" style="padding: 10px 10px 0 10px">
+            <div class="infoTile" style="width: 100%; padding: 16px 5px 5px 5px">
+                <div class="infoTileHead" style="margin: 0 0 10px 10px"><span style="color: #3498db">Personal Information</span></div>
+
+                                                   <table class="table" style="width: 100%">
+                                                      <col width="40%"> <col width="60%">
+                                                      <tbody>
+                                                         <tr>
+                                                            <td style="color: #4a4949; font-weight: 300;">Full Name</td>
+                                                            <td style="color: #34495e">{{viewingStaffData.fName + " " + viewingStaffData.lName}} </td>
+                                                         </tr>
+                                                         <tr>
+                                                            <td style="color: #4a4949; font-weight: 300;">Birth Date</td>
+                                                            <td style="color: #34495e">{{viewingStaffData.birthDate}}</td>
+                                                         </tr>
+                                                         <tr>
+                                                            <td style="color: #4a4949; font-weight: 300;">Height (in cm)</td>
+                                                            <td style="color: #34495e">{{viewingStaffData.height}}</td>
+                                                         </tr>
+                                                         <tr>
+                                                            <td style="color: #4a4949; font-weight: 300;">Weight (in kg)</td>
+                                                            <td style="color: #34495e">{{viewingStaffData.weight}}</td>
+                                                         </tr>
+                                                         <tr>
+                                                            <td style="color: #4a4949; font-weight: 300;">Gender</td>
+                                                            <td style="color: #34495e">{{viewingStaffData.gender}}</td>
+                                                         </tr>
+                                                         <tr>
+                                                            <td style="color: #4a4949; font-weight: 300;">Blood Group</td>
+                                                            <td style="color: #34495e">{{viewingStaffData.bloodGroup}}</td>
+                                                         </tr>
+                                                         <tr>
+                                                            <td style="color: #4a4949; font-weight: 300;">Contact Number</td>
+                                                            <td style="color: #34495e">{{viewingStaffData.contact}}</td>
+                                                         </tr>
+                                                         <tr>
+                                                            <td style="color: #4a4949; font-weight: 300;">Presesent Address</td>
+                                                            <td style="color: #34495e">
+                                                               {{viewingStaffData.currentAddress.house != undefined? viewingStaffData.currentAddress.house+', ' : ''}}
+                                                               {{viewingStaffData.currentAddress.postOffice != undefined? viewingStaffData.currentAddress.postOffice+', ' : ''}}
+                                                               {{viewingStaffData.currentAddress.locality != undefined? viewingStaffData.currentAddress.locality+', ' : ''}}
+                                                               {{viewingStaffData.currentAddress.city != undefined? viewingStaffData.currentAddress.city+', ' : ''}}
+                                                               {{viewingStaffData.currentAddress.district != undefined? viewingStaffData.currentAddress.district+', ' : ''}}
+                                                               {{viewingStaffData.currentAddress.state != undefined? viewingStaffData.currentAddress.state+', ' : ''}}
+                                                               {{viewingStaffData.currentAddress.postCode != undefined? viewingStaffData.currentAddress.postCode : ''}}
+
+                                                            </td>
+                                                         </tr>
+                                                         <tr>
+                                                            <td style="color: #4a4949; font-weight: 300;">Permanent Address</td>
+                                                            <td style="color: #34495e">
+                                                               {{viewingStaffData.permanentAddress.house != undefined? viewingStaffData.permanentAddress.house+', ' : ''}}
+                                                               {{viewingStaffData.permanentAddress.postOffice != undefined? viewingStaffData.permanentAddress.postOffice+', ' : ''}}
+                                                               {{viewingStaffData.permanentAddress.locality != undefined? viewingStaffData.permanentAddress.locality+', ' : ''}}
+                                                               {{viewingStaffData.permanentAddress.city != undefined? viewingStaffData.permanentAddress.city+', ' : ''}}
+                                                               {{viewingStaffData.permanentAddress.district != undefined? viewingStaffData.permanentAddress.district+', ' : ''}}
+                                                               {{viewingStaffData.permanentAddress.state != undefined? viewingStaffData.permanentAddress.state+', ' : ''}}
+                                                               {{viewingStaffData.permanentAddress.postCode != undefined? viewingStaffData.permanentAddress.postCode : ''}}
+
+                                                            </td>
+                                                         </tr>
+                                                         <tr>
+                                                         <tr>
+                                                            <td style="color: #4a4949; font-weight: 300;">Religion</td>
+                                                            <td style="color: #34495e">{{viewingStaffData.religion}}</td>
+                                                         </tr>
+                                                         <tr>
+                                                            <td style="color: #4a4949; font-weight: 300;">Native Place </td>
+                                                            <td style="color: #34495e">{{viewingStaffData.nativePlace}}</td>
+                                                         </tr>
+                                                      </tbody>
+                                                   </table>             
+                
+            </div>
+          </div>
+
+          <div class="row" style="padding: 10px 10px 0 10px">
+            <div class="infoTile" style="width: 100%; padding: 16px 5px 5px 5px">
+                <div class="infoTileHead" style="margin: 0 0 10px 10px"><span style="color: #e74c3c">Emergency Contact</span></div>
+
+                                                   <table class="table" style="width: 100%">
+                                                      <col width="40%"> <col width="60%">
+                                                      <tbody>
+                                                         <tr>
+                                                            <td style="color: #4a4949; font-weight: 300;">Contact Name</td>
+                                                            <td style="color: #34495e">{{viewingStaffData.emergencyName}}</td>
+                                                         </tr>
+                                                         <tr>
+                                                            <td style="color: #4a4949; font-weight: 300;">Contact Number</td>
+                                                            <td style="color: #34495e">{{viewingStaffData.emergencyNumber}}</td>
+                                                         </tr>
+                                                      </tbody>
+                                                   </table>                
+                
+            </div>
+          </div>
+
+
+          <div class="row" style="padding: 10px 10px 0 10px">
+            <div class="button buttonMyBlue" style="width: 100%">Attendance Summary</div>
+          </div>
+
+          <div class="row" style="padding: 10px 10px 0 10px">
+            <div class="button buttonMyBlue" style="width: 100%">Salary Slips</div>
+          </div>
+
+      </div> <!-- Viewing Profile -->
+
+
+<!-- Attendance - Calendar View -->
+
+<div class="row" style="padding: 10px 10px 0 10px">
+   <div class="infoTile" style="width: 100%; padding: 0">
+      <calendar selected="day" style="width: 100%; margin: 0">
+         <div class="header">
+            <i class="moveLeft icon ion-arrow-left-b" ng-click="previous()"></i>
+            <span>{{displayCalendarMonth}}</span>
+            <i class="moveRight icon ion-arrow-right-b" ng-click="next()"></i>
+         </div>
+         <div class="week names">
+            <span class="day">Sun</span>
+            <span class="day">Mon</span>
+            <span class="day">Tue</span>
+            <span class="day">Wed</span>
+            <span class="day">Thu</span>
+            <span class="day">Fri</span>
+            <span class="day">Sat</span>
+         </div>
+         <!-- ngRepeat: week in weeks -->
+         <div class="week" ng-repeat="week in weeks">
+            <span class="day" ng-class="getDayClass(day)" ng-repeat="day in week.days">
+              {{day.number}}
+            </span>
+         </div>
+      </calendar>
+   </div>
+</div>
+
+
+
+          <div style="padding-bottom: 20px"></div>
+
+
+         </ion-content>
+    </ion-nav-view>
+  </ion-pane>
+
+  <ion-side-menu side="left" class="main-menu">
+    <header class="bar bar-header bar-stable" style="height: 80px; padding: 0; background: #661a18; display: flex; flex-direction: column; justify-content: center; align-items :center ;">
+      
+        <img style="width: 70%" ng-src="./img/common/white_logo.png"/>
+  
+    </header>
+    <ion-content class="has-header" style="top: 80px">
+      <ion-list>
+        <ion-item class="item-icon-left" style="background: none" nav-clear menu-close ui-sref="main.app.overall">
+               <i class="icon" style="width: 60px; color: #FFF; text-align: center"><i class="fa fa-bar-chart" style="font-size: 70%; padding-left: 6px"></i></i>
+               <h2 class="menu-text">Overall Summary</h2>
+        </ion-item>
+        <ion-item class="item-icon-left" style="background: none" nav-clear menu-close ui-sref="main.app.sales">
+               <i class="icon" style="width: 60px; color: #FFF"><i class="fa fa-inr" style="font-size: 70%; padding-left: 6px"></i></i>
+               <h2 class="menu-text">Sales</h2>
+        </ion-item>
+        <ion-item class="item-icon-left" style="background: none" nav-clear menu-close ui-sref="main.app.staff">
+               <i class="icon" style="width: 60px; color: #FFF"><i class="fa fa-users" style="font-size: 70%; padding-left: 6px"></i></i>
+               <h2 class="menu-text">Staff Info</h2>
+        </ion-item>
+        <ion-item class="item-icon-left" style="background: none" nav-clear menu-close ui-sref="main.app.customers">
+               <i class="icon" style="width: 60px; color: #FFF"><i class="fa fa-smile-o" style="font-size: 70%; padding-left: 6px"></i></i>
+               <h2 class="menu-text">Customers</h2>
+        </ion-item>
+        <ion-item class="item-icon-left" style="background: none" nav-clear menu-close ui-sref="main.app.feedbacks">
+               <i class="icon" style="width: 60px; color: #FFF"><i class="fa fa-star-half-o" style="font-size: 70%; padding-left: 6px"></i></i>
+               <h2 class="menu-text">Feedbacks</h2>
+        </ion-item>
+        <ion-item class="item-icon-left" style="background: none" nav-clear menu-close ui-sref="main.app.stocks">
+               <i class="icon" style="width: 60px; color: #FFF"><i class="fa fa-cube" style="font-size: 70%; padding-left: 6px"></i></i>
+               <h2 class="menu-text">Inventory</h2>
+        </ion-item>
+
+      </ion-list>
+      <p style="margin-left: 15px; position: absolute; color: #5a1011; bottom: 0px; font-size: 12px;">Version 1.5.0</p>
+    </ion-content>
+  </ion-side-menu>
+</ion-side-menus>

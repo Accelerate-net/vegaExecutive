@@ -544,3 +544,52 @@
 	}
 
 }
+
+
+
+
+	.user-info-row
+	{
+		padding: 5px 30px 15px;
+
+		.pre-img
+		{
+			border-radius: 50%;
+			background-color: rgba($account-divider-color, .5);
+
+			.spinner svg
+	    {
+	      position: absolute;
+	    }
+		}
+
+		.profile-image
+		{
+			border-radius: 50%;
+			width: 100%;
+		}
+
+		.user-info-col
+		{
+			padding-left: 15px;
+
+			.user-welcome
+			{
+				color: $account-color;
+				margin: 0px;
+				font-size: 20px;
+				line-height: 26px;
+				font-weight: 400;
+			}
+
+			.user-email
+			{
+				color: $account-color;
+				margin: 0px;
+				font-size: 12px;
+				line-height: 18px;
+				font-weight: 400;
+			}
+		}
+	}
+

@@ -110,12 +110,767 @@ angular.module('manager.controllers', ['ionic', 'ionic-timepicker', 'ionic-datep
                     $state.go('main.app.customers');
                     break;
                 }
+                case "FEEDBACKS":{
+                    $state.go('main.app.feedbacks');
+                    break;
+                }
+                case "SALES":{
+                    $state.go('main.app.sales');
+                    break;
+                }
+                case "STAFF":{
+                    $state.go('main.app.staff');
+                    break;
+                }
+                case "STOCKS":{
+                    $state.go('main.app.stock');
+                    break;
+                }
             }
 
         }
 
 
     })
+
+
+
+
+   .controller('salesCtrl', function(changeSlotService, $ionicScrollDelegate, $ionicSideMenuDelegate, $scope, $ionicPopup, ionicTimePicker, ionicDatePicker, $state, $http, $ionicPopover, $ionicLoading, $timeout, mappingService, currentBooking) {
+
+
+        //Already Logged in case
+      /*  if (!_.isUndefined(window.localStorage.admin) && window.localStorage.admin != '') {
+            $state.go('main.app.landing');
+        }
+    */
+
+
+
+    $scope.getTodayDefaultDate = function(){
+                var temp = new Date();
+                var mm = temp.getMonth() + 1;
+                var dd = temp.getDate();
+                var yyyy = temp.getFullYear();
+                if (mm < 10) mm = '0' + mm;
+                if (dd < 10) dd = '0' + dd;
+                var date = dd + '-' + mm + '-' + yyyy;
+
+                return date;
+    }
+
+
+
+    //Filter Options
+    $scope.resetFilter = function(){
+        $scope.isFilterEnabled = false;
+        $scope.filterBranch = 'All Outlets';
+        $scope.filterBranchCode = 'ALL';
+        $scope.filterFrom = $scope.getTodayDefaultDate();
+        $scope.filterTo = $scope.getTodayDefaultDate();
+
+        $scope.filterBranchBackup = $scope.filterBranch;
+        $scope.filterBranchCodeBackup = $scope.filterBranchCode;
+        $scope.filterFromBackup = $scope.filterFrom;
+        $scope.filterToBackup = $scope.filterTo;
+
+        $scope.filterPendingApply = false;
+    }
+
+    $scope.resetFilter();
+
+
+
+    
+
+    $scope.applyFilterCancel = function(){
+        $scope.filterPendingApply = false;
+
+        $scope.filterBranch = $scope.filterBranchBackup;
+        $scope.filterBranchCode = $scope.filterBranchCodeBackup;
+        $scope.filterFrom = $scope.filterFromBackup;
+        $scope.filterTo = $scope.filterToBackup;
+
+    }
+
+    $scope.applyFilterConfirm = function(){
+        $scope.filterPendingApply = false;
+
+        //Send Post request.
+    }
+
+    $scope.triggerFilter = function(){
+        if($scope.isFilterEnabled){
+            $scope.resetFilter();
+            //Fetch default results
+        }
+        else{
+            $scope.isFilterEnabled = true;
+            //show filter options window
+        }
+    }
+
+
+        //Date Picker stuff
+        var filterFromDate = {
+            callback: function(val) { //Mandatory
+
+                var monthNames = ["January", "February", "March", "April", "May", "June",
+                    "July", "August", "September", "October", "November", "December"
+                ];
+                var temp = new Date(val);
+                var mm = temp.getMonth() + 1;
+                var dd = temp.getDate();
+                var yyyy = temp.getFullYear();
+                if (mm < 10) mm = '0' + mm;
+                if (dd < 10) dd = '0' + dd;
+                var date = dd + '-' + mm + '-' + yyyy;
+                //var fancyDate = dd + ' ' + monthNames[temp.getMonth()] + ', ' + yyyy;
+
+                $scope.filterFromBackup = $scope.filterFrom;
+                $scope.filterFrom = date;
+                $scope.filterPendingApply = true;
+                $ionicScrollDelegate.scrollTop();
+            },
+            disabledDates: [ //Optional
+            ],
+            //from: new Date(), //Optional
+            to: new Date(), //Optional
+            inputDate: new Date(), //Optional
+            mondayFirst: true, //Optional
+            disableWeekdays: [], //Optional
+            closeOnSelect: false, //Optional
+            templateType: 'popup' //Optional
+        };
+
+        $scope.changeFilterFrom = function() {
+            ionicDatePicker.openDatePicker(filterFromDate);
+        }
+
+
+        var filterToDate = {
+            callback: function(val) { //Mandatory
+
+                var monthNames = ["January", "February", "March", "April", "May", "June",
+                    "July", "August", "September", "October", "November", "December"
+                ];
+                var temp = new Date(val);
+                var mm = temp.getMonth() + 1;
+                var dd = temp.getDate();
+                var yyyy = temp.getFullYear();
+                if (mm < 10) mm = '0' + mm;
+                if (dd < 10) dd = '0' + dd;
+                var date = dd + '-' + mm + '-' + yyyy;
+                //var fancyDate = dd + ' ' + monthNames[temp.getMonth()] + ', ' + yyyy;
+
+                $scope.filterToBackup = $scope.filterTo;
+                $scope.filterTo = date;
+                $scope.filterPendingApply = true;
+                $ionicScrollDelegate.scrollTop();
+            },
+            disabledDates: [ //Optional
+            ],
+            //from:, //Optional
+            to: new Date(), //Optional
+            inputDate: new Date(), //Optional
+            mondayFirst: true, //Optional
+            disableWeekdays: [], //Optional
+            closeOnSelect: false, //Optional
+            templateType: 'popup' //Optional
+        };
+
+        $scope.changeFilterTo = function() {
+            ionicDatePicker.openDatePicker(filterToDate);
+        }
+
+
+        //Filter by branch
+        $scope.changeFilterBranch = function() {
+
+                //Get all the outlets
+                $http.get('https://www.zaitoon.online/services/fetchoutlets.php')
+                    .then(function(response) {
+                        $scope.allList = response.data.response;
+                    });
+
+                outletsPopup = $ionicPopup.show({
+                    cssClass: 'popup-outer edit-shipping-address-view',
+                    templateUrl: 'views/common/templates/outlets-popup.html',
+                    scope: angular.extend($scope, {}),
+                    buttons: [{
+                        text: 'Close'
+                    }]
+                });
+
+                //Callback
+                $scope.setBranchFilter = function(val) {
+                    $scope.filterBranchBackup = $scope.filterBranch;
+                    $scope.filterBranchCodeBackup = $scope.filterBranchCode;
+                    $scope.filterBranch = val.name;
+                    $scope.filterBranchCode = val.code;
+                    $scope.filterPendingApply = true;
+                    $ionicScrollDelegate.scrollTop();
+
+                    outletsPopup.close();
+                }
+        }
+
+
+
+
+
+        $scope.overallData = {
+    "status": true,
+    "error": "",
+        "current": [{
+            "index": 1,
+            "date": "12-04-2018",
+            "sales": "29629",
+            "flag" : 0
+        }, {
+            "index": 2,
+            "date": "13-04-2018",
+            "sales": "28087",
+            "flag" : 0
+        }, {
+            "index": 3,
+            "date": "14-04-2018",
+            "sales": "31498",
+            "flag" : 0
+        }, {
+            "index": 4,
+            "date": "15-04-2018",
+            "sales": "39487",
+            "flag" : 2
+        }, {
+            "index": 5,
+            "date": "16-04-2018",
+            "sales": "25234",
+            "flag" : 0
+        }, {
+            "index": 6,
+            "date": "17-04-2018",
+            "sales": "32268",
+            "flag" : 0
+        }, {
+            "index": 7,
+            "date": "18-04-2018",
+            "sales": "28670",
+            "flag" : 0
+        },
+        {
+            "index": 8,
+            "date": "19-04-2018",
+            "sales": "28670",
+            "flag" : 0
+        }, {
+            "index": 9,
+            "date": "20-04-2018",
+            "sales": "28907",
+            "flag" : 0
+        }, {
+            "index": 10,
+            "date": "21-04-2018",
+            "sales": "33034",
+            "flag" : 0
+        }, {
+            "index": 11,
+            "date": "22-04-2018",
+            "sales": "35029",
+            "flag" : 2
+        }, {
+            "index": 12,
+            "date": "23-04-2018",
+            "sales": "27841",
+            "flag" : 0
+        }, {
+            "index": 13,
+            "date": "24-04-2018",
+            "sales": "26533",
+            "flag" : 1
+        }, {
+            "index": 14,
+            "date": "25-04-2018",
+            "sales": "32817",
+            "flag" : 0
+        }],
+    "daywise":[{
+        "day": "Sunday",
+        "amount": 34200
+    },
+    {
+        "day": "Monday",
+        "amount": 12000
+    }, {
+        "day": "Tuesday",
+        "amount": 18492
+    }, {
+        "day": "Wednesday",
+        "amount": 17829
+    },
+    {
+        "day": "Thursday",
+        "amount": 24039
+    }, {
+        "day": "Friday",
+        "amount": 39023
+    }, {
+        "day": "Saturday",
+        "amount": 67294
+    }
+],
+    "monthwise":[{
+        "month": "January",
+        "amount": 34200
+    },
+    {
+        "month": "February",
+        "amount": 12000
+    }, {
+        "month": "March",
+        "amount": 18492
+    }, {
+        "month": "April",
+        "amount": 17829
+    },
+    {
+        "month": "May",
+        "amount": 24039
+    }, {
+        "month": "June",
+        "amount": 39023
+    }, {
+        "month": "July",
+        "amount": 67294
+    },
+    {
+        "month": "August",
+        "amount": 34200
+    },
+    {
+        "month": "September",
+        "amount": 12000
+    }, {
+        "month": "October",
+        "amount": 18492
+    }, {
+        "month": "November",
+        "amount": 17829
+    },
+    {
+        "month": "December",
+        "amount": 24039
+    }
+],
+    "todaysSum": 212831,
+    "yesterdaysSum": 214873,
+    "averageSum": 203400,
+    "currentCount": 940,
+    "previousCount": 951,
+    "totalUsers": "5386",
+    "ordersMobile": "5472",
+    "ordersWeb": "28479",
+    "ordersTotal": 33951,
+    "outletsTotal": 2127,
+    "outletInfo": [{
+        "name": "IIT Madras",
+        "amount": "790"
+    }, {
+        "name": "Adyar",
+        "amount": "454"
+    }, {
+        "name": "Velachery",
+        "amount": "283"
+    }, {
+        "name": "Royapettah",
+        "amount": "423"
+    }, {
+        "name": "Nungambakkam",
+        "amount": "121"
+    }, {
+        "name": "Anna Nagar",
+        "amount": "56"
+    }],
+    "paymentModes": [{
+        "name": "Cash",
+        "amount": 1450
+    }, {
+        "name": "Card",
+        "amount": 4382
+    }, {
+        "name": "Online",
+        "amount": 3291
+    }, {
+        "name": "PayTM",
+        "amount": 982
+    }, {
+        "name": "BHIM",
+        "amount": 244
+    }],
+    "paymentModesSum":10349,
+    "orderTypes": [{
+        "name": "Dine In",
+        "count" : 13,
+        "amount": 1450
+    }, {
+        "name": "Online",
+        "count" : 48,
+        "amount": 4382
+    }, {
+        "name": "Zomato Orders",
+        "count" : 34,
+        "amount": 3291
+    }, {
+        "name": "Swiggy",
+        "count" : 9,
+        "amount": 982
+    }, {
+        "name": "Takeaways",
+        "count" : 2,
+        "amount": 244
+    }],
+    "orderTypesSum":10349,
+    "orderTypesCount":106
+}
+
+
+
+
+
+    $scope.attendanceList = {
+    "status": true,
+    "error": "",
+    "response": [{
+        "date": "03-04-2018",
+        "day": "Tuesday",
+        "status": "2"
+    }, {
+        "date": "12-04-2018",
+        "day": "Thursday",
+        "status": "2"
+    }, {
+        "date": "14-04-2018",
+        "day": "Saturday",
+        "status": "2"
+    }, {
+        "date": "15-04-2018",
+        "day": "Sunday",
+        "status": "2"
+    }, {
+        "date": "23-04-2018",
+        "day": "Monday",
+        "status": "2"
+    }, {
+        "date": "02-05-2018",
+        "day": "Monday",
+        "status": "5"
+    }]
+}
+
+
+
+                        $scope.selected = moment();
+                        $scope.month = $scope.selected.clone();
+
+                        $scope.displayCalendarMonth = moment($scope.selected).format('MMMM YYYY');
+
+                        var start = $scope.selected.clone();
+                        start.date(1);
+                        _removeTime(start.day(0));
+
+                        _buildMonth($scope, start, $scope.month);
+
+                        $scope.select = function(day) {
+                            $scope.selected = day.date;  
+                        };
+
+                        $scope.next = function() {
+                            var next = $scope.month.clone();
+                            _removeTime(next.month(next.month()+1).date(1));
+                            $scope.month.month($scope.month.month()+1);
+                            _buildMonth($scope, next, $scope.month);
+                        };
+
+                        $scope.previous = function() {
+                            var previous = $scope.month.clone();
+                            _removeTime(previous.month(previous.month()-1).date(1));
+                            $scope.month.month($scope.month.month()-1);
+                            _buildMonth($scope, previous, $scope.month);
+                        };
+
+
+                function _removeTime(date) {
+                    return date.day(0).hour(0).minute(0).second(0).millisecond(0);
+                }
+
+                function _buildMonth(scope, start, month) {
+                    scope.weeks = [];
+
+                    $scope.displayCalendarMonth = moment(month).format('MMMM YYYY');
+
+                    var done = false, date = start.clone(), monthIndex = date.month(), count = 0;
+                    while (!done) {
+                        scope.weeks.push({ days: _buildWeek(date.clone(), month) });
+                        date.add(1, "w");
+                        done = count++ > 2 && monthIndex !== date.month();
+                        monthIndex = date.month();
+                    }
+                }
+
+                function _buildWeek(date, month) {
+                    var days = [];
+                    var statusToSet = '';
+                    var amountToSet = '';
+                    for (var i = 0; i < 7; i++) {
+
+                        var tempFormatted = moment(date).format('DD-MM-YYYY');
+                        
+                        statusToSet = '';
+                        amountToSet = '';
+
+                        for(var j = 0; j < $scope.overallData.current.length; j++){
+                            if($scope.overallData.current[j].date == tempFormatted){
+                                statusToSet = parseInt($scope.overallData.current[j].flag);
+                                amountToSet = parseInt($scope.overallData.current[j].sales);
+                                break;
+                            }
+                        }
+
+                        days.push({
+                            number: date.date(),
+                            isCurrentMonth: date.month() === month.month(),
+                            isToday: date.isSame(new Date(), "day"),
+                            status: statusToSet,
+                            amount: amountToSet
+                        });
+
+                        date = date.clone();
+                        date.add(1, "d");
+                    }
+                    return days;
+                }
+
+                $scope.getMyStyle = function(day){
+
+                    if(!day.isCurrentMonth){
+                        return {'color': '#bdc3c7'};
+                    }
+                    else{
+                        return {
+                            "font-weight": "bold"
+                        }
+                    }                  
+
+                }
+
+                $scope.getMyAmountStyle = function(day){
+
+                    if(!day.isCurrentMonth){
+                        return {
+                                    "display": "block",
+                                    "font-size": "80%",
+                                    "font-weight": "300"
+                                }
+                    }
+                    else{
+
+                        switch(day.status){
+                            case 1:{ //low
+                                return {
+                                    "display": "block",
+                                    "font-size": "80%",
+                                    "font-weight": "400",
+                                    "color": "#e74c3c"
+                                }
+                            }
+                            case 2:{ //high
+                                return {
+                                    "display": "block",
+                                    "font-size": "80%",
+                                    "font-weight": "400",
+                                    "color": "#27ae60"
+                                }
+                            }
+                            default:{
+                                return {
+                                    "display": "block",
+                                    "font-size": "80%",
+                                    "font-weight": "400"
+                                }
+                            }
+
+                        }    
+
+                        
+                    }                  
+
+                }
+
+
+                
+
+
+                $scope.getDayClass = function(day){
+
+                    if(!day.isCurrentMonth){
+                        return 'different-month';
+                    }
+
+                    switch(day.status){
+                        case 0:{
+                            return 'unknown';
+                        }
+                        case 1:{
+                            return 'halfday';
+                        }
+                        case 2:{
+                            return 'present';
+                        }
+                        case 5:{
+                            return 'absent';
+                        }
+                        default:{
+                            return '';
+                        }
+
+                    }       
+                }
+
+
+
+
+//GRAPH - Month Trend
+
+
+  $scope.getMyFancyMonth = function(month){
+    return month.substring(0, 3);
+  }
+
+
+  $scope.data = [];
+  var tempCurrent = [];
+
+  $scope.labels = [];
+  var n = 0;
+  while($scope.overallData.monthwise[n]){
+    $scope.labels.push($scope.getMyFancyMonth($scope.overallData.monthwise[n].month));
+    tempCurrent.push($scope.overallData.monthwise[n].amount);
+
+    n++;
+
+    if(n == 7){ //last iteration
+        $scope.data.push(tempCurrent);
+    }
+  }
+
+  $scope.series = ['Monthly Sales'];
+
+  $scope.colors = ['#2ecc71'];
+
+
+  $scope.datasetOverride = [{ yAxisID: 'y-axis' }];
+  $scope.options = {
+    scales: {
+      yAxes: [
+        {
+          id: 'y-axis',
+          type: 'linear',
+          display: true,
+          position: 'left'
+        }
+      ]
+    }
+  };
+
+
+
+
+//PieChart - Payemnt Modes
+
+  $scope.labelsPaymentMode = [];
+  $scope.dataPaymentMode = [];
+
+  var m = 0;
+  while($scope.overallData.paymentModes[m]){
+    $scope.labelsPaymentMode.push($scope.overallData.paymentModes[m].name + ' ('+(Math.round(($scope.overallData.paymentModes[m].amount/$scope.overallData.paymentModesSum) * 1000) / 10)+'%)');
+    $scope.dataPaymentMode.push($scope.overallData.paymentModes[m].amount);
+    m++;
+  }
+
+
+  $scope.optionsPaymentMode = {
+        legend: { display: true, position: 'bottom' }
+  }
+
+
+
+
+//Line Chart - Daywise Trend
+
+  $scope.getFancyDay = function(day){
+    return day.substring(0, 3);
+  }
+
+  $scope.labelsDaywise = [];
+  $scope.dataDaywiseTemp = [];
+
+  var m = 0;
+  while($scope.overallData.daywise[m]){
+    $scope.labelsDaywise.push($scope.getFancyDay($scope.overallData.daywise[m].day));
+    $scope.dataDaywiseTemp.push($scope.overallData.daywise[m].amount);
+    m++;
+  }
+
+  $scope.dataDaywise = [];
+  $scope.dataDaywise.push($scope.dataDaywiseTemp);
+
+  $scope.colorsDaywise = ['#3498db'];
+
+        $scope.showOptionsMenu = function() {
+            $ionicSideMenuDelegate.toggleLeft();
+            $scope.navToggled = !$scope.navToggled;
+        };
+
+        $scope.getRevenueClass = function(current, previous){
+            if(current >= previous){
+                return 'ion-arrow-graph-up-right specialGreen';
+            }
+            else{
+                return 'ion-arrow-graph-down-right specialRed';
+            }
+            
+        }
+
+
+        $scope.getFancyAmount = function(amount){
+            if(amount < 10000){
+                return amount;
+            }
+            else if(amount >= 10000 && amount < 100000){
+                amount = amount/1000;
+                amount = Math.round(amount * 100) / 100;
+                return amount + "" + " K";
+            }
+            else if(amount >= 100000 && amount < 10000000){
+                amount = amount/100000;
+                amount = Math.round(amount * 100) / 100;
+                return amount + "" + " L";
+            }
+            else if(amount >= 10000000){
+                amount = amount/10000000;
+                amount = Math.round(amount * 100) / 100;
+                return amount + "" + " Cr";
+            }
+        }
+
+
+
+
+
+
+ })
+
+
 
 
 
@@ -193,6 +948,9 @@ angular.module('manager.controllers', ['ionic', 'ionic-timepicker', 'ionic-datep
     "currentSum": 212831,
     "previousSum": 214873,
     "currentCount": 940,
+    "rating": 3.8,
+    "averageTimeSpent": 62,
+    "averageAmountSpent": 340,
     "previousCount": 951,
     "totalUsers": "5386",
     "ordersMobile": "5472",
@@ -217,9 +975,47 @@ angular.module('manager.controllers', ['ionic', 'ionic-timepicker', 'ionic-datep
     }, {
         "name": "Anna Nagar",
         "amount": "56"
-    }]
+    }],
+    "topSelling": [{
+        "name": "Spicy Barbeque",
+        "count": "790"
+    }, {
+        "name": "Chicken Shawarma",
+        "count": "454"
+    }, {
+        "name": "Angara Kebab",
+        "count": "283"
+    }, {
+        "name": "Spcial Falooda",
+        "count": "129"
+    }, {
+        "name": "Chicken Biryani",
+        "count": "121"
+    }],
+    "topSellingLastUpdate" : "12th April, 2018"
 }
 
+$scope.getRatingColor = function(rating){
+
+        if(rating >= 4){
+            return {'color': '#305D02'}
+        }
+        else if(rating >= 3.5){
+            return {'color': '#cddc39'}
+        }
+        else if(rating >= 3){
+            return {'color': '#FFBA00'}
+        }
+        else if(rating >= 2){
+            return {'color': '#FF7800'}
+        }
+        else if(rating < 2){
+            return {'color': '#CD1C26'}             
+        }
+        else{
+            return {'color': '#34495e'}
+        }
+}
 
 //GRAPH - Current vs Previous Week comparison
 
@@ -300,6 +1096,161 @@ angular.module('manager.controllers', ['ionic', 'ionic-timepicker', 'ionic-datep
 
 
 
+        $scope.showOptionsMenu = function() {
+            $ionicSideMenuDelegate.toggleLeft();
+            $scope.navToggled = !$scope.navToggled;
+        };
+
+        $scope.getRevenueClass = function(current, previous){
+            if(current >= previous){
+                return 'ion-arrow-graph-up-right specialGreen';
+            }
+            else{
+                return 'ion-arrow-graph-down-right specialRed';
+            }
+            
+        }
+
+
+        $scope.getFancyAmount = function(amount){
+            if(amount < 10000){
+                return amount;
+            }
+            else if(amount >= 10000 && amount < 100000){
+                amount = amount/1000;
+                amount = Math.round(amount * 100) / 100;
+                return amount + "" + " K";
+            }
+            else if(amount >= 100000 && amount < 10000000){
+                amount = amount/100000;
+                amount = Math.round(amount * 100) / 100;
+                return amount + "" + " L";
+            }
+            else if(amount >= 10000000){
+                amount = amount/10000000;
+                amount = Math.round(amount * 100) / 100;
+                return amount + "" + " Cr";
+            }
+        }
+
+
+
+    })
+
+
+
+
+ .controller('staffCtrl', function(changeSlotService, $ionicSideMenuDelegate, $scope, $ionicPopup, ionicTimePicker, ionicDatePicker, $state, $http, $ionicPopover, $ionicLoading, $timeout, mappingService, currentBooking) {
+
+
+        //Already Logged in case
+      /*  if (!_.isUndefined(window.localStorage.admin) && window.localStorage.admin != '') {
+            $state.go('main.app.landing');
+        }
+    */
+
+
+        $scope.overallData = {
+    "status": true,
+    "error": "",
+    "salarySum": 212831,
+    "totalEmployees": 342,
+    "attendance": {
+        "absent": 30,
+        "present": 305,
+        "unknown": 15,
+        "halfday": 2
+    },
+    "roleWiseEmployees": [{
+        "name": "Manager",
+        "count": "2"
+    }, {
+        "name": "Stewards",
+        "count": "11"
+    }, {
+        "name": "Accounting",
+        "count": "1"
+    }, {
+        "name": "House Keeping",
+        "count": "2"
+    }, {
+        "name": "Security",
+        "count": "1"
+    }],
+    "outletWiseEmployees": [{
+        "name": "IIT Madras",
+        "count": "42"
+    }, {
+        "name": "Adyar",
+        "count": "31"
+    }, {
+        "name": "Velachery",
+        "count": "28"
+    }, {
+        "name": "Royapettah",
+        "count": "27"
+    }, {
+        "name": "Nungambakkam",
+        "count": "19"
+    }, {
+        "name": "Anna Nagar",
+        "count": "26"
+    }]
+}
+
+//BAR CHART - Outletwise Staff Distribution
+
+  $scope.getMyFancyDate = function(date){
+    var myDate = date.split('-');
+
+    if(myDate[0]%10 == 1){
+        return myDate[0]+'st';
+    }
+    else if(myDate[0]%10 == 2){
+        return myDate[0]+'nd';
+    }
+    else if(myDate[0]%10 == 3){
+        return myDate[0]+'rd';
+    }
+    else{
+        return myDate[0]+'th';
+    }
+  }
+
+
+  $scope.data = [];
+  $scope.labels = [];
+  var n = 0;
+  while($scope.overallData.outletWiseEmployees[n]){
+    $scope.labels.push($scope.overallData.outletWiseEmployees[n].name);
+    $scope.data.push($scope.overallData.outletWiseEmployees[n].count);
+
+    n++;
+  }
+
+  $scope.datasetOverride = [{ yAxisID: 'y-axis' }];
+  $scope.options = {
+    scales: {
+      yAxes: [
+        {
+          id: 'y-axis',
+          type: 'linear',
+          display: true,
+          position: 'left'
+        }
+      ]
+    }
+  };
+
+
+//DOUGHNUT - Attendance
+  $scope.labelsAttendance = ['Present ('+$scope.overallData.attendance.present+')', 'Half Day ('+$scope.overallData.attendance.halfday+')', 'Absent ('+$scope.overallData.attendance.absent+')',  'Unknown ('+$scope.overallData.attendance.unknown+')'];
+  $scope.colorsAttendance = ['#27ae60',  '#f39c12', '#c0392b', '#7f8c8d']
+  $scope.dataAttendance = [$scope.overallData.attendance.present, $scope.overallData.attendance.halfday, $scope.overallData.attendance.absent, $scope.overallData.attendance.unknown];
+
+  $scope.optionsAttendance = {
+        legend: { display: true, position: 'bottom' }
+  }
 
 
         $scope.showOptionsMenu = function() {
@@ -342,6 +1293,388 @@ angular.module('manager.controllers', ['ionic', 'ionic-timepicker', 'ionic-datep
 
 
     })
+
+
+                
+
+
+
+.controller('staffInfoCtrl', function(changeSlotService, $ionicSideMenuDelegate, $scope, $ionicPopup, ionicTimePicker, ionicDatePicker, $state, $http, $ionicPopover, $ionicLoading, $timeout, mappingService, currentBooking) {
+
+
+        //Already Logged in case
+      /*  if (!_.isUndefined(window.localStorage.admin) && window.localStorage.admin != '') {
+            $state.go('main.app.landing');
+        }
+    */
+
+var TEMP_TOKEN = 'sHtArttc2ht+tMf9baAeQ9ukHnXtlsHfexmCWx5sJOgFE1kpUfdk49ICSFMlFpeEQmANKHwckmtqJx2jKY6r1jd0GfFSLnBi7Lho856b/d8=';
+
+
+
+$scope.day = moment();
+
+
+      $scope.search = function(search_key){
+
+            var data = {};
+            data.token = TEMP_TOKEN; //$cookies.get("dashManager");
+            data.key = search_key;
+
+
+            $http({
+              method  : 'POST',
+              url     : 'https://www.zaitoon.online/services/erpfetchpeople.php',
+              data    : data,
+              headers : {'Content-Type': 'application/x-www-form-urlencoded'}
+             })
+             .then(function(response) {
+
+                if(response.data.status){
+                  $scope.isSearched = true;
+                  $scope.isFound = true;
+                  $scope.staffData = response.data.response;
+
+                  if($scope.staffData.length == 1){
+                    $scope.singleStaff = true;
+                    $scope.staffData = $scope.staffData[0];
+                  }
+                  else{
+                    $scope.singleStaff = false;
+                  }
+
+                  $scope.errorMessage = '';
+                }
+                else{
+                  $scope.isSearched = true;
+                  $scope.isFound = false;
+                  $scope.staffData = {};
+                  $scope.errorMessage = "No Results found.";
+                }
+
+            });
+              
+      }
+
+
+      $scope.resetSearchView = function(){
+
+        $scope.isSearched = false;
+        $scope.isFound = false;
+        $scope.singleStaff = false;
+        
+        $scope.staffData = "";
+
+        $scope.searchKey = "";
+        $scope.errorMessage = "";
+
+        $scope.isViewingProfile = false;
+      }
+
+      $scope.resetSearchView();
+
+$scope.search('a');
+
+      $scope.viewStaffProfile = function(staffObj){
+
+        $scope.isViewingProfile = true;
+        $scope.viewingStaffData = staffObj;
+
+        console.log($scope.viewingStaffData)
+
+      }
+
+
+
+
+/* Attendance Calendar */
+
+    $scope.attendanceList = {
+    "status": true,
+    "error": "",
+    "response": [{
+        "date": "03-04-2018",
+        "day": "Tuesday",
+        "status": "2"
+    }, {
+        "date": "12-04-2018",
+        "day": "Thursday",
+        "status": "2"
+    }, {
+        "date": "14-04-2018",
+        "day": "Saturday",
+        "status": "2"
+    }, {
+        "date": "15-04-2018",
+        "day": "Sunday",
+        "status": "2"
+    }, {
+        "date": "23-04-2018",
+        "day": "Monday",
+        "status": "2"
+    }, {
+        "date": "02-05-2018",
+        "day": "Monday",
+        "status": "5"
+    }]
+}
+
+
+                        $scope.selected = moment();
+                        $scope.month = $scope.selected.clone();
+
+                        $scope.displayCalendarMonth = moment($scope.selected).format('MMMM YYYY');
+
+                        var start = $scope.selected.clone();
+                        start.date(1);
+                        _removeTime(start.day(0));
+
+                        _buildMonth($scope, start, $scope.month);
+
+                        $scope.select = function(day) {
+                            $scope.selected = day.date;  
+                        };
+
+                        $scope.next = function() {
+                            var next = $scope.month.clone();
+                            _removeTime(next.month(next.month()+1).date(1));
+                            $scope.month.month($scope.month.month()+1);
+                            _buildMonth($scope, next, $scope.month);
+                        };
+
+                        $scope.previous = function() {
+                            var previous = $scope.month.clone();
+                            _removeTime(previous.month(previous.month()-1).date(1));
+                            $scope.month.month($scope.month.month()-1);
+                            _buildMonth($scope, previous, $scope.month);
+                        };
+
+
+                function _removeTime(date) {
+                    return date.day(0).hour(0).minute(0).second(0).millisecond(0);
+                }
+
+                function _buildMonth(scope, start, month) {
+                    scope.weeks = [];
+
+                    $scope.displayCalendarMonth = moment(month).format('MMMM YYYY');
+
+                    var done = false, date = start.clone(), monthIndex = date.month(), count = 0;
+                    while (!done) {
+                        scope.weeks.push({ days: _buildWeek(date.clone(), month) });
+                        date.add(1, "w");
+                        done = count++ > 2 && monthIndex !== date.month();
+                        monthIndex = date.month();
+                    }
+                }
+
+                function _buildWeek(date, month) {
+                    var days = [];
+                    var statusToSet = '';
+                    for (var i = 0; i < 7; i++) {
+
+                        var tempFormatted = moment(date).format('DD-MM-YYYY');
+                        
+                        statusToSet = '';
+
+                        for(var j = 0; j < $scope.attendanceList.response.length; j++){
+                            if($scope.attendanceList.response[j].date == tempFormatted){
+                                statusToSet = parseInt($scope.attendanceList.response[j].status);
+                                break;
+                            }
+                        }
+
+                        days.push({
+                            number: date.date(),
+                            isCurrentMonth: date.month() === month.month(),
+                            isToday: date.isSame(new Date(), "day"),
+                            status: statusToSet
+                        });
+
+                        date = date.clone();
+                        date.add(1, "d");
+                    }
+                    return days;
+                }
+
+                $scope.getDayClass = function(day){
+
+                    if(!day.isCurrentMonth){
+                        return 'different-month';
+                    }
+
+                    switch(day.status){
+                        case 0:{
+                            return 'unknown';
+                        }
+                        case 1:{
+                            return 'halfday';
+                        }
+                        case 2:{
+                            return 'present';
+                        }
+                        case 5:{
+                            return 'absent';
+                        }
+                        default:{
+                            return '';
+                        }
+
+                    }       
+                }
+
+
+
+        $scope.overallData = {
+    "status": true,
+    "error": "",
+    "salarySum": 212831,
+    "totalEmployees": 342,
+    "attendance": {
+        "absent": 30,
+        "present": 305,
+        "unknown": 15,
+        "halfday": 2
+    },
+    "roleWiseEmployees": [{
+        "name": "Manager",
+        "count": "2"
+    }, {
+        "name": "Stewards",
+        "count": "11"
+    }, {
+        "name": "Accounting",
+        "count": "1"
+    }, {
+        "name": "House Keeping",
+        "count": "2"
+    }, {
+        "name": "Security",
+        "count": "1"
+    }],
+    "outletWiseEmployees": [{
+        "name": "IIT Madras",
+        "count": "42"
+    }, {
+        "name": "Adyar",
+        "count": "31"
+    }, {
+        "name": "Velachery",
+        "count": "28"
+    }, {
+        "name": "Royapettah",
+        "count": "27"
+    }, {
+        "name": "Nungambakkam",
+        "count": "19"
+    }, {
+        "name": "Anna Nagar",
+        "count": "26"
+    }]
+}
+
+
+$scope.defaultDisplayTitle = 'Registered Employees';
+
+
+
+
+//BAR CHART - Outletwise Staff Distribution
+
+  $scope.getMyFancyDate = function(date){
+    var myDate = date.split('-');
+
+    if(myDate[0]%10 == 1){
+        return myDate[0]+'st';
+    }
+    else if(myDate[0]%10 == 2){
+        return myDate[0]+'nd';
+    }
+    else if(myDate[0]%10 == 3){
+        return myDate[0]+'rd';
+    }
+    else{
+        return myDate[0]+'th';
+    }
+  }
+
+
+  $scope.data = [];
+  $scope.labels = [];
+  var n = 0;
+  while($scope.overallData.outletWiseEmployees[n]){
+    $scope.labels.push($scope.overallData.outletWiseEmployees[n].name);
+    $scope.data.push($scope.overallData.outletWiseEmployees[n].count);
+
+    n++;
+  }
+
+  $scope.datasetOverride = [{ yAxisID: 'y-axis' }];
+  $scope.options = {
+    scales: {
+      yAxes: [
+        {
+          id: 'y-axis',
+          type: 'linear',
+          display: true,
+          position: 'left'
+        }
+      ]
+    }
+  };
+
+
+//DOUGHNUT - Attendance
+  $scope.labelsAttendance = ['Present ('+$scope.overallData.attendance.present+')', 'Half Day ('+$scope.overallData.attendance.halfday+')', 'Absent ('+$scope.overallData.attendance.absent+')',  'Unknown ('+$scope.overallData.attendance.unknown+')'];
+  $scope.colorsAttendance = ['#27ae60',  '#f39c12', '#c0392b', '#7f8c8d']
+  $scope.dataAttendance = [$scope.overallData.attendance.present, $scope.overallData.attendance.halfday, $scope.overallData.attendance.absent, $scope.overallData.attendance.unknown];
+
+  $scope.optionsAttendance = {
+        legend: { display: true, position: 'bottom' }
+  }
+
+
+        $scope.showOptionsMenu = function() {
+            $ionicSideMenuDelegate.toggleLeft();
+            $scope.navToggled = !$scope.navToggled;
+        };
+
+        $scope.getRevenueClass = function(current, previous){
+            if(current >= previous){
+                return 'ion-arrow-graph-up-right specialGreen';
+            }
+            else{
+                return 'ion-arrow-graph-down-right specialRed';
+            }
+            
+        }
+
+
+        $scope.getFancyAmount = function(amount){
+            if(amount < 10000){
+                return amount;
+            }
+            else if(amount >= 10000 && amount < 100000){
+                amount = amount/1000;
+                amount = Math.round(amount * 100) / 100;
+                return amount + "" + " K";
+            }
+            else if(amount >= 100000 && amount < 10000000){
+                amount = amount/100000;
+                amount = Math.round(amount * 100) / 100;
+                return amount + "" + " L";
+            }
+            else if(amount >= 10000000){
+                amount = amount/10000000;
+                amount = Math.round(amount * 100) / 100;
+                return amount + "" + " Cr";
+            }
+        }
+
+
+
+    })
+
 
 
 
