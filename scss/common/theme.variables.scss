@@ -50,18 +50,20 @@
  color: #ffffff !important; 
  overflow: hidden; white-space: nowrap; text-overflow: ellipsis; 
  font-size: 15px !important; 
- border: 1px solid !important; 
+ border: 1px solid #FFF !important; 
  padding: 0 8px !important;
+ min-width: 85px !important;
 }
 
 .applyFilterButton{
  margin-left: 10px; 
  font-weight: 400 !important; 
- color: #480b0b !important; 
+ color: #d28e21 !important; 
  overflow: hidden; white-space: nowrap; text-overflow: ellipsis; 
  font-size: 15px !important; 
- border: 1px solid #480b0b !important; 
+ border: 2px solid transparent !important;
  padding: 0 8px !important;
+ min-width: 85px !important;
 }
 
 .bannerButtonCheck{
@@ -226,6 +228,25 @@
 
 .StaffListingRole{
   display: block; font-size: 70%; text-transform: uppercase; color: #747777;
+}
+
+
+.incomeListTable tr:nth-child(even) {
+  background-color: #e6f7e5;
+  color: #326f3c;
+}
+.incomeListTable tr:nth-child(odd) {
+  background-color: #d5e4d4;
+  color: #326f3c;
+}
+
+.expensesListTable tr:nth-child(even) {
+  background-color: #f3e5e4;
+  color: #772822;
+}
+.expensesListTable tr:nth-child(odd) {
+  background-color: #efd7d7;
+  color: #772822;
 }
 
 .buttonMyBlue{

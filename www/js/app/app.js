@@ -180,6 +180,16 @@ angular.module('zaitoonFirst', [
             }
           })  
 
+          .state('main.app.accounts', {
+            url: '/accounts',
+            views: {
+              'main-view@main': {
+                templateUrl: 'views/pages/accounts.html',
+                controller: 'accountsCtrl'
+              }
+            }
+          })  
+
           .state('main.app.staff', {
             url: '/staff',
             views: {
