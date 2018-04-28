@@ -1,3 +1,106 @@
+/* BANNER */
+.bannerHolder{
+  position: absolute; width: 100%; background: #1abc9c; 
+  color: #FFF; z-index: 100; top: 44px; left: 0; height: 44px;
+}
+
+.bannerPendingChanges{
+  background: #f39c12 !important;
+}
+
+.bannerHolder .bannerBranch{
+  max-width: 140px; overflow: hidden; 
+  text-overflow: ellipsis; white-space: nowrap;
+  font-weight: bold; font-size: 120%;
+}
+
+.bannerHolder .bannerLabel{
+  display: block; font-size: 9px; 
+  letter-spacing: 2px; font-weight: normal; color: #d4e4e0;
+}
+
+.bannerHolder .bannerDate{
+  line-height: 14px
+}
+
+
+.bannerHolder .bannerDate:active,
+.bannerHolder .bannerDate:hover, 
+.bannerHolder .bannerDate:focus{
+  background: #16a085 !important;
+}
+
+.bannerHolder .bannerBranch:active,
+.bannerHolder .bannerBranch:hover, 
+.bannerHolder .bannerBranch:focus{
+  background: #16a085 !important;
+}
+
+.hasBanner{
+  top: 88px !important;
+}
+
+.overflowDisabled{
+  overflow: hidden !important;
+}
+
+.clearFilterButton{
+ margin-left: 10px; 
+ font-weight: 400 !important; 
+ color: #ffffff !important; 
+ overflow: hidden; white-space: nowrap; text-overflow: ellipsis; 
+ font-size: 15px !important; 
+ border: 1px solid !important; 
+ padding: 0 8px !important;
+}
+
+.applyFilterButton{
+ margin-left: 10px; 
+ font-weight: 400 !important; 
+ color: #480b0b !important; 
+ overflow: hidden; white-space: nowrap; text-overflow: ellipsis; 
+ font-size: 15px !important; 
+ border: 1px solid #480b0b !important; 
+ padding: 0 8px !important;
+}
+
+.bannerButtonCheck{
+  width: 50px; height: 50px; background: #1abc9c; 
+  display: inline-block; border-radius: 50%; 
+  font-size: 32px; padding: 10px 12px; color: #FFF;
+}
+
+.bannerButtonCheck:active,
+.bannerButtonCheck:hover, 
+.bannerButtonCheck:focus{
+  background: #16a085 !important;
+}
+
+.bannerButtonCross{
+  width: 50px; height: 50px; background: #7f8c8d; 
+  display: inline-block; border-radius: 50%; 
+  font-size: 32px; padding: 10px 13px; color: #FFF;
+}
+
+.bannerButtonCross:active,
+.bannerButtonCross:hover, 
+.bannerButtonCross:focus{
+  background: #5c6869!important;
+}
+
+
+.bannerButtonHolder{
+  letter-spacing: 10px;
+  position: absolute; padding: 10px; 
+  height: inherit; background: rgba(0, 0, 0, 0.35); 
+  width: 100%; z-index: 100; text-align: center;
+}
+
+
+
+
+
+
 /* TILES */
 .tileBox{
     border-color: transparent;
@@ -92,6 +195,172 @@
 .specialGreen{
   color: #27ae60 !important;
 }
+
+
+.input-group{
+      position: relative;
+    display: table;
+    border-collapse: separate;
+}
+
+.input-group-btn{
+  position: relative;
+    font-size: 0;
+    white-space: nowrap;
+        width: 1%;
+    vertical-align: middle;
+    display: table-cell;
+}
+
+
+
+.StaffListingTable th, td {
+    text-align: left;
+    padding: 8px;
+    height: 42px;
+    vertical-align: middle;
+}
+
+.StaffListingTable tr:nth-child(even) {background-color: #fff3eb;}
+.StaffListingTable tr:nth-child(odd) {background-color: #fffefa;}
+
+.StaffListingRole{
+  display: block; font-size: 70%; text-transform: uppercase; color: #747777;
+}
+
+.buttonMyBlue{
+  background: #3498db;
+  color: #FFF;
+}
+
+.buttonMyBlue:hover, .buttonMyBlue:active, .buttonMyBlue:focus{
+ background: #2980b9 !important;
+ color: #FFF !important; 
+}
+
+
+
+/* CALENDAR */
+
+.border-box {
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+}
+calendar {
+  float: left;
+  display: block;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  background: white;
+  width: 300px;
+  border: solid 1px #cccccc;
+  margin-bottom: 10px;
+}
+calendar > div.header {
+  float: left;
+  width: 100%;
+  background: #2875c7;
+  height: 40px;
+  color: white;
+}
+calendar > div.header > * {
+  height: 40px;
+  line-height: 40px !important;
+  display: inline-block;
+  vertical-align: middle;
+}
+calendar > div.header > i {
+  float: left;
+  width: 40px;
+  font-size: 1.125em;
+  font-weight: bold;
+  position: relative;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  padding: 0 10px;
+  cursor: pointer;
+}
+calendar > div.header > i.moveLeft {
+  text-align: left;
+}
+calendar > div.header > i.moveRight {
+  text-align: right;
+  margin-left: -40px;
+}
+calendar > div.header > span {
+  float: left;
+  width: 100%;
+  font-weight: bold;
+  text-transform: uppercase;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  padding-left: 50px;
+  margin-left: -40px;
+  text-align: center;
+  padding-right: 40px;
+  color: inherit;
+}
+calendar > div.week {
+  float: left;
+  width: 100%;
+  border-top: solid 1px #cccccc;
+}
+calendar > div.week:first-child {
+  border-top: none;
+}
+calendar > div.week > span.day {
+  float: left;
+  width: 14.285714285714286%;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  border-left: solid 1px #cccccc;
+  font-size: 0.75em;
+  text-align: center;
+  height: 30px;
+  line-height: 30px !important;
+  display: inline-block;
+  vertical-align: middle;
+  background: white;
+  cursor: pointer;
+  color: black;
+}
+calendar > div.week > span.day:first-child {
+  border-left: none;
+}
+calendar > div.week > span.day.today {
+  background: #E3F2FF;
+}
+calendar > div.week > span.day.present {
+  background: #51af60;
+}
+calendar > div.week > span.day.absent {
+  background: #c0392b;
+}
+calendar > div.week > span.day.halfday {
+  background: #f39c31;
+}
+calendar > div.week > span.day.unknown {
+  background: #7e8c8c;
+}
+calendar > div.week > span.day.different-month {
+  color: #C0C0C0;
+}
+calendar > div.week > span.day.selected {
+  background: #2875c7;
+  color: white;
+}
+calendar > div.week.names > span {
+  color: #2875c7;
+  font-weight: bold;
+}
+
+
+.lightRupees{
+  font-size: 70% !important;
+    padding-right: 0.2em;
+}
+
+
 
 /* FEED BACK */
 

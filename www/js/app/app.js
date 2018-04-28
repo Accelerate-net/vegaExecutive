@@ -170,6 +170,36 @@ angular.module('zaitoonFirst', [
             }
           })  
 
+          .state('main.app.sales', {
+            url: '/sales',
+            views: {
+              'main-view@main': {
+                templateUrl: 'views/pages/sales.html',
+                controller: 'salesCtrl'
+              }
+            }
+          })  
+
+          .state('main.app.staff', {
+            url: '/staff',
+            views: {
+              'main-view@main': {
+                templateUrl: 'views/pages/staff.html',
+                controller: 'staffCtrl'
+              }
+            }
+          })  
+
+          .state('main.app.staffinfo', {
+            url: '/staffinfo',
+            views: {
+              'main-view@main': {
+                templateUrl: 'views/pages/staffinfo.html',
+                controller: 'staffInfoCtrl'
+              }
+            }
+          })  
+
 
   ;
 
