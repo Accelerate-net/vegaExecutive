@@ -230,6 +230,29 @@
   display: block; font-size: 70%; text-transform: uppercase; color: #747777;
 }
 
+.StaffListingMail{
+  display: block; font-size: 75%; text-transform: none; color: #747777;
+}
+
+.clearSearchButton{
+    width: 110px;
+    height: 30px;
+    font-weight: 400;
+    text-transform: none;
+    color: #de8182;
+    text-align: right;
+}
+
+.loadMoreButton{
+  background: #2ecc71 !important;
+  color: #FFF !important;
+  border-radius: 0 !important;
+}
+
+.loadMoreButton:hover, .loadMoreButton:focus, .loadMoreButton:active{
+  background: #27ae60 !important;
+  color: #FFF !important;
+}
 
 .incomeListTable tr:nth-child(even) {
   background-color: #e6f7e5;

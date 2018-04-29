@@ -85,9 +85,9 @@
 
 
       <div ng-if="isViewingProfile">
+        
         <div class="infoTile" style="width: 100%; padding: 16px 5px 5px 5px">
-         <div class="row user-info-row">
-          
+          <div class="row user-info-row">
             <div class="col col-25">
                <pre-img ratio="_1_1">
                  <img class="profile-image" ng-if="viewingStaffData.photoURL && viewingStaffData.photoURL != ''" ng-src="{{viewingStaffData.photoURL}}" spinner-on-load/>
@@ -97,11 +97,10 @@
             </div>
             <div class="col col-75 col-center user-info-col">
               <h3 class="user-welcome" style="font-weight: 400; font-size: 24px; color: #a71d2b">{{viewingStaffData.fName}} {{viewingStaffData.lName}}</h3>
-              <h3 class="user-welcome" style="font-weight: 300; font-size: 24px; color: #a71d2b">{{temp_name}}</h3>
               <p class="user-email" style="font-weight: 300; color: #7d7d7d">{{viewingStaffData.designation}} at {{viewingStaffData.currentBranch}}</p>
             </div>
           </div>
-         </div>
+        </div>
 
 
 

@@ -190,6 +190,16 @@ angular.module('zaitoonFirst', [
             }
           })  
 
+          .state('main.app.customers', {
+            url: '/customers',
+            views: {
+              'main-view@main': {
+                templateUrl: 'views/pages/customers.html',
+                controller: 'customersCtrl'
+              }
+            }
+          })  
+
           .state('main.app.staff', {
             url: '/staff',
             views: {

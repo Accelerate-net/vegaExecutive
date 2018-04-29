@@ -1369,6 +1369,222 @@ $scope.getFancyCurrency = function(x){
 
 
 
+
+
+ .controller('customersCtrl', function(changeSlotService, $ionicSideMenuDelegate, $scope, $ionicPopup, ionicTimePicker, ionicDatePicker, $state, $http, $ionicPopover, $ionicLoading, $timeout, mappingService, currentBooking) {
+
+
+        //Already Logged in case
+      /*  if (!_.isUndefined(window.localStorage.admin) && window.localStorage.admin != '') {
+            $state.go('main.app.landing');
+        }
+    */
+
+
+$scope.overallData = {
+    "status": true,
+    "error": "",
+    "grandDineGuests": 452944,
+    "grandVisits": 212831,
+    "grandAppRegistrations": 214873,
+    "grandDeliveryMade": 12311,
+    "grandSalarySum": 72840,
+    
+}
+
+$scope.getFancyCommaNumber = function(x){
+    return x.toLocaleString('en-US', {maximumSignificantDigits : 12});
+}
+
+
+
+
+
+        $scope.showOptionsMenu = function() {
+            $ionicSideMenuDelegate.toggleLeft();
+            $scope.navToggled = !$scope.navToggled;
+        };
+
+
+        $scope.getFancyAmount = function(amount){
+
+            amount = Math.abs(amount);
+
+            if(amount < 10000){
+                return amount;
+            }
+            else if(amount >= 10000 && amount < 100000){
+                amount = amount/1000;
+                amount = Math.round(amount * 10) / 10;
+                return amount + "" + " K";
+            }
+            else if(amount >= 100000 && amount < 10000000){
+                amount = amount/100000;
+                amount = Math.round(amount * 100) / 100;
+                return amount + "" + " L";
+            }
+            else if(amount >= 10000000){
+                amount = amount/10000000;
+                amount = Math.round(amount * 100) / 100;
+                return amount + "" + " Cr";
+            }
+        }
+
+
+
+
+
+var TEMP_TOKEN = 'sHtArttc2ht+tMf9baAeQ9ukHnXtlsHfexmCWx5sJOgFE1kpUfdk49ICSFMlFpeEQmANKHwckmtqJx2jKY6r1jd0GfFSLnBi7Lho856b/d8=';
+
+
+
+      $scope.viewGuestProfile = function(guestObj){
+
+        $scope.limiter = 0; //to be safe
+
+        $scope.isViewingProfile = true;
+        $scope.viewingGuestData = guestObj;
+
+      }
+
+      $scope.goBackToResults = function(){
+        $scope.isViewingProfile = false;
+      }
+
+
+      $scope.search = function(search_key){
+
+            if(search_key == '' || !search_key){
+                return '';
+            }
+
+            $scope.isViewingProfile = false; //to be safe
+
+            var data = {};
+            data.token = TEMP_TOKEN; //$cookies.get("dashManager");
+            data.key = search_key;
+            data.id = $scope.limiter;
+
+
+            $http({
+              method  : 'POST',
+              url     : 'https://www.zaitoon.online/services/erpfetchguest.php',
+              data    : data,
+              headers : {'Content-Type': 'application/x-www-form-urlencoded'}
+             })
+             .then(function(response) {
+
+                if(response.data.status){
+                  $scope.isSearched = true;
+                  $scope.isFound = true;
+                  $scope.guestData = response.data.response;
+
+                  if($scope.guestData.length == 1){
+                    $scope.singleGuest = true;
+                    $scope.viewGuestProfile($scope.guestData[0]); //single result, directly load info page
+                  }
+                  else{
+                    $scope.singleGuest = false;
+
+                    //more left to load
+                    if($scope.guestData.length % 10 == 0){
+                      $scope.isMoreLeft = true;
+                    }
+                    else{
+                      $scope.isMoreLeft = false;
+                    }
+
+                  }
+
+                  $scope.errorMessage = '';
+                }
+                else{
+                  $scope.isSearched = true;
+                  $scope.isFound = false;
+                  $scope.guestData = {};
+                  $scope.errorMessage = "No Results found.";
+                }
+
+            });
+              
+      }
+
+
+
+    $scope.searchMore = function(search_key){
+            
+            $scope.limiter = $scope.limiter + 10;
+
+
+            var data = {};
+            data.token = TEMP_TOKEN; //$cookies.get("dashManager");
+            data.key = search_key;
+            data.id = $scope.limiter;
+
+            $http({
+              method  : 'POST',
+              url     : 'https://www.zaitoon.online/services/erpfetchguest.php',
+              data    : data,
+              headers : {'Content-Type': 'application/x-www-form-urlencoded'}
+             })
+             .then(function(response) {
+
+                if(response.data.status){
+
+                  $scope.guestData = $scope.guestData.concat(response.data.response);
+                    
+                    //more left to load
+                    if($scope.guestData.length % 10 == 0){
+                      $scope.isMoreLeft = true;
+                    }
+                    else{
+                      $scope.isMoreLeft = false;
+                    }
+
+                  $scope.errorMessage = '';
+                }
+                else{
+                  $scope.isMoreLeft = false;
+                }
+
+            });
+    }
+
+
+
+
+
+      $scope.resetSearchView = function(){
+
+        $scope.isSearched = false;
+        $scope.isFound = false;
+        $scope.singleGuest = false;
+        
+        $scope.guestData = "";
+
+        $scope.searchKey = "";
+        $scope.limiter = 0;
+        $scope.isMoreLeft = false;
+        $scope.errorMessage = "";
+
+        $scope.isViewingProfile = false;
+      }
+
+      $scope.resetSearchView();
+
+
+
+$scope.defaultDisplayTitle = 'Guest Profiles';
+
+
+
+})
+
+
+
+
+
+
  .controller('staffCtrl', function(changeSlotService, $ionicSideMenuDelegate, $scope, $ionicPopup, ionicTimePicker, ionicDatePicker, $state, $http, $ionicPopover, $ionicLoading, $timeout, mappingService, currentBooking) {
 
 
@@ -1379,7 +1595,7 @@ $scope.getFancyCurrency = function(x){
     */
 
 
-        $scope.overallData = {
+$scope.overallData = {
     "status": true,
     "error": "",
     "salarySum": 212831,
@@ -1604,7 +1820,7 @@ $scope.day = moment();
 
       $scope.resetSearchView();
 
-$scope.search('a');
+      $scope.search('a');
 
       $scope.viewStaffProfile = function(staffObj){
 
