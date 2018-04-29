@@ -1445,11 +1445,43 @@ var TEMP_TOKEN = 'sHtArttc2ht+tMf9baAeQ9ukHnXtlsHfexmCWx5sJOgFE1kpUfdk49ICSFMlFp
         $scope.isViewingProfile = true;
         $scope.viewingGuestData = guestObj;
 
+        $scope.viewingGuestData.totalVisits = 3;
+        $scope.viewingGuestData.totalOnlineOrders = 8;
+        $scope.viewingGuestData.totalVolume = 5933;
+        $scope.viewingGuestData.lastVisitOutlet = 'IIT Madras';
+        $scope.viewingGuestData.lastVisitDate = '12th April, 2018';
+        $scope.viewingGuestData.averageRating = 3.9;
+
       }
 
       $scope.goBackToResults = function(){
         $scope.isViewingProfile = false;
       }
+
+
+      $scope.getRatingColor = function(rating){
+
+            if(rating >= 4){
+                return {'color': '#305D02'}
+            }
+            else if(rating >= 3.5){
+                return {'color': '#cddc39'}
+            }
+            else if(rating >= 3){
+                return {'color': '#FFBA00'}
+            }
+            else if(rating >= 2){
+                return {'color': '#FF7800'}
+            }
+            else if(rating < 2){
+                return {'color': '#CD1C26'}             
+            }
+            else{
+                return {'color': '#34495e'}
+            }
+      }
+
+
 
 
       $scope.search = function(search_key){

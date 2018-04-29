@@ -83,7 +83,7 @@
 
           <div class="row" style="padding: 10px 10px 0 10px">
             <div class="infoTile" style="width: 100%; padding: 16px 5px 5px 5px">
-                <div class="infoTileHead" style="margin: 0 0 10px 10px"><span style="color: #3498db">Personal Information</span></div>
+                <div class="infoTileHead" style="margin: 0 0 10px 10px"><span style="color: #3498db">Basic Information</span></div>
 
                                                    <table class="table" style="width: 100%">
                                                       <col width="40%"> <col width="60%">
@@ -105,7 +105,135 @@
                                                       </tbody>
                                                    </table>   
             </div>
-          </div>            
+          </div>   
+
+          <div class="row" style="padding: 10px 10px 0 10px">
+            <div class="infoTile" style="width: 100%;">
+                <div class="infoTileIcon"><i class="icon ion-fork"></i></div>
+                <div class="infoTileHead"><span>Total Visits</span></div>
+                <div class="tinfoTileBody">{{viewingGuestData.totalVisits}}</div>
+                <div class="infoTileFoot">
+                  <span style="color: gray">Times visited</span>
+                </div>
+            </div>
+          </div>
+
+          <div class="row" style="padding: 10px 10px 0 10px">
+            <div class="infoTile" style="width: 100%;">
+                <div class="infoTileIcon"><i class="icon fa fa-truck"></i></div>
+                <div class="infoTileHead"><span>Online Orders</span></div>
+                <div class="tinfoTileBody">{{viewingGuestData.totalOnlineOrders}}</div>
+                <div class="infoTileFoot">
+                  <span style="color: gray">Orders made online</span>
+                </div>
+            </div>
+          </div>
+
+          <div class="row" style="padding: 10px 10px 0 10px">
+            <div class="infoTile" style="width: 100%;">
+                <div class="infoTileIcon"><i class="icon fa fa-inr"></i></div>
+                <div class="infoTileHead"><span>Total Volume</span></div>
+                <div class="tinfoTileBody"><i class="fa fa-inr lightRupees"></i>{{viewingGuestData.totalVolume}}</div>
+                <div class="infoTileFoot">
+                  <span style="color: gray">Worth revenue</span>
+                </div>
+            </div>
+          </div>                                       
+
+          <div class="row" style="padding: 10px 10px 0 10px">
+            <div class="infoTile" style="width: 100%;">
+                <div class="infoTileIcon" ng-style="getRatingColor(viewingGuestData.averageRating)">{{viewingGuestData.averageRating}}</div>
+                <div class="infoTileHead"><span>Average Rating</span></div>
+                <div class="tinfoTileBody">
+                  <tag ng-if="viewingGuestData.averageRating == 5" style="letter-spacing: -5px;" ng-style="getRatingColor(viewingGuestData.averageRating)">
+                    <i class="icon ion-android-star"></i>
+                    <i class="icon ion-android-star"></i>
+                    <i class="icon ion-android-star"></i>
+                    <i class="icon ion-android-star"></i>
+                    <i class="icon ion-android-star"></i>
+                  </tag>
+                  <tag ng-if="viewingGuestData.averageRating < 5 && viewingGuestData.averageRating > 4" style="letter-spacing: -5px;" ng-style="getRatingColor(viewingGuestData.averageRating)">
+                    <i class="icon ion-android-star"></i>
+                    <i class="icon ion-android-star"></i>
+                    <i class="icon ion-android-star"></i>
+                    <i class="icon ion-android-star"></i>
+                    <i class="icon ion-android-star-half"></i>
+                  </tag>
+                  <tag ng-if="viewingGuestData.averageRating == 4" style="letter-spacing: -5px;" ng-style="getRatingColor(viewingGuestData.averageRating)">
+                    <i class="icon ion-android-star"></i>
+                    <i class="icon ion-android-star"></i>
+                    <i class="icon ion-android-star"></i>
+                    <i class="icon ion-android-star"></i>
+                    <i class="icon ion-android-star-outline"></i>
+                  </tag>
+                  <tag ng-if="viewingGuestData.averageRating < 4 && viewingGuestData.averageRating > 3" style="letter-spacing: -5px;" ng-style="getRatingColor(viewingGuestData.averageRating)">
+                    <i class="icon ion-android-star"></i>
+                    <i class="icon ion-android-star"></i>
+                    <i class="icon ion-android-star"></i>
+                    <i class="icon ion-android-star-half"></i>
+                    <i class="icon ion-android-star-outline"></i>
+                  </tag>
+                  <tag ng-if="viewingGuestData.averageRating == 3" style="letter-spacing: -5px;" ng-style="getRatingColor(viewingGuestData.averageRating)">
+                    <i class="icon ion-android-star"></i>
+                    <i class="icon ion-android-star"></i>
+                    <i class="icon ion-android-star"></i>
+                    <i class="icon ion-android-star-outline"></i>
+                    <i class="icon ion-android-star-outline"></i>
+                  </tag>
+                  <tag ng-if="viewingGuestData.averageRating < 3 && viewingGuestData.averageRating > 2" style="letter-spacing: -5px;" ng-style="getRatingColor(viewingGuestData.averageRating)">
+                    <i class="icon ion-android-star"></i>
+                    <i class="icon ion-android-star"></i>
+                    <i class="icon ion-android-star-half"></i>
+                    <i class="icon ion-android-star-outline"></i>
+                    <i class="icon ion-android-star-outline"></i>
+                  </tag>
+                  <tag ng-if="viewingGuestData.averageRating == 2" style="letter-spacing: -5px;" ng-style="getRatingColor(viewingGuestData.averageRating)">
+                    <i class="icon ion-android-star"></i>
+                    <i class="icon ion-android-star"></i>
+                    <i class="icon ion-android-star-outline"></i>
+                    <i class="icon ion-android-star-outline"></i>
+                    <i class="icon ion-android-star-outline"></i>
+                  </tag>
+                  <tag ng-if="viewingGuestData.averageRating < 2 && viewingGuestData.averageRating > 1" style="letter-spacing: -5px;" ng-style="getRatingColor(viewingGuestData.averageRating)">
+                    <i class="icon ion-android-star"></i>
+                    <i class="icon ion-android-star-half"></i>
+                    <i class="icon ion-android-star-outline"></i>
+                    <i class="icon ion-android-star-outline"></i>
+                    <i class="icon ion-android-star-outline"></i>
+                  </tag>
+                  <tag ng-if="viewingGuestData.averageRating == 1" style="letter-spacing: -5px;" ng-style="getRatingColor(viewingGuestData.averageRating)">
+                    <i class="icon ion-android-star"></i>
+                    <i class="icon ion-android-star-outline"></i>
+                    <i class="icon ion-android-star-outline"></i>
+                    <i class="icon ion-android-star-outline"></i>
+                    <i class="icon ion-android-star-outline"></i>
+                  </tag>
+                  <tag ng-if="viewingGuestData.averageRating < 1" style="letter-spacing: -5px;" ng-style="getRatingColor(viewingGuestData.averageRating)">
+                    <i class="icon ion-android-star-half"></i>
+                    <i class="icon ion-android-star-outline"></i>
+                    <i class="icon ion-android-star-outline"></i>
+                    <i class="icon ion-android-star-outline"></i>
+                    <i class="icon ion-android-star-outline"></i>
+                  </tag>
+
+                </div>
+                <div class="infoTileFoot">
+                  <span style="color: gray">Average Rating by {{viewingGuestData.name}}</span>
+                </div>
+            </div>
+          </div>
+
+          <div class="row" style="padding: 10px 10px 0 10px">
+            <div class="infoTile" style="width: 100%;">
+                <div class="infoTileIcon"><i class="icon fa fa-map-marker"></i></div>
+                <div class="infoTileHead"><span>Recently Visited Outlet</span></div>
+                <div class="tinfoTileBody" style="font-size: 26px">{{viewingGuestData.lastVisitOutlet}}</div>
+                <div class="infoTileFoot">
+                  <span style="color: gray"><tag ng-if="viewingGuestData.lastVisitDate && viewingGuestData.lastVisitDate != ''">Visited on {{viewingGuestData.lastVisitDate}}</tag></span>
+                </div>
+            </div>
+          </div>   
+
 
         </div> <!-- viewing result -->
 
