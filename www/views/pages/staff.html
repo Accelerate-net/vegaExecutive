@@ -1,4 +1,4 @@
-<ion-side-menus class="feed-view">
+<ion-side-menus class="feed-view" cache-view="false">
 
   <ion-pane ion-side-menu-content>
       <ion-header-bar class="feed-header">
@@ -8,7 +8,7 @@
             </button>
 
             <button class="button button-clear" style="text-align: left; margin-left: 10px; font-weight: 400; color: #FFF; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; font-size: 18px;">
-              Staff Info
+              Staff Directory
             </button>  
 
          </div>
@@ -91,33 +91,42 @@
     </header>
     <ion-content class="has-header" style="top: 80px">
       <ion-list>
+        <ion-item class="item-icon-left" style="background: none" nav-clear menu-close ui-sref="main.app.tiles">
+               <i class="icon" style="width: 60px; color: #FFF; text-align: center"><i class="fa fa-th" style="font-size: 70%; padding-left: 6px"></i></i>
+               <h2 class="menu-text">Home</h2>
+        </ion-item>
         <ion-item class="item-icon-left" style="background: none" nav-clear menu-close ui-sref="main.app.overall">
-               <i class="icon" style="width: 60px; color: #FFF; text-align: center"><i class="fa fa-bar-chart" style="font-size: 70%; padding-left: 6px"></i></i>
-               <h2 class="menu-text">Overall Summary</h2>
-        </ion-item>
+               <i class="icon" style="width: 60px; color: #FFF; text-align: center"><i class="ion-android-bulb" style="font-size: 80%; padding-left: 6px"></i></i>
+               <h2 class="menu-text">Quick Insights</h2>
+        </ion-item>        
         <ion-item class="item-icon-left" style="background: none" nav-clear menu-close ui-sref="main.app.sales">
-               <i class="icon" style="width: 60px; color: #FFF"><i class="fa fa-inr" style="font-size: 70%; padding-left: 6px"></i></i>
-               <h2 class="menu-text">Sales</h2>
+               <i class="icon" style="width: 60px; color: #FFF"><i class="fa fa-bar-chart" style="font-size: 70%; padding-left: 6px"></i></i>
+               <h2 class="menu-text">Sales Summary</h2>
         </ion-item>
+        <ion-item class="item-icon-left" style="background: none" nav-clear menu-close ui-sref="main.app.accounts">
+               <i class="icon" style="width: 60px; color: #FFF"><i class="fa fa-inr" style="font-size: 70%; padding-left: 6px"></i></i>
+               <h2 class="menu-text">Accounts</h2>
+        </ion-item>        
         <ion-item class="item-icon-left" style="background: none" nav-clear menu-close ui-sref="main.app.staff">
-               <i class="icon" style="width: 60px; color: #FFF"><i class="fa fa-users" style="font-size: 70%; padding-left: 6px"></i></i>
-               <h2 class="menu-text">Staff Info</h2>
+               <i class="icon" style="width: 60px; color: #FFF"><i class="ion-android-people" style="font-size: 80%; padding-left: 6px"></i></i>
+               <h2 class="menu-text">Staff Directory</h2>
         </ion-item>
         <ion-item class="item-icon-left" style="background: none" nav-clear menu-close ui-sref="main.app.customers">
                <i class="icon" style="width: 60px; color: #FFF"><i class="fa fa-smile-o" style="font-size: 70%; padding-left: 6px"></i></i>
-               <h2 class="menu-text">Customers</h2>
+               <h2 class="menu-text">Customer Profiles</h2>
         </ion-item>
         <ion-item class="item-icon-left" style="background: none" nav-clear menu-close ui-sref="main.app.feedbacks">
                <i class="icon" style="width: 60px; color: #FFF"><i class="fa fa-star-half-o" style="font-size: 70%; padding-left: 6px"></i></i>
                <h2 class="menu-text">Feedbacks</h2>
         </ion-item>
-        <ion-item class="item-icon-left" style="background: none" nav-clear menu-close ui-sref="main.app.stocks">
-               <i class="icon" style="width: 60px; color: #FFF"><i class="fa fa-cube" style="font-size: 70%; padding-left: 6px"></i></i>
-               <h2 class="menu-text">Inventory</h2>
+
+
+        <ion-item style="padding-top: 0; background: none; bottom: 0; width: 100%; border: none;" nav-clear>
+               <p style="color: #521110; font-size: 11px; margin: 10px 0; text-align: center;">Version 1.5.0</p>
         </ion-item>
 
+
       </ion-list>
-      <p style="margin-left: 15px; position: absolute; color: #5a1011; bottom: 0px; font-size: 12px;">Version 1.5.0</p>
     </ion-content>
   </ion-side-menu>
 </ion-side-menus>

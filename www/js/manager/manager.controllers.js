@@ -1,4 +1,4 @@
-angular.module('manager.controllers', ['ionic', 'ionic-timepicker', 'ionic-datepicker', 'chart.js']) //, 'moment-picker'
+angular.module('manager.controllers', ['ionic', 'ui.router', 'ionic-timepicker', 'ionic-datepicker', 'chart.js']) //, 'moment-picker'
 
 
     .config(function(ionicTimePickerProvider) {
@@ -2159,11 +2159,41 @@ $scope.defaultDisplayTitle = 'Registered Employees';
 
 
 
-    .controller('feedbacksCtrl', function(changeSlotService, $ionicLoading, ionicDatePicker, $scope, $rootScope, $ionicPopup, $state, $http, $ionicPopover, $ionicLoading, $timeout, mappingService, currentBooking) {
+    .controller('feedbacksCtrl', function(changeSlotService, $ionicLoading, ionicDatePicker, $scope, $rootScope, $ionicPopup, $state, $http, $ionicPopover, $ionicLoading, $timeout, mappingService, currentBooking, $ionicSideMenuDelegate) {
 
         if (_.isUndefined(window.localStorage.admin)) {
             $state.go('main.app.login');
         }
+
+
+        $scope.showOptionsMenu = function() {
+            $ionicSideMenuDelegate.toggleLeft();
+            $scope.navToggled = !$scope.navToggled;
+        };
+
+
+$scope.getRatingColor = function(rating){
+
+        if(rating >= 4){
+            return {'color': '#4d7b1e'}
+        }
+        else if(rating >= 3.5){
+            return {'color': '#cddc39'}
+        }
+        else if(rating >= 3){
+            return {'color': '#FFBA00'}
+        }
+        else if(rating >= 2){
+            return {'color': '#FF7800'}
+        }
+        else if(rating < 2){
+            return {'color': '#CD1C26'}             
+        }
+        else{
+            return {'color': '#34495e'}
+        }
+}
+
 
 
         $scope.totalPAXCount = 0;
@@ -2196,6 +2226,7 @@ $scope.defaultDisplayTitle = 'Registered Employees';
                 .success(function(response) {
 					$ionicLoading.hide();
                     $scope.feedFigures = response;
+                    $scope.feedFigures.overall = 3.8;
                 })
                 .error(function(data) {
                     $ionicLoading.hide();
@@ -2264,7 +2295,12 @@ $scope.defaultDisplayTitle = 'Registered Employees';
         }
 
 
+        $scope.filterAppliedDisplayText = '';
+
         $scope.filterSort = function(type) {
+
+            $scope.filterAppliedDisplayText = type;
+
 			$scope.limiter = 5;
             $scope.left = true;
             $scope.isFilterApplied = true;
@@ -2274,6 +2310,7 @@ $scope.defaultDisplayTitle = 'Registered Employees';
         }
 
         $scope.filterClear = function() {
+            $scope.filterAppliedDisplayText = '';
             $scope.isFilterApplied = false;
             $scope.init();
             $scope.mypopup.close();
