@@ -294,6 +294,8 @@ letter-spacing: 1px;
 }
 
 
+
+
 .input-group{
       position: relative;
     display: table;
@@ -309,6 +311,61 @@ letter-spacing: 1px;
     display: table-cell;
 }
 
+
+
+/* ORDER LISTING */
+
+.orderLabelPrepaid{
+    font-size: 10px;
+    padding: 1px 3px;
+    font-weight: bold;
+    border: 1px solid #2980b9;
+    color: #2980b9;
+    float: right;
+}
+
+.orderLabelCash{
+    font-size: 10px;
+    padding: 1px 3px;
+    font-weight: bold;
+    background: #2ecc71;
+    color: #FFF;
+    float: right;
+}
+
+.orderLabelDelivery{
+  padding: 2px 4px; background: #f39c12; 
+  color: #FFF; font-size: 10px; float: right;
+}
+
+.orderLabelTakeaway{
+  padding: 2px 4px; background: #2980b9; 
+  color: #FFF; font-size: 10px; float: right;
+}
+
+.orderConfirmButton{
+  width: 100%; 
+  border-radius: 0;
+  color: #FFF !important;
+  background: #1abc9c !important;
+}
+
+.orderConfirmButton:hover, .orderConfirmButton:focus, .orderConfirmButton:active{
+  background: #16a085 !important;
+  color: #FFF !important;
+}
+
+.orderRejectButton{
+  width: 100%; 
+  border-radius: 0;
+  color: #FFF !important;
+  background: #e74c3c !important;
+}
+
+.orderRejectButton:hover, .orderRejectButton:focus, .orderRejectButton:active{
+  background: #c0392b !important;
+  color: #FFF !important;
+}
 
 
 .StaffListingTable th, td {
@@ -366,6 +423,17 @@ letter-spacing: 1px;
   background-color: #efd7d7;
   color: #772822;
 }
+
+
+.orderCartTable tr:nth-child(even) {
+  background-color: #f3eee4;
+  color: #772822;
+}
+.orderCartTable tr:nth-child(odd) {
+  background-color: #eae4d8;
+  color: #772822;
+}
+
 
 .buttonMyBlue{
   background: #3498db;

@@ -1434,8 +1434,8 @@ $scope.getFancyCommaNumber = function(x){
 
 
 
-var TEMP_TOKEN = 'sHtArttc2ht+tMf9baAeQ9ukHnXtlsHfexmCWx5sJOgFE1kpUfdk49ICSFMlFpeEQmANKHwckmtqJx2jKY6r1jd0GfFSLnBi7Lho856b/d8=';
-
+     var TEMP_TOKEN = 'sHtArttc2ht+tMf9baAeQ9ukHnXtlsHfexmCWx5sJOgFE1kpUfdk49ICSFMlFpeEQmANKHwckmtqJx2jKY6r1jd0GfFSLnBi7Lho856b/d8=';
+    
 
 
       $scope.viewGuestProfile = function(guestObj){
@@ -1480,8 +1480,6 @@ var TEMP_TOKEN = 'sHtArttc2ht+tMf9baAeQ9ukHnXtlsHfexmCWx5sJOgFE1kpUfdk49ICSFMlFp
                 return {'color': '#34495e'}
             }
       }
-
-
 
 
       $scope.search = function(search_key){
@@ -3419,5 +3417,158 @@ console.log(data)
             $state.go('main.app.reservations');
         };
     })
+
+
+.controller('AppCtrl', function(changeSlotService, $ionicSideMenuDelegate, $scope, $ionicPopup, ionicTimePicker, ionicDatePicker, $state, $http, $ionicPopover, $ionicLoading, $timeout, mappingService, currentBooking) {
+
+
+})
+
+
+
+// ONLINE ORDERS
+
+ .controller('pendingOrdersCtrl', function(changeSlotService, $ionicSideMenuDelegate, $scope, $ionicPopup, ionicTimePicker, ionicDatePicker, $state, $http, $ionicPopover, $ionicLoading, $timeout, mappingService, currentBooking) {
+
+
+        //Already Logged in case
+      /*  if (!_.isUndefined(window.localStorage.admin) && window.localStorage.admin != '') {
+            $state.go('main.app.landing');
+        }
+    */
+
+
+
+var TEMP_TOKEN = 'sHtArttc2ht+tMf9baAeQ9ukHnXtlsHfexmCWx5sJOgFE1kpUfdk49ICSFMlFpeEQmANKHwckmtqJx2jKY6r1jd0GfFSLnBi7Lho856b/d8=';
+    
+
+    //List or Details View?
+    $scope.isViewingOrder = false;
+
+
+    $scope.initializePendingOrders = function(){
+
+      var data = {};
+      data.token = TEMP_TOKEN; //$cookies.get("zaitoonAdmin");
+      data.status = 2;
+      data.id = 10;
+
+      $http({
+        method  : 'POST',
+        url     : 'https://zaitoon.online/services/fetchorders.php',
+        data    : data,
+        headers : {'Content-Type': 'application/x-www-form-urlencoded'}
+       })
+       .then(function(response) {
+            $scope.pending_orders = response.data.response;
+            $scope.pending_orders_length = response.data.count;
+       });
+    }
+
+
+    $scope.initializePendingOrders();
+
+    $scope.openViewOrder = function (obj){
+        $scope.isViewingOrder = true;
+        $scope.displayOrderContent = obj;
+    }
+
+
+
+
+
+$scope.getRatingColor = function(rating){
+
+        if(rating >= 4){
+            return {'color': '#305D02'}
+        }
+        else if(rating >= 3.5){
+            return {'color': '#cddc39'}
+        }
+        else if(rating >= 3){
+            return {'color': '#FFBA00'}
+        }
+        else if(rating >= 2){
+            return {'color': '#FF7800'}
+        }
+        else if(rating < 2){
+            return {'color': '#CD1C26'}             
+        }
+        else{
+            return {'color': '#34495e'}
+        }
+}
+
+$scope.getRevenueStyle = function(amount){
+    if(amount < 0){
+        return {'color': '#e74c3c'}
+    }
+    else if(amount > 0){
+        return {'color': '#27ae60'}
+    }
+}
+
+$scope.getFancyCurrency = function(x){
+    return x.toLocaleString('en-US', {maximumSignificantDigits : 9});
+}
+
+
+
+
+
+        $scope.showOptionsMenu = function() {
+            $ionicSideMenuDelegate.toggleLeft();
+            $scope.navToggled = !$scope.navToggled;
+        };
+
+        $scope.getRevenueClass = function(current, previous){
+            if(current >= previous){
+                return 'ion-arrow-graph-up-right specialGreen';
+            }
+            else{
+                return 'ion-arrow-graph-down-right specialRed';
+            }
+            
+        }
+
+
+        $scope.getFancyAmount = function(amount){
+
+            amount = Math.abs(amount);
+
+            if(amount < 10000){
+                return amount;
+            }
+            else if(amount >= 10000 && amount < 100000){
+                amount = amount/1000;
+                amount = Math.round(amount * 10) / 10;
+                return amount + "" + " K";
+            }
+            else if(amount >= 100000 && amount < 10000000){
+                amount = amount/100000;
+                amount = Math.round(amount * 100) / 100;
+                return amount + "" + " L";
+            }
+            else if(amount >= 10000000){
+                amount = amount/10000000;
+                amount = Math.round(amount * 100) / 100;
+                return amount + "" + " Cr";
+            }
+        }
+
+
+
+    })
+
+
+.controller('confirmedOrdersCtrl', function(changeSlotService, $ionicSideMenuDelegate, $scope, $ionicPopup, ionicTimePicker, ionicDatePicker, $state, $http, $ionicPopover, $ionicLoading, $timeout, mappingService, currentBooking) {
+
+})
+
+
+.controller('completedOrdersCtrl', function(changeSlotService, $ionicSideMenuDelegate, $scope, $ionicPopup, ionicTimePicker, ionicDatePicker, $state, $http, $ionicPopover, $ionicLoading, $timeout, mappingService, currentBooking) {
+
+})
+
 
 ;
