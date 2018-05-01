@@ -40,6 +40,10 @@
   top: 88px !important;
 }
 
+.hasSearchBar{
+  top: 106px !important;
+}
+
 .overflowDisabled{
   overflow: hidden !important;
 }
@@ -53,6 +57,18 @@
  border: 1px solid #FFF !important; 
  padding: 0 8px !important;
  min-width: 85px !important;
+}
+
+.clearSearchFilterButton{
+ margin-left: 10px; 
+ font-weight: 400 !important; 
+ color: #ffffff !important; 
+ overflow: hidden; white-space: nowrap; text-overflow: ellipsis; 
+ font-size: 15px !important; 
+ border: none !important; 
+ padding: 0 8px !important;
+ min-width: 85px !important;
+ text-align: right;
 }
 
 .clearFeeedFilterButton{
@@ -362,9 +378,19 @@ letter-spacing: 1px;
   background: #e74c3c !important;
 }
 
+.rejectOrderTrash{
+  font-size: 16px; width: 50px; height: 45px; color: #e0e0e0 !important;
+  display: inline-block; top: 0px; padding: 17px; float: right; position: absolute;
+}
+
 .orderRejectButton:hover, .orderRejectButton:focus, .orderRejectButton:active{
   background: #c0392b !important;
   color: #FFF !important;
+}
+
+
+.rejectOrderTrash:hover, .rejectOrderTrash:focus, .rejectOrderTrash:active{
+  color: #721e1f !important;
 }
 
 

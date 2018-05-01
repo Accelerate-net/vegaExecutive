@@ -293,16 +293,20 @@ angular.module('manager.controllers', ['ionic', 'ui.router', 'ionic-timepicker',
                 $http.get('https://www.zaitoon.online/services/fetchoutlets.php')
                     .then(function(response) {
                         $scope.allList = response.data.response;
+
+                            outletsPopup = $ionicPopup.show({
+                                cssClass: 'popup-outer edit-shipping-address-view',
+                                templateUrl: 'views/common/templates/outlets-popup.html',
+                                scope: angular.extend($scope, {}),
+                                buttons: [{
+                                    text: 'Close'
+                                }]
+                            });
+
+
                     });
 
-                outletsPopup = $ionicPopup.show({
-                    cssClass: 'popup-outer edit-shipping-address-view',
-                    templateUrl: 'views/common/templates/outlets-popup.html',
-                    scope: angular.extend($scope, {}),
-                    buttons: [{
-                        text: 'Close'
-                    }]
-                });
+
 
                 //Callback
                 $scope.setBranchFilter = function(val) {
@@ -3428,7 +3432,7 @@ console.log(data)
 
 // ONLINE ORDERS
 
- .controller('pendingOrdersCtrl', function(changeSlotService, $ionicSideMenuDelegate, $scope, $ionicPopup, ionicTimePicker, ionicDatePicker, $state, $http, $ionicPopover, $ionicLoading, $timeout, mappingService, currentBooking) {
+ .controller('pendingOrdersCtrl', function($ionicActionSheet, changeSlotService, $ionicSideMenuDelegate, $scope, $ionicPopup, ionicTimePicker, ionicDatePicker, $state, $http, $ionicPopover, $ionicLoading, $timeout, mappingService, currentBooking) {
 
 
         //Already Logged in case
@@ -3445,13 +3449,15 @@ var TEMP_TOKEN = 'sHtArttc2ht+tMf9baAeQ9ukHnXtlsHfexmCWx5sJOgFE1kpUfdk49ICSFMlFp
     //List or Details View?
     $scope.isViewingOrder = false;
 
+    $scope.searchKey = {};
+    $scope.searchKey.value = '';
+
 
     $scope.initializePendingOrders = function(){
 
       var data = {};
       data.token = TEMP_TOKEN; //$cookies.get("zaitoonAdmin");
-      data.status = 2;
-      data.id = 10;
+      data.status = 0;
 
       $http({
         method  : 'POST',
@@ -3473,46 +3479,46 @@ var TEMP_TOKEN = 'sHtArttc2ht+tMf9baAeQ9ukHnXtlsHfexmCWx5sJOgFE1kpUfdk49ICSFMlFp
         $scope.displayOrderContent = obj;
     }
 
+    $scope.backToPendingOrders = function(flag){
+        $scope.isViewingOrder = false;
 
-
-
-
-$scope.getRatingColor = function(rating){
-
-        if(rating >= 4){
-            return {'color': '#305D02'}
+        if(flag == 'RELOAD'){
+            $scope.searchKey.value = '';
+            $scope.initializePendingOrders();
         }
-        else if(rating >= 3.5){
-            return {'color': '#cddc39'}
-        }
-        else if(rating >= 3){
-            return {'color': '#FFBA00'}
-        }
-        else if(rating >= 2){
-            return {'color': '#FF7800'}
-        }
-        else if(rating < 2){
-            return {'color': '#CD1C26'}             
-        }
-        else{
-            return {'color': '#34495e'}
-        }
-}
-
-$scope.getRevenueStyle = function(amount){
-    if(amount < 0){
-        return {'color': '#e74c3c'}
     }
-    else if(amount > 0){
-        return {'color': '#27ae60'}
+
+    $scope.resetSearchKey = function(){
+        $scope.searchKey.value = '';
     }
-}
 
-$scope.getFancyCurrency = function(x){
-    return x.toLocaleString('en-US', {maximumSignificantDigits : 9});
-}
+    $scope.confirmOrder = function(orderObj){
+
+    }
 
 
+    $scope.proceedRejectOrder = function(orderObj){
+        alert('DONE!')
+    }
+
+
+    $scope.rejectOrder = function(orderObj){
+        $ionicActionSheet.show({
+            buttons: [
+                { text: '<i class="icon ion-close-circled assertive"></i> <i class="assertive">Reject Order</i>' },
+                { text: '<i class="icon"></i> <i class="dark">Close</i>' },
+              ],
+                    titleText: 'Are you sure you want to Reject Order #'+orderObj.orderID+'?',
+                    buttonClicked: function(index) {
+                        if(index == 0){
+                            $scope.proceedRejectOrder(orderObj);
+                        }
+                
+                    return true;
+              },
+        });
+
+    }
 
 
 
@@ -3521,49 +3527,187 @@ $scope.getFancyCurrency = function(x){
             $scope.navToggled = !$scope.navToggled;
         };
 
-        $scope.getRevenueClass = function(current, previous){
-            if(current >= previous){
-                return 'ion-arrow-graph-up-right specialGreen';
-            }
-            else{
-                return 'ion-arrow-graph-down-right specialRed';
-            }
-            
+})
+
+
+
+
+ .controller('confirmedOrdersCtrl', function($ionicActionSheet, changeSlotService, $ionicSideMenuDelegate, $scope, $ionicPopup, ionicTimePicker, ionicDatePicker, $state, $http, $ionicPopover, $ionicLoading, $timeout, mappingService, currentBooking) {
+
+
+        //Already Logged in case
+      /*  if (!_.isUndefined(window.localStorage.admin) && window.localStorage.admin != '') {
+            $state.go('main.app.landing');
         }
+    */
 
 
-        $scope.getFancyAmount = function(amount){
 
-            amount = Math.abs(amount);
+var TEMP_TOKEN = 'sHtArttc2ht+tMf9baAeQ9ukHnXtlsHfexmCWx5sJOgFE1kpUfdk49ICSFMlFpeEQmANKHwckmtqJx2jKY6r1jd0GfFSLnBi7Lho856b/d8=';
+    
 
-            if(amount < 10000){
-                return amount;
-            }
-            else if(amount >= 10000 && amount < 100000){
-                amount = amount/1000;
-                amount = Math.round(amount * 10) / 10;
-                return amount + "" + " K";
-            }
-            else if(amount >= 100000 && amount < 10000000){
-                amount = amount/100000;
-                amount = Math.round(amount * 100) / 100;
-                return amount + "" + " L";
-            }
-            else if(amount >= 10000000){
-                amount = amount/10000000;
-                amount = Math.round(amount * 100) / 100;
-                return amount + "" + " Cr";
-            }
+    //List or Details View?
+    $scope.isViewingOrder = false;
+
+    $scope.searchKey = {};
+    $scope.searchKey.value = '';
+
+
+    $scope.initializeConfirmedOrders = function(){
+
+      var data = {};
+      data.token = TEMP_TOKEN; //$cookies.get("zaitoonAdmin");
+      data.status = 1;
+
+      $http({
+        method  : 'POST',
+        url     : 'https://zaitoon.online/services/fetchorders.php',
+        data    : data,
+        headers : {'Content-Type': 'application/x-www-form-urlencoded'}
+       })
+       .then(function(response) {
+            $scope.confirmed_orders = response.data.response;
+            $scope.confirmed_orders_length = response.data.count;
+       });
+    }
+
+
+    $scope.initializeConfirmedOrders();
+
+    $scope.openViewOrder = function (obj){
+        $scope.isViewingOrder = true;
+        $scope.displayOrderContent = obj;
+    }
+
+    $scope.backToConfirmedOrders = function(flag){
+        $scope.isViewingOrder = false;
+
+        if(flag == 'RELOAD'){
+            $scope.searchKey.value = '';
+            $scope.initializeConfirmedOrders();
         }
+    }
+
+    $scope.resetSearchKey = function(){
+        $scope.searchKey.value = '';
+    }
+
+    $scope.dispatchOrderPost = function(orderObj, agentCode){
+        //CALL POST METHOD here.
+        console.log(orderObj, agentCode)
+    }
+
+    $scope.dispatchOrder = function(orderObj){
+
+              var temp_branch = 'IITMADRAS';
+
+              $http.get("https://zaitoon.online/services/fetchroles.php?branch="+temp_branch+"&role=AGENT").then(function(response) {
+                $scope.all_agents = response.data.results;
+
+                if(!response.data.isFound)
+                {
+                    $ionicLoading.show({
+                        template:  'No Delivery Agents available',
+                        duration: 3000
+                    })
+                    return '';
+                }
+
+                $scope.delivery_agents = [];
+                var i = 0;
+                while(i < $scope.all_agents.length){
+                  $scope.delivery_agents.push(
+                    {
+                      value: $scope.all_agents[i].code ,
+                      label: $scope.all_agents[i].name
+                    }
+                  );
+                  i++;
+                }
+
+
+                outletsPopup = $ionicPopup.show({
+                    cssClass: 'popup-outer edit-shipping-address-view',
+                    templateUrl: 'views/common/templates/delivery-agents-popup.html',
+                    title : 'Assign a Delivery Agent',
+                    scope: angular.extend($scope, {}),
+                    buttons: [{
+                        text: 'Close'
+                    }]
+                });
+
+
+              });
+
+                //Callback
+                $scope.dispatchOrderProcess = function(val) {
+                    $scope.dispatchOrderPost(orderObj, val)
+
+                    outletsPopup.close();
+                }
+    }
+
+    $scope.markOrderReady = function(orderObj){
+
+    }
+
+
+    $scope.proceedRejectOrder = function(orderObj){
+        alert('DONE!')
+    }
+
+
+    $scope.rejectOrder = function(orderObj){
+        $ionicActionSheet.show({
+            buttons: [
+                { text: '<i class="icon ion-close-circled assertive"></i> <i class="assertive">Cancel Order</i>' },
+                { text: '<i class="icon"></i> <i class="dark">Close</i>' },
+              ],
+                    titleText: 'Are you sure you want to Cancel Order #'+orderObj.orderID+' which is already been processed?',
+                    buttonClicked: function(index) {
+                        if(index == 0){
+                            $scope.proceedRejectOrder(orderObj);
+                        }
+                
+                    return true;
+              },
+        });
+
+    }
 
 
 
-    })
+    $scope.getTotalTimeLapsed = function(time){
+        return moment(time, "LT").fromNow();
+    }
+
+    $scope.timeLapsedStyle = function(time){
+        var timestamp = moment(time,'hh:mm a');
+        var difference = moment.duration(timestamp.diff(moment())).asMinutes();
+
+        if(difference >= -35){ //Normal
+            return {}
+        }
+        else if(difference < -35 && difference > -45){ //Warning
+            return {'color': '#f1c40f'}
+        }
+        else if(difference <= -45 && difference > -60){ //Critical Warning
+            return {'color': '#d35400'}
+        }
+        else if(difference <= -60){ //Very Delayed
+            return {'color': '#c0392b'}
+        }
+    }
 
 
-.controller('confirmedOrdersCtrl', function(changeSlotService, $ionicSideMenuDelegate, $scope, $ionicPopup, ionicTimePicker, ionicDatePicker, $state, $http, $ionicPopover, $ionicLoading, $timeout, mappingService, currentBooking) {
+
+        $scope.showOptionsMenu = function() {
+            $ionicSideMenuDelegate.toggleLeft();
+            $scope.navToggled = !$scope.navToggled;
+        };
 
 })
+
 
 
 .controller('completedOrdersCtrl', function(changeSlotService, $ionicSideMenuDelegate, $scope, $ionicPopup, ionicTimePicker, ionicDatePicker, $state, $http, $ionicPopover, $ionicLoading, $timeout, mappingService, currentBooking) {
