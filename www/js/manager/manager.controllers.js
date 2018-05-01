@@ -3709,8 +3709,193 @@ var TEMP_TOKEN = 'sHtArttc2ht+tMf9baAeQ9ukHnXtlsHfexmCWx5sJOgFE1kpUfdk49ICSFMlFp
 })
 
 
+ .controller('completedOrdersCtrl', function($ionicScrollDelegate, $ionicActionSheet, changeSlotService, $ionicSideMenuDelegate, $scope, $ionicPopup, ionicTimePicker, ionicDatePicker, $state, $http, $ionicPopover, $ionicLoading, $timeout, mappingService, currentBooking) {
 
-.controller('completedOrdersCtrl', function(changeSlotService, $ionicSideMenuDelegate, $scope, $ionicPopup, ionicTimePicker, ionicDatePicker, $state, $http, $ionicPopover, $ionicLoading, $timeout, mappingService, currentBooking) {
+
+        //Already Logged in case
+      /*  if (!_.isUndefined(window.localStorage.admin) && window.localStorage.admin != '') {
+            $state.go('main.app.landing');
+        }
+    */
+
+
+
+var TEMP_TOKEN = 'sHtArttc2ht+tMf9baAeQ9ukHnXtlsHfexmCWx5sJOgFE1kpUfdk49ICSFMlFpeEQmANKHwckmtqJx2jKY6r1jd0GfFSLnBi7Lho856b/d8=';
+    
+
+    //List or Details View?
+    $scope.isViewingOrder = false;
+
+    $scope.searchKey = {};
+    $scope.searchKey.value = '';
+
+
+      //Default Results : Completed Orders of the Day
+      var today = new Date();
+      var dd = today.getDate();
+      var mm = today.getMonth()+1;
+      var yyyy = today.getFullYear();
+      if(dd<10){ dd='0'+dd;}
+      if(mm<10){ mm='0'+mm;}
+      var today = dd+''+mm+''+yyyy;
+
+
+
+    $scope.initializeCompletedOrders = function(){
+
+      var data = {};
+      data.token = TEMP_TOKEN; //$cookies.get("zaitoonAdmin");
+      data.status = 2;
+      data.key = today;
+
+      $http({
+        method  : 'POST',
+        url     : 'https://zaitoon.online/services/filterorders.php',
+        data    : data,
+        headers : {'Content-Type': 'application/x-www-form-urlencoded'}
+       })
+       .then(function(response) {
+            $scope.completed_orders = response.data.response;
+            $scope.completed_orders_length = $scope.completed_orders.length;
+       });
+    }
+
+
+    $scope.initializeCompletedOrders();
+
+    $scope.openViewOrder = function (obj){
+        $scope.isViewingOrder = true;
+        $scope.displayOrderContent = obj;
+    }
+
+    $scope.backToCompletedOrders = function(flag){
+        $scope.isViewingOrder = false;
+
+        if(flag == 'RELOAD'){
+            $scope.searchKey.value = '';
+            $scope.initializeCompletedOrders();
+        }
+    }
+
+    $scope.resetSearchKey = function(){
+        $scope.searchKey.value = '';
+    }
+
+
+    $scope.getTotalTimeLapsed = function(time){
+        return moment(time, "LT").fromNow();
+    }
+
+    $scope.timeLapsedStyle = function(time){
+        var timestamp = moment(time,'hh:mm a');
+        var difference = moment.duration(timestamp.diff(moment())).asMinutes();
+
+        if(difference >= -35){ //Normal
+            return {}
+        }
+        else if(difference < -35 && difference > -45){ //Warning
+            return {'color': '#f1c40f'}
+        }
+        else if(difference <= -45 && difference > -60){ //Critical Warning
+            return {'color': '#d35400'}
+        }
+        else if(difference <= -60){ //Very Delayed
+            return {'color': '#c0392b'}
+        }
+    }
+
+
+
+    $scope.filterDate = '';
+    $scope.filterFancyDate = '';
+    $scope.isDateFilterApplied = false;
+
+
+    $scope.loadCompletedOrders = function(){
+
+      if($scope.filterDate == ''){
+        return '';
+      }
+
+      
+
+      var temp_key = $scope.filterDate.replace(/-/g , "");
+
+      if(temp_key != today){
+        $scope.isDateFilterApplied = true;
+      }
+      else{
+        $scope.isDateFilterApplied = false;
+      }
+
+      var data = {};
+      data.token = TEMP_TOKEN; //$cookies.get("zaitoonAdmin");
+      data.status = 2;
+      data.key = temp_key;
+
+      $http({
+        method  : 'POST',
+        url     : 'https://zaitoon.online/services/filterorders.php',
+        data    : data,
+        headers : {'Content-Type': 'application/x-www-form-urlencoded'}
+       })
+       .then(function(response) {
+            $scope.completed_orders = response.data.response;
+            $scope.completed_orders_length = $scope.completed_orders.length;
+       });
+    }
+
+
+    $scope.clearDateFilter = function(){
+        $scope.isDateFilterApplied = false;
+        $scope.initializeCompletedOrders();
+    }
+
+
+        //Date Picker stuff
+        var filterFromDate = {
+            callback: function(val) { //Mandatory
+
+                var monthNames = ["January", "February", "March", "April", "May", "June",
+                    "July", "August", "September", "October", "November", "December"
+                ];
+                var temp = new Date(val);
+                var mm = temp.getMonth() + 1;
+                var dd = temp.getDate();
+                var yyyy = temp.getFullYear();
+                if (mm < 10) mm = '0' + mm;
+                if (dd < 10) dd = '0' + dd;
+                var date = dd + '-' + mm + '-' + yyyy;
+                var fancyDate = dd + ' ' + monthNames[temp.getMonth()] + ', ' + yyyy;
+
+                $scope.filterDate = date;
+                $scope.filterFancyDate = fancyDate;
+
+                $scope.loadCompletedOrders();
+
+                $ionicScrollDelegate.scrollTop();
+            },
+            disabledDates: [ //Optional
+            ],
+            //from: new Date(), //Optional
+            to: new Date(), //Optional
+            inputDate: new Date(), //Optional
+            mondayFirst: true, //Optional
+            disableWeekdays: [], //Optional
+            closeOnSelect: false, //Optional
+            templateType: 'popup' //Optional
+        };
+
+
+    $scope.filterCompletedByDate = function(){
+        ionicDatePicker.openDatePicker(filterFromDate);
+    }
+
+
+        $scope.showOptionsMenu = function() {
+            $ionicSideMenuDelegate.toggleLeft();
+            $scope.navToggled = !$scope.navToggled;
+        };
 
 })
 
