@@ -2190,7 +2190,6 @@ var TEMP_TOKEN = 'sHtArttc2ht+tMf9baAeQ9ukHnXtlsHfexmCWx5sJOikSRf7xi1G0alsgJTZKK
 
                   if($scope.staffData.length == 1){
                     $scope.singleStaff = true;
-                    $scope.staffData = $scope.staffData[0];
                   }
                   else{
                     $scope.singleStaff = false;
