@@ -2164,6 +2164,12 @@ var TEMP_TOKEN = 'sHtArttc2ht+tMf9baAeQ9ukHnXtlsHfexmCWx5sJOikSRf7xi1G0alsgJTZKK
 
       $scope.search = function(search_key){
 
+            if(search_key == '' || !search_key){
+                return '';
+            }
+
+            $scope.isViewingProfile = false; //to be safe
+
             var data = {};
             data.token = TEMP_TOKEN; //$cookies.get("dashManager");
             data.key = search_key;
@@ -2218,13 +2224,19 @@ var TEMP_TOKEN = 'sHtArttc2ht+tMf9baAeQ9ukHnXtlsHfexmCWx5sJOikSRf7xi1G0alsgJTZKK
         $scope.errorMessage = "";
 
         $scope.isViewingProfile = false;
+        $scope.isViewingProfileAttendance = false;
+        $scope.isViewingProfileSalary = false;
       }
 
       $scope.resetSearchView();
 
-      $scope.search('a');
+     
 
       $scope.viewStaffProfile = function(staffObj){
+
+        //default options for attendance and salary display
+        $scope.isViewingProfileAttendance = false;
+        $scope.isViewingProfileSalary = false;
 
         $scope.isViewingProfile = true;
         $scope.viewingStaffData = staffObj;
@@ -2233,52 +2245,97 @@ var TEMP_TOKEN = 'sHtArttc2ht+tMf9baAeQ9ukHnXtlsHfexmCWx5sJOikSRf7xi1G0alsgJTZKK
 
       }
 
+      $scope.goBackToResults = function(){
+        $scope.isViewingProfile = false;
+      }
+
+      $scope.triggerSalaryButton = function(){
+        if($scope.isViewingProfileSalary){
+            $scope.isViewingProfileSalary = false;
+        }
+        else{
+            $scope.showSalarySummary();
+        }
+      }
+
+      $scope.showSalarySummary = function(){
+        //LOAD SALARY SUMMARY
+        $scope.isViewingProfileSalary = true;
+      }
 
 
-
-/* Attendance Calendar */
-
-    $scope.attendanceList = {
-    "status": true,
-    "error": "",
-    "response": [{
-        "date": "03-04-2018",
-        "day": "Tuesday",
-        "status": "2"
-    }, {
-        "date": "12-04-2018",
-        "day": "Thursday",
-        "status": "2"
-    }, {
-        "date": "14-04-2018",
-        "day": "Saturday",
-        "status": "2"
-    }, {
-        "date": "15-04-2018",
-        "day": "Sunday",
-        "status": "2"
-    }, {
-        "date": "23-04-2018",
-        "day": "Monday",
-        "status": "2"
-    }, {
-        "date": "02-05-2018",
-        "day": "Monday",
-        "status": "5"
-    }]
-}
+      $scope.triggerAttendanceButton = function(){
+        if($scope.isViewingProfileAttendance){
+            $scope.isViewingProfileAttendance = false;
+        }
+        else{
+            $scope.showAttendanceSummary();
+        }
+      }
 
 
-                        $scope.selected = moment();
-                        $scope.month = $scope.selected.clone();
+      $scope.showAttendanceSummary = function(){
 
-                        $scope.displayCalendarMonth = moment($scope.selected).format('MMMM YYYY');
+                    var TEMP_TOKEN = 'sHtArttc2ht+tMf9baAeQ9ukHnXtlsHfexmCWx5sJOikSRf7xi1G0alsgJTZKK9YvpLRtnhL5iK3X5xhKyQh5A==';
 
-                        var start = $scope.selected.clone();
-                        start.date(1);
-                        _removeTime(start.day(0));
+                    var tempFormattedMonth = moment($scope.day).format('YYYYMM');
 
-                        _buildMonth($scope, start, $scope.month);
+                    var data = {};
+                    data.token = TEMP_TOKEN; //$cookies.get("dashManager");
+                    data.month = tempFormattedMonth;
+
+                    //LOADING 
+                    $ionicLoading.show({ template: '<ion-spinner></ion-spinner>' });
+
+                    $http({
+                      method  : 'POST',
+                      url     : 'https://www.zaitoon.online/services/erpanalyticsstaffattendance.php',
+                      data    : data,
+                      headers : {'Content-Type': 'application/x-www-form-urlencoded'},
+                      timeout : 10000
+                     })
+                     .success(function(data) {
+
+                        $ionicLoading.hide();
+                        
+                        if(data.status){
+                            $scope.attendanceList = data.response;
+                            $scope.renderCalender();
+                        }
+                        else{
+                            $scope.attendanceList = [];
+
+                            $ionicLoading.show({
+                                template:  data.error,
+                                duration: 3000
+                            });                    
+                        }
+                    })
+                   .error(function(data){
+                    $ionicLoading.hide();
+                      $ionicLoading.show({
+                        template:  "Not responding. Check your connection.",
+                        duration: 3000
+                      });
+                    });      
+      }
+
+
+      $scope.renderCalender = function(){
+
+            $scope.isViewingProfileAttendance = true;
+
+            $scope.selected = moment();
+            $scope.month = $scope.selected.clone();
+
+            $scope.displayCalendarMonth = moment($scope.selected).format('MMMM YYYY');
+
+            var start = $scope.selected.clone();
+            start.date(1);
+            _removeTime(start.day(0));
+
+             _buildMonth($scope, start, $scope.month);
+      }
 
                         $scope.select = function(day) {
                             $scope.selected = day.date;  
@@ -2288,14 +2345,107 @@ var TEMP_TOKEN = 'sHtArttc2ht+tMf9baAeQ9ukHnXtlsHfexmCWx5sJOikSRf7xi1G0alsgJTZKK
                             var next = $scope.month.clone();
                             _removeTime(next.month(next.month()+1).date(1));
                             $scope.month.month($scope.month.month()+1);
-                            _buildMonth($scope, next, $scope.month);
+
+                            var tempFormattedMonth = moment($scope.month).format('YYYYMM');
+
+                            //Call POST method
+                            var TEMP_TOKEN = 'sHtArttc2ht+tMf9baAeQ9ukHnXtlsHfexmCWx5sJOikSRf7xi1G0alsgJTZKK9YvpLRtnhL5iK3X5xhKyQh5A==';
+
+                            var data = {};
+                            data.token = TEMP_TOKEN; //$cookies.get("dashManager");
+                            data.month = tempFormattedMonth;
+
+                            //LOADING 
+                            $ionicLoading.show({ template: '<ion-spinner></ion-spinner>' });
+
+                            $http({
+                              method  : 'POST',
+                              url     : 'https://www.zaitoon.online/services/erpanalyticsstaffattendance.php',
+                              data    : data,
+                              headers : {'Content-Type': 'application/x-www-form-urlencoded'},
+                              timeout : 10000
+                             })
+                             .success(function(data) {
+
+                                $ionicLoading.hide();
+                                
+                                if(data.status){
+                                    $scope.attendanceList = data.response;
+
+                                    //make calender
+                                    _buildMonth($scope, next, $scope.month);
+                                }
+                                else{
+                                    $scope.attendanceList = [];
+
+                                    $ionicLoading.show({
+                                        template:  data.error,
+                                        duration: 3000
+                                    });                    
+                                }
+                            })
+                           .error(function(data){
+                            $ionicLoading.hide();
+                              $ionicLoading.show({
+                                template:  "Not responding. Check your connection.",
+                                duration: 3000
+                              });
+                            }); 
+
                         };
 
                         $scope.previous = function() {
                             var previous = $scope.month.clone();
                             _removeTime(previous.month(previous.month()-1).date(1));
                             $scope.month.month($scope.month.month()-1);
-                            _buildMonth($scope, previous, $scope.month);
+
+                            var tempFormattedMonth = moment($scope.month).format('YYYYMM');
+
+
+                            //Call POST method
+                            var TEMP_TOKEN = 'sHtArttc2ht+tMf9baAeQ9ukHnXtlsHfexmCWx5sJOikSRf7xi1G0alsgJTZKK9YvpLRtnhL5iK3X5xhKyQh5A==';
+
+                            var data = {};
+                            data.token = TEMP_TOKEN; //$cookies.get("dashManager");
+                            data.month = tempFormattedMonth;
+
+                            //LOADING 
+                            $ionicLoading.show({ template: '<ion-spinner></ion-spinner>' });
+
+                            $http({
+                              method  : 'POST',
+                              url     : 'https://www.zaitoon.online/services/erpanalyticsstaffattendance.php',
+                              data    : data,
+                              headers : {'Content-Type': 'application/x-www-form-urlencoded'},
+                              timeout : 10000
+                             })
+                             .success(function(data) {
+
+                                $ionicLoading.hide();
+                                
+                                if(data.status){
+                                    $scope.attendanceList = data.response;
+
+                                    //make calender
+                                    _buildMonth($scope, previous, $scope.month);
+                                }
+                                else{
+                                    $scope.attendanceList = [];
+
+                                    $ionicLoading.show({
+                                        template:  data.error,
+                                        duration: 3000
+                                    });                    
+                                }
+                            })
+                           .error(function(data){
+                            $ionicLoading.hide();
+                              $ionicLoading.show({
+                                template:  "Not responding. Check your connection.",
+                                duration: 3000
+                              });
+                            });                             
+                            
                         };
 
 
@@ -2326,9 +2476,9 @@ var TEMP_TOKEN = 'sHtArttc2ht+tMf9baAeQ9ukHnXtlsHfexmCWx5sJOikSRf7xi1G0alsgJTZKK
                         
                         statusToSet = '';
 
-                        for(var j = 0; j < $scope.attendanceList.response.length; j++){
-                            if($scope.attendanceList.response[j].date == tempFormatted){
-                                statusToSet = parseInt($scope.attendanceList.response[j].status);
+                        for(var j = 0; j < $scope.attendanceList.length; j++){
+                            if($scope.attendanceList[j].date == tempFormatted){
+                                statusToSet = parseInt($scope.attendanceList[j].status);
                                 break;
                             }
                         }
@@ -2374,113 +2524,8 @@ var TEMP_TOKEN = 'sHtArttc2ht+tMf9baAeQ9ukHnXtlsHfexmCWx5sJOikSRf7xi1G0alsgJTZKK
 
 
 
-        $scope.overallData = {
-    "status": true,
-    "error": "",
-    "salarySum": 212831,
-    "totalEmployees": 342,
-    "attendance": {
-        "absent": 30,
-        "present": 305,
-        "unknown": 15,
-        "halfday": 2
-    },
-    "roleWiseEmployees": [{
-        "name": "Manager",
-        "count": "2"
-    }, {
-        "name": "Stewards",
-        "count": "11"
-    }, {
-        "name": "Accounting",
-        "count": "1"
-    }, {
-        "name": "House Keeping",
-        "count": "2"
-    }, {
-        "name": "Security",
-        "count": "1"
-    }],
-    "outletWiseEmployees": [{
-        "name": "IIT Madras",
-        "count": "42"
-    }, {
-        "name": "Adyar",
-        "count": "31"
-    }, {
-        "name": "Velachery",
-        "count": "28"
-    }, {
-        "name": "Royapettah",
-        "count": "27"
-    }, {
-        "name": "Nungambakkam",
-        "count": "19"
-    }, {
-        "name": "Anna Nagar",
-        "count": "26"
-    }]
-}
 
-
-$scope.defaultDisplayTitle = 'Registered Employees';
-
-
-
-
-//BAR CHART - Outletwise Staff Distribution
-
-  $scope.getMyFancyDate = function(date){
-    var myDate = date.split('-');
-
-    if(myDate[0]%10 == 1){
-        return myDate[0]+'st';
-    }
-    else if(myDate[0]%10 == 2){
-        return myDate[0]+'nd';
-    }
-    else if(myDate[0]%10 == 3){
-        return myDate[0]+'rd';
-    }
-    else{
-        return myDate[0]+'th';
-    }
-  }
-
-
-  $scope.data = [];
-  $scope.labels = [];
-  var n = 0;
-  while($scope.overallData.outletWiseEmployees[n]){
-    $scope.labels.push($scope.overallData.outletWiseEmployees[n].name);
-    $scope.data.push($scope.overallData.outletWiseEmployees[n].count);
-
-    n++;
-  }
-
-  $scope.datasetOverride = [{ yAxisID: 'y-axis' }];
-  $scope.options = {
-    scales: {
-      yAxes: [
-        {
-          id: 'y-axis',
-          type: 'linear',
-          display: true,
-          position: 'left'
-        }
-      ]
-    }
-  };
-
-
-//DOUGHNUT - Attendance
-  $scope.labelsAttendance = ['Present ('+$scope.overallData.attendance.present+')', 'Half Day ('+$scope.overallData.attendance.halfday+')', 'Absent ('+$scope.overallData.attendance.absent+')',  'Unknown ('+$scope.overallData.attendance.unknown+')'];
-  $scope.colorsAttendance = ['#27ae60',  '#f39c12', '#c0392b', '#7f8c8d']
-  $scope.dataAttendance = [$scope.overallData.attendance.present, $scope.overallData.attendance.halfday, $scope.overallData.attendance.absent, $scope.overallData.attendance.unknown];
-
-  $scope.optionsAttendance = {
-        legend: { display: true, position: 'bottom' }
-  }
+        $scope.defaultDisplayTitle = 'Registered Employees';
 
 
         $scope.showOptionsMenu = function() {
@@ -2488,42 +2533,7 @@ $scope.defaultDisplayTitle = 'Registered Employees';
             $scope.navToggled = !$scope.navToggled;
         };
 
-        $scope.getRevenueClass = function(current, previous){
-            if(current >= previous){
-                return 'ion-arrow-graph-up-right specialGreen';
-            }
-            else{
-                return 'ion-arrow-graph-down-right specialRed';
-            }
-            
-        }
-
-
-        $scope.getFancyAmount = function(amount){
-            amount = Math.abs(amount);
-            if(amount < 10000){
-                return amount;
-            }
-            else if(amount >= 10000 && amount < 100000){
-                amount = amount/1000;
-                amount = Math.round(amount * 10) / 10;
-                return amount + "" + " K";
-            }
-            else if(amount >= 100000 && amount < 10000000){
-                amount = amount/100000;
-                amount = Math.round(amount * 100) / 100;
-                return amount + "" + " L";
-            }
-            else if(amount >= 10000000){
-                amount = amount/10000000;
-                amount = Math.round(amount * 100) / 100;
-                return amount + "" + " Cr";
-            }
-        }
-
-
-
-    })
+})
 
 
 

@@ -11,13 +11,17 @@
               Staff Records
             </button>  
 
+            <button class="button button-clear clearSearchFilterButton" ng-click="goBackToResults()" ng-if='isSearched && isViewingProfile' style="position: absolute; top: 0px; right: 0px;">
+              <i class="icon ion-arrow-return-left"></i> 
+            </button>        
+
          </div>
       </ion-header-bar>
 
     <ion-nav-view animation="slide-left-right">
          <ion-content class="categories-feeds-content" overflow-scroll="true" has-bouncing="false" delegate-handle="feeds-content" style="background: #f5f5f5;">
 
-          <div class="row" style="padding: 10px 10px 0 10px">
+          <div class="row" style="padding: 10px 10px 0 10px" ng-if='!isViewingProfile'>
             <div class="input-group" style="padding: 10px 0; border: none;">
               <input type="text" ng-model="searchKey.value" class="form-control input-lg" style="text-align: center; width: 100%; height: 42px;" placeholder="Search Employees">
               <span class="input-group-btn">
@@ -27,31 +31,15 @@
           </div>
 
 
-<!--           <div class="row" style="padding: 10px 10px 0 10px">
-            <div class="infoTile" style="width: 100%;">
-                <div class="infoTileIcon"><i class="icon ion-social-usd"></i></div>
-                <div class="infoTileHead"><span>Salary Expenses</span></div>
-                <div class="tinfoTileBody"><i class="fa fa-inr"></i>{{getFancyAmount(overallData.salarySum)}}</div>
-                <div class="infoTileFoot">
-
-                </div>
-            </div>
-          </div>
-
-
-          <div class="row" style="padding: 10px 10px 0 10px">
-            <div class="infoTile" style="width: 100%; padding: 16px 5px 5px 5px">
-                <div class="infoTileHead" style="text-align: center; margin-bottom: 10px; color: #2ecc71"><span>Today's Attendance</span></div>
-                <canvas id="doughnut" class="chart chart-doughnut" chart-options="optionsAttendance"
-                chart-data="dataAttendance" chart-labels="labelsAttendance" chart-colors="colorsAttendance">
-                </canvas> 
-                <span class="button button-small" style="width: 100%; margin-top: 10px">View Attendance</span>
-            </div>
-          </div> -->
+      <!-- SEARCH RESULTS DISPLAY -->
+      <div ng-if="isSearched && !isViewingProfile">
 
           <div class="row" style="padding: 10px 10px 0 10px">
             <div class="infoTile" style="width: 100%; padding: 16px 0 0 0">
-                <div class="infoTileHead" style="text-align: center; margin-bottom: 10px"><span>{{defaultDisplayTitle}}</span></div>
+                <div class="infoTileHead" style="margin: 0 10px 10px 10px">
+                  <span>{{defaultDisplayTitle}}</span>
+                  <span class="clearSearchButton" style="float: right" ng-click="resetSearchView()"><i class="ion-refresh"></i> Clear</span>
+                </div>
 
                 <table class="StaffListingTable" style="border-collapse: collapse; width: 100%;">
                   <tr ng-repeat="staff in staffData" ng-click="viewStaffProfile(staff)">
@@ -59,26 +47,11 @@
                     <td style="text-align: right; color: #384448">{{staff.contact}}</td>
                   </tr>
                 </table>
-                <p ng-if="errorMessage && errorMessage != ''" style="color: gray; text-align: center">{{errorMessage}}</p>
+                <p ng-if="errorMessage && errorMessage != ''" style="margin: 20px 0; color: gray; text-align: center">{{errorMessage}}</p>
             </div>
           </div>
 
-<!--           <div class="row" style="padding: 10px 10px 0 10px">
-            <div class="infoTile" style="width: 100%; padding: 16px 5px 5px 5px">
-                <div class="infoTileHead" style="text-align: center; margin-bottom: 10px"><span>Branch-wise Staff Strength</span></div>
-                <canvas id="line" class="chart chart-bar" chart-data="data"
-                chart-labels="labels" chart-options="options"
-                chart-dataset-override="datasetOverride">
-                </canvas>
-            </div>
-          </div> -->
-
-
-
-
-
-
-
+      </div>
 
 
 
@@ -103,6 +76,9 @@
         </div>
 
 
+      <div ng-if="!isViewingProfileAttendance && !isViewingProfileSalary">   <!-- junk info  -->
+        <!-- Show these only if attendance and salary details 
+        not being displayed -->
 
           <div class="row" style="padding: 10px 10px 0 10px">
             <div class="infoTile" style="width: 100%; padding: 16px 5px 5px 5px">
@@ -238,46 +214,60 @@
             </div>
           </div>
 
+    </div> <!-- junk info -->
 
-          <div class="row" style="padding: 10px 10px 0 10px">
-            <div class="button buttonMyBlue" style="width: 100%">Attendance Summary</div>
+
+
+          <div class="row" style="padding: 10px 10px 0 10px" ng-if="!isViewingProfileSalary">
+            <div ng-click="triggerAttendanceButton()" class="button buttonMyBlue" style="width: 100%;">{{!isViewingProfileAttendance ? 'View Attendance Summary' : 'Hide Attendance Summary'}}</div>
           </div>
 
-          <div class="row" style="padding: 10px 10px 0 10px">
-            <div class="button buttonMyBlue" style="width: 100%">Salary Slips</div>
+          <div class="row" style="padding: 10px 10px 0 10px" ng-if="!isViewingProfileAttendance">
+            <div ng-click="triggerSalaryButton()" class="button buttonMyBlue" style="width: 100%;">{{!isViewingProfileSalary ? 'View Salary Slips' : 'Hide Salary Slips'}}</div>
           </div>
 
+
+          <!-- Optional Requests -->
+        
+          <!-- ATTENDANCE - Calendar View -->
+
+          <div class="row" style="padding: 10px 10px 0 10px" ng-show="isViewingProfileAttendance">
+             <div class="infoTile" style="width: 100%; padding: 0">
+                <calendar selected="day" style="width: 100%; margin: 0">
+                   <div class="header">
+                      <i class="moveLeft icon ion-arrow-left-b" ng-click="previous()"></i>
+                      <span>{{displayCalendarMonth}}</span>
+                      <i class="moveRight icon ion-arrow-right-b" ng-click="next()"></i>
+                   </div>
+                   <div class="week names">
+                      <span class="day">Sun</span>
+                      <span class="day">Mon</span>
+                      <span class="day">Tue</span>
+                      <span class="day">Wed</span>
+                      <span class="day">Thu</span>
+                      <span class="day">Fri</span>
+                      <span class="day">Sat</span>
+                   </div>
+                   <!-- ngRepeat: week in weeks -->
+                   <div class="week" ng-repeat="week in weeks">
+                      <span class="day" ng-class="getDayClass(day)" ng-repeat="day in week.days">
+                        {{day.number}}
+                      </span>
+                   </div>
+                </calendar>
+             </div>
+          </div>
+
+
+
+          <!-- SALARY - List View -->
+
+          <div class="row" style="padding: 10px 10px 0 10px" ng-show="isViewingProfileSalary">
+             <div class="infoTile" style="width: 100%; padding: 0">
+                List the salary here.
+             </div>
+          </div>
       </div> <!-- Viewing Profile -->
-
-
-<!-- Attendance - Calendar View -->
-
-<div class="row" style="padding: 10px 10px 0 10px">
-   <div class="infoTile" style="width: 100%; padding: 0">
-      <calendar selected="day" style="width: 100%; margin: 0">
-         <div class="header">
-            <i class="moveLeft icon ion-arrow-left-b" ng-click="previous()"></i>
-            <span>{{displayCalendarMonth}}</span>
-            <i class="moveRight icon ion-arrow-right-b" ng-click="next()"></i>
-         </div>
-         <div class="week names">
-            <span class="day">Sun</span>
-            <span class="day">Mon</span>
-            <span class="day">Tue</span>
-            <span class="day">Wed</span>
-            <span class="day">Thu</span>
-            <span class="day">Fri</span>
-            <span class="day">Sat</span>
-         </div>
-         <!-- ngRepeat: week in weeks -->
-         <div class="week" ng-repeat="week in weeks">
-            <span class="day" ng-class="getDayClass(day)" ng-repeat="day in week.days">
-              {{day.number}}
-            </span>
-         </div>
-      </calendar>
-   </div>
-</div>
 
 
 
