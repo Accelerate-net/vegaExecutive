@@ -1,3 +1,35 @@
+/* TILE LOADER */
+
+.loaderDummyTile{
+    -webkit-animation-duration:1s;
+    -webkit-animation-fill-mode:forwards;
+    -webkit-animation-iteration-count:infinite;
+    -webkit-animation-name:placeHolderShimmer;
+    -webkit-animation-timing-function:linear;
+    background:#f6f7f8;
+    background-image:-webkit-linear-gradient(left, #f6f7f8 0, #edeef1 20%, #f6f7f8 40%, #f6f7f8 100%);
+    background-image:linear-gradient(left, #f6f7f8 0, #edeef1 20%, #f6f7f8 40%, #f6f7f8 100%);
+    background-repeat:no-repeat;
+    height:5em;
+    position:relative
+}
+@-webkit-keyframes placeHolderShimmer{
+    0%{
+        background-position:-468px 0
+    }
+    100%{
+        background-position:468px 0
+    }
+}
+.loaderDummyTile div{
+    position:absolute;
+    background:#fff;
+    overflow:hidden
+}
+
+
+
+
 /* BANNER */
 .bannerHolder{
   position: absolute; width: 100%; background: #1abc9c; 
@@ -40,6 +72,10 @@
   top: 88px !important;
 }
 
+.hasSearchBar{
+  top: 106px !important;
+}
+
 .overflowDisabled{
   overflow: hidden !important;
 }
@@ -53,6 +89,30 @@
  border: 1px solid #FFF !important; 
  padding: 0 8px !important;
  min-width: 85px !important;
+}
+
+.clearSearchFilterButton{
+ margin-left: 10px; 
+ font-weight: 400 !important; 
+ color: #ffffff !important; 
+ overflow: hidden; white-space: nowrap; text-overflow: ellipsis; 
+ font-size: 15px !important; 
+ border: none !important; 
+ padding: 0 8px !important;
+ min-width: 85px !important;
+ text-align: right;
+}
+
+.clearFeeedFilterButton{
+ margin-left: 10px; 
+ font-weight: 400 !important; 
+ color: #ffffff !important; 
+ overflow: hidden; white-space: nowrap; text-overflow: ellipsis; 
+ font-size: 15px !important; 
+ border: 2px solid transparent !important;
+ padding: 0 8px !important;
+ min-width: 85px !important;
+ font-style: italic;
 }
 
 .applyFilterButton{
@@ -99,15 +159,87 @@
 }
 
 
+/* FEEDBACK */
 
+.feedPositive{
+  border-radius: 4px; border: 1px solid #2ecc71; color: #2ecc71; 
+  padding: 2px 4px; margin-right: 3px;
+}
+
+.feedNegative{
+  border-radius: 4px; border: 1px solid #e74c3c; color: #e74c3c; 
+  padding: 2px 4px; margin-right: 3px
+}
+
+.feedNeutral{
+  border-radius: 4px; border: 1px solid #cddc39; color: #cddc39; 
+  padding: 2px 4px; margin-right: 3px
+}
+
+.feedRating{
+  display: block;
+}
+
+.specialRating{
+  display: block;
+  padding-top: 8px;
+}
+
+.feedbackTile{
+    border-color: transparent;
+    background-color: #f9f9f9;
+    color: #FFF !important;
+    padding: 12px;
+    min-width: 52px;
+    min-height: 47px;
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 0;
+    vertical-align: top;
+    text-overflow: ellipsis;
+    font-size: 16px;
+    line-height: 42px;
+    cursor: pointer;
+
+    position: relative; 
+    text-align: center; 
+    height: 150px; 
+    width: 50%; 
+    margin: 0 4px 4px 0; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    text-align: center;
+
+        box-shadow: 0 1px 3px 0px rgba(0, 0, 0, 0.2);      
+
+}
+
+.feedbackTileCaption{
+  line-height: 26px; display: block;
+  text-transform: uppercase;
+      overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 11px;
+color: #828282;
+letter-spacing: 1px;
+    font-weight: 400;
+}
+
+.feedbackTileRating{
+  display: block;
+  font-size: 40px;
+    font-weight: 200;
+}
 
 
 
 /* TILES */
 .tileBox{
     border-color: transparent;
-    background-color: #353b48;
-    color: #bac4ce !important;
+    background-color: rgba(138, 18, 12, 0.6);
+    color: #FFF !important;
     padding: 12px;
     min-width: 52px;
     min-height: 47px;
@@ -133,7 +265,7 @@
 }
 
 .tileBox:active, .tileBox:focus, .tileBox:hover{
-    background-color: #2f3640;
+    background-color: #73221c;
     color: #FFF !important;
 }
 
@@ -151,7 +283,7 @@
 .infoTileIcon{
     position: absolute;
     height: 70px;
-    width: 140px;
+    width: 80px;
     border-radius: 0;
     left: 15px;
     bottom: 10px;
@@ -180,6 +312,12 @@
     line-height: 72px;
     position: relative;
     z-index: 1;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding-left: 85px;
+
 }
 
 .infoTileFoot{
@@ -188,6 +326,11 @@
     position: absolute;
     right: 20px;
     bottom: 8px;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
 }
 
 .specialRed{
@@ -197,6 +340,8 @@
 .specialGreen{
   color: #27ae60 !important;
 }
+
+
 
 
 .input-group{
@@ -216,6 +361,71 @@
 
 
 
+/* ORDER LISTING */
+
+.orderLabelPrepaid{
+    font-size: 10px;
+    padding: 1px 3px;
+    font-weight: bold;
+    border: 1px solid #2980b9;
+    color: #2980b9;
+    float: right;
+}
+
+.orderLabelCash{
+    font-size: 10px;
+    padding: 1px 3px;
+    font-weight: bold;
+    background: #2ecc71;
+    color: #FFF;
+    float: right;
+}
+
+.orderLabelDelivery{
+  padding: 2px 4px; background: #f39c12; 
+  color: #FFF; font-size: 10px; float: right;
+}
+
+.orderLabelTakeaway{
+  padding: 2px 4px; background: #2980b9; 
+  color: #FFF; font-size: 10px; float: right;
+}
+
+.orderConfirmButton{
+  width: 100%; 
+  border-radius: 0;
+  color: #FFF !important;
+  background: #1abc9c !important;
+}
+
+.orderConfirmButton:hover, .orderConfirmButton:focus, .orderConfirmButton:active{
+  background: #16a085 !important;
+  color: #FFF !important;
+}
+
+.orderRejectButton{
+  width: 100%; 
+  border-radius: 0;
+  color: #FFF !important;
+  background: #e74c3c !important;
+}
+
+.rejectOrderTrash{
+  font-size: 16px; width: 50px; height: 45px; color: #e0e0e0 !important;
+  display: inline-block; top: 0px; padding: 17px; float: right; position: absolute;
+}
+
+.orderRejectButton:hover, .orderRejectButton:focus, .orderRejectButton:active{
+  background: #c0392b !important;
+  color: #FFF !important;
+}
+
+
+.rejectOrderTrash:hover, .rejectOrderTrash:focus, .rejectOrderTrash:active{
+  color: #721e1f !important;
+}
+
+
 .StaffListingTable th, td {
     text-align: left;
     padding: 8px;
@@ -230,6 +440,29 @@
   display: block; font-size: 70%; text-transform: uppercase; color: #747777;
 }
 
+.StaffListingMail{
+  display: block; font-size: 75%; text-transform: none; color: #747777;
+}
+
+.clearSearchButton{
+    width: 110px;
+    height: 30px;
+    font-weight: 400;
+    text-transform: none;
+    color: #de8182;
+    text-align: right;
+}
+
+.loadMoreButton{
+  background: #2ecc71 !important;
+  color: #FFF !important;
+  border-radius: 0 !important;
+}
+
+.loadMoreButton:hover, .loadMoreButton:focus, .loadMoreButton:active{
+  background: #27ae60 !important;
+  color: #FFF !important;
+}
 
 .incomeListTable tr:nth-child(even) {
   background-color: #e6f7e5;
@@ -248,6 +481,17 @@
   background-color: #efd7d7;
   color: #772822;
 }
+
+
+.orderCartTable tr:nth-child(even) {
+  background-color: #f3eee4;
+  color: #772822;
+}
+.orderCartTable tr:nth-child(odd) {
+  background-color: #eae4d8;
+  color: #772822;
+}
+
 
 .buttonMyBlue{
   background: #3498db;

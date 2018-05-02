@@ -82,6 +82,40 @@ angular.module('zaitoonFirst', [
       })
 
 
+          .state('main.app.orderspending', {
+            url: '/orderspending',
+            views: {
+              'orders-pending@main.app': {
+                templateUrl: 'views/orders/pending-orders.html',
+                controller: 'pendingOrdersCtrl'
+              }
+            }
+          })  
+
+
+          .state('main.app.ordersconfirmed', {
+            url: '/ordersconfirmed',
+            views: {
+              'orders-confirmed@main.app': {
+                templateUrl: 'views/orders/confirmed-orders.html',
+                controller: 'confirmedOrdersCtrl'
+              }
+            }
+          })  
+
+
+          .state('main.app.orderscompleted', {
+            url: '/orderscompleted',
+            views: {
+              'orders-completed@main.app': {
+                templateUrl: 'views/orders/completed-orders.html',
+                controller: 'completedOrdersCtrl'
+              }
+            }
+          })  
+
+
+
       .state('main.app.landing', {
         url: '/landing',
         views: {
@@ -190,6 +224,16 @@ angular.module('zaitoonFirst', [
             }
           })  
 
+          .state('main.app.customers', {
+            url: '/customers',
+            views: {
+              'main-view@main': {
+                templateUrl: 'views/pages/customers.html',
+                controller: 'customersCtrl'
+              }
+            }
+          })  
+
           .state('main.app.staff', {
             url: '/staff',
             views: {
@@ -209,6 +253,8 @@ angular.module('zaitoonFirst', [
               }
             }
           })  
+
+
 
 
   ;

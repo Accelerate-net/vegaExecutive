@@ -33,6 +33,7 @@
 		{
 			text-transform: uppercase;
 			font-weight: 500;
+			color: #721e1f;
 		}
 
 		.tab-item
@@ -44,19 +45,19 @@
 				background-size: 100% 100%;
 				margin: 8px auto 3px;
 
-				&.menu-icon
+				&.pending-icon
 				{
-					background-image: url('../img/common/tabs-menu.png');
+					background-image: url('../img/feed/tabs-pending.png');
 				}
 
-				&.search-icon
+				&.confirmed-icon
 				{
-					background-image: url('../img/common/tabs-explore.png');
+					background-image: url('../img/feed/tabs-confirmed.png');
 				}
 
-				&.account-icon
+				&.completed-icon
 				{
-					background-image: url('../img/common/tabs-account.png');
+					background-image: url('../img/feed/tabs-completed.png');
 				}
 			}
 		}

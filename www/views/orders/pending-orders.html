@@ -1,0 +1,212 @@
+
+<ion-side-menus class="feed-view" cache-view="false">
+
+  <ion-pane ion-side-menu-content>
+
+      <ion-header-bar class="feed-header">
+         <div class="buttons" style="position: absolute; top: 5px; left: 5px; bottom: 5px;">
+            <button class="button button-clear cart-button" style="margin: 0; color: #FFF; width: 35px;" ng-click="showOptionsMenu()">
+            <i class="icon ion-navicon"></i> 
+            </button>
+
+            <button class="button button-clear" style="text-align: left; margin-left: 10px; font-weight: 400; color: #FFF; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; font-size: 18px;">
+              {{!isViewingOrder ? pending_orders_length + ' Pending Orders' : 'Pending #'+displayOrderContent.orderID}}
+            </button>  
+
+            <button class="button button-clear clearSearchFilterButton" ng-click="backToPendingOrders()" ng-if='isViewingOrder' style="position: absolute; top: 0px; right: 0px;">
+              <i class="icon ion-arrow-return-left"></i> 
+            </button>  
+
+
+         </div>
+      </ion-header-bar>
+
+    <ion-nav-view animation="slide-left-right">
+         <ion-content class="categories-feeds-content" overflow-scroll="true" has-bouncing="false" delegate-handle="feeds-content" style="background: #f5f5f5;">
+
+
+          <div class="row" style="padding: 0 10px" ng-if="pending_orders_length > 1 && !isViewingOrder">
+            <div class="input-group" style="padding: 10px 0 0 0; border: none;">
+              <input type="text" id="searchInputBox" ng-model="searchKey.value" class="form-control input-lg" style="text-align: center; width: 100%; height: 42px;" placeholder="Search Pending Orders">
+              <span class="input-group-btn">
+                  <div ng-click="resetSearchKey()" class="button button-default btn-lg" type="button" style="min-height: 10px; height: 42px !important; color: gray; border-radius: 0"><i class="icon" ng-class="{'ion-android-search': searchKey.value == '', 'ion-android-refresh': searchKey.value != ''}"></i></div>
+              </span>
+            </div>
+          </div>
+
+
+         <!-- LIST View -->
+         <div ng-if="!isViewingOrder">
+
+          <div class="row" style="padding: 10px 10px 0 10px" ng-click="openViewOrder(order)" ng-repeat="order in pending_orders | filter: searchKey.value track by $index">
+              <div class="infoTile" style="width: 100%;">
+                  <div class="infoTileHead">
+                    <span style="font-size: 28px; font-weight: 300">{{order.orderID}}</span>
+                    <span class="orderLabelTakeaway" ng-if="order.isTakeaway">Take Away</span>
+                    <span class="orderLabelDelivery" ng-if="!order.isTakeaway">Delivery</span>
+                  </div>
+                  <div class="tinfoTileBody" style="line-height: 21px; font-size: 18px; text-align: left; padding: 25px 0 0 5px;">
+                    <span style="display: block">{{order.userName}}</span>
+                    <span style="display: block; font-size: 75%"><i class="fa fa-phone"></i> {{order.userID}}</span>
+                  </div>
+                  <div class="infoTileFoot" style="bottom: 15px">
+                    <span style="color: gray; display: block"><i class="fa fa-clock-o"></i> {{order.timePlace}}</span>
+                  </div>
+              </div>
+          </div>
+
+          <!-- No SEARCH RESULTS -->
+          <div ng-if="pending_orders_length != 0 && (pending_orders | filter: searchKey.value).length == 0" style="font-size: 12px; font-weight: 400; color: gray; text-align: center; padding: 15px 0;">No Search Results</div>  
+
+         <!-- No results -->
+         <div ng-if="pending_orders_length == 0 || !pending_orders || pending_order.length == 0">
+          <p style="padding: 40px 20px; text-align: center; font-size: 21px; font-weight: 300; color: #7b7b7b;">There are no Pending orders.</p>
+         </div>
+
+         </div>
+
+
+
+         <!-- DETAILS OF ORDER -->
+         <div ng-if="isViewingOrder">
+
+            <div class="row" style="padding: 10px 10px 0 10px">
+              <div class="infoTile" style="width: 100%;">
+                  <div class="infoTileHead">
+                    <span style="font-size: 32px; font-weight: 300">{{displayOrderContent.orderID}}
+                      <reject class="rejectOrderTrash" ng-click="rejectOrder(displayOrderContent)"><i class="fa fa-trash-o"></i></reject>
+                    </span>
+                    <span class="orderLabelTakeaway" ng-if="displayOrderContent.isTakeaway">Take Away</span>
+                    <span class="orderLabelDelivery" ng-if="!displayOrderContent.isTakeaway">Delivery</span>
+                  </div>
+                  <div class="tinfoTileBody" style="line-height: 21px; font-size: 18px; text-align: left; padding: 25px 0 0 5px;">
+                    <span style="display: block">{{displayOrderContent.userName}}</span>
+                    <a href="tel:{{displayOrderContent.userID}}" style="display: block; font-size: 75%; text-decoration: none; color: inherit"><i class="fa fa-phone"></i> {{displayOrderContent.userID}}</a>
+                  </div>
+                  <div class="infoTileFoot" style="bottom: 15px">
+                    <span style="color: gray; display: block"><i class="fa fa-clock-o"></i> {{displayOrderContent.timePlace}}</span>
+                  </div>
+              </div>
+            </div>
+
+            <div class="row" style="padding: 10px 10px 0 10px" ng-if="!displayOrderContent.isTakeaway">
+              <div class="infoTile" style="width: 100%;">
+                  <div class="infoTileHead" style="font-weight: 600; color: #3498db"><span>Delivery Address</span></div>
+                  <div class="tinfoTileBody" style="line-height: 21px; font-size: 16px; text-align: left; padding: 10px 0 0 0; white-space: inherit">
+                    <span style="display: block; font-weight: bold">{{displayOrderContent.deliveryAddress.name}}</span>
+                    <span style="display: block">{{displayOrderContent.deliveryAddress.flatNo}}, {{displayOrderContent.deliveryAddress.flatName}}</span>
+                    <span style="display: block">{{displayOrderContent.deliveryAddress.landmark}}</span>
+                    <span style="display: block">{{displayOrderContent.deliveryAddress.area}}</span>
+                    <a href="tel:{{displayOrderContent.deliveryAddress.contact}}" style="display: block; text-decoration: none; color: inherit">Mob. <b>{{displayOrderContent.deliveryAddress.contact}}</b></a>
+                  </div>
+              </div>
+            </div>
+
+            <div class="row" style="padding: 10px 10px 0 10px" ng-if="displayOrderContent.comments && displayOrderContent.comments != ''">
+              <div class="infoTile" style="width: 100%; background: #2980b9">
+                  <div class="infoTileHead" style="font-weight: 500; color: #efd7a8;"><span>Comments to Chef</span></div>
+                  <div class="tinfoTileBody" style="line-height: 21px; font-size: 16px; text-align: left; padding: 10px 0 0 0; white-space: inherit;">
+                    <p style="display: block; font-weight: 400; margin: 0; color: #FFF">{{displayOrderContent.comments}}</p>
+                  </div>
+              </div>
+            </div>
+
+
+            <div class="row" style="padding: 10px 10px 0 10px; margin-top: 8px">
+              <div class="infoTile" style="width: 100%; padding: 0">
+                <table class="orderCartTable" style="width: 100%">
+                  <tr ng-repeat="item in displayOrderContent.cart.items" style="height: 30px">
+                    <td>#{{$index + 1}}</td>
+                    <td style="font-size: 14px;">
+                      {{item.itemName}}
+                      <tag ng-if="item.isCustom"> ({{item.variant}})</tag>
+                    </td>
+                    <td style="font-size: 12px;">x {{item.qty}}</td>
+                    <td style="font-size: 12px; text-align: right"><i class="fa fa-inr lightRupees"></i>{{item.qty * item.itemPrice}}</td>
+                  </tr>
+                  <tr style="background: #5e97bd !important" ng-if="displayOrderContent.cart.cartDiscount != 0">
+                    <td style="font-size: 14px; color: #FFF; font-weight: 400;" colspan="3">Discount Offered</td>
+                    <td style="font-size: 14px; color: #FFF; font-weight: 400; text-align: right">- <i class="fa fa-inr lightRupees"></i>{{displayOrderContent.cart.cartDiscount}}</td>
+                  </tr>
+
+                  <tr style="background: #27ae60 !important" ng-if="!displayOrderContent.isPrepaid">
+                    <td style="font-size: 16px; color: #FFF; font-weight: bold;" colspan="3">Cash on Delivery</td>
+                    <td style="font-size: 18px; color: #FFF; font-weight: bold; text-align: right"><i class="fa fa-inr lightRupees"></i>{{displayOrderContent.amountPaid}}</td>
+                  </tr>
+
+                  <tr style="background: #949088 !important" ng-if="displayOrderContent.isPrepaid">
+                    <td style="font-size: 16px; color: #FFF; font-weight: bold;" colspan="3">Prepaid</td>
+                    <td style="font-size: 18px; color: #FFF; font-weight: bold; text-align: right"><i class="fa fa-inr lightRupees"></i>{{displayOrderContent.amountPaid}}</td>
+                  </tr>
+
+                </table>
+              </div>
+            </div>
+
+
+            <div class="row" style="padding: 10px 10px 15px 10px;">
+              <button ng-click="confirmOrder(displayOrderContent)" class="button orderConfirmButton" style="bottom: 0;">Confirm Order</button>
+            </div>
+
+
+         </div>
+
+
+
+
+         </ion-content>
+        
+
+
+
+    </ion-nav-view>
+  </ion-pane>
+
+
+  <ion-side-menu side="left" class="main-menu">
+    <header class="bar bar-header bar-stable" style="height: 80px; padding: 0; background: #661a18; display: flex; flex-direction: column; justify-content: center; align-items :center ;">
+      
+        <img style="width: 70%" ng-src="./img/common/white_logo.png"/>
+  
+    </header>
+    <ion-content class="has-header" style="top: 80px">
+      <ion-list>
+        <ion-item class="item-icon-left" style="background: none" nav-clear menu-close ui-sref="main.app.tiles">
+               <i class="icon" style="width: 60px; color: #FFF; text-align: center"><i class="fa fa-th" style="font-size: 70%; padding-left: 6px"></i></i>
+               <h2 class="menu-text">Home</h2>
+        </ion-item>
+        <ion-item class="item-icon-left" style="background: none" nav-clear menu-close ui-sref="main.app.overall">
+               <i class="icon" style="width: 60px; color: #FFF; text-align: center"><i class="ion-android-bulb" style="font-size: 80%; padding-left: 6px"></i></i>
+               <h2 class="menu-text">Quick Insights</h2>
+        </ion-item>        
+        <ion-item class="item-icon-left" style="background: none" nav-clear menu-close ui-sref="main.app.sales">
+               <i class="icon" style="width: 60px; color: #FFF"><i class="fa fa-bar-chart" style="font-size: 70%; padding-left: 6px"></i></i>
+               <h2 class="menu-text">Sales Summary</h2>
+        </ion-item>
+        <ion-item class="item-icon-left" style="background: none" nav-clear menu-close ui-sref="main.app.accounts">
+               <i class="icon" style="width: 60px; color: #FFF"><i class="fa fa-inr" style="font-size: 70%; padding-left: 6px"></i></i>
+               <h2 class="menu-text">Accounts</h2>
+        </ion-item>        
+        <ion-item class="item-icon-left" style="background: none" nav-clear menu-close ui-sref="main.app.staff">
+               <i class="icon" style="width: 60px; color: #FFF"><i class="ion-android-people" style="font-size: 80%; padding-left: 6px"></i></i>
+               <h2 class="menu-text">Staff Directory</h2>
+        </ion-item>
+        <ion-item class="item-icon-left" style="background: none" nav-clear menu-close ui-sref="main.app.customers">
+               <i class="icon" style="width: 60px; color: #FFF"><i class="fa fa-smile-o" style="font-size: 70%; padding-left: 6px"></i></i>
+               <h2 class="menu-text">Customer Profiles</h2>
+        </ion-item>
+        <ion-item class="item-icon-left" style="background: none" nav-clear menu-close ui-sref="main.app.feedbacks">
+               <i class="icon" style="width: 60px; color: #FFF"><i class="fa fa-star-half-o" style="font-size: 70%; padding-left: 6px"></i></i>
+               <h2 class="menu-text">Feedbacks</h2>
+        </ion-item>
+
+
+        <ion-item style="padding-top: 0; background: none; bottom: 0; width: 100%; border: none;" nav-clear>
+               <p style="color: #521110; font-size: 11px; margin: 10px 0; text-align: center;">Version 1.5.0</p>
+        </ion-item>
+
+
+      </ion-list>
+    </ion-content>
+  </ion-side-menu>
+</ion-side-menus>
