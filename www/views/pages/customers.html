@@ -12,17 +12,22 @@
               Customer Profiles
             </button>  
 
+
+            <button class="button button-clear clearSearchFilterButton" ng-click="goBackToResults()" ng-if='isSearched && isViewingProfile' style="position: absolute; top: 0px; right: 0px;">
+              <i class="icon ion-arrow-return-left"></i> 
+            </button>              
+
          </div>
       </ion-header-bar>
 
     <ion-nav-view animation="slide-left-right">
          <ion-content class="categories-feeds-content" overflow-scroll="true" has-bouncing="false" delegate-handle="feeds-content" style="background: #f5f5f5;">
 
-          <div class="row" style="padding: 10px 10px 0 10px">
+          <div class="row" style="padding: 10px 10px 0 10px" ng-if='!isViewingProfile'>
             <div class="input-group" style="padding: 10px 0; border: none;">
-              <input type="text" ng-model="searchKey" class="form-control input-lg" style="text-align: center; width: 100%; height: 42px;" placeholder="Search for Guests">
+              <input type="text" ng-model="searchKey.value" class="form-control input-lg" style="text-align: center; width: 100%; height: 42px;" placeholder="Search for Guests">
               <span class="input-group-btn">
-                  <button class="button button-default btn-lg" type="button" ng-click="search(searchKey)" style="min-height: 10px; height: 42px !important; color: gray; border-radius: 0"><i class="icon ion-android-search"></i></button>
+                  <button class="button button-default btn-lg" type="button" ng-click="search(searchKey.value)" style="min-height: 10px; height: 42px !important; color: gray; border-radius: 0"><i class="icon ion-android-search"></i></button>
               </span>
             </div>
           </div>
@@ -36,7 +41,7 @@
             <div class="infoTile" style="width: 100%; padding: 16px 0 0 0">
                 <div class="infoTileHead" style="margin: 0 10px 10px 10px">
                   <span>{{defaultDisplayTitle}}</span>
-                  <span class="clearSearchButton" style="float: right" ng-click="resetSearchView()">Clear Search</span>
+                  <span class="clearSearchButton" style="float: right" ng-click="resetSearchView()"><i class="ion-refresh"></i> Clear</span>
                 </div>
 
                 <table class="StaffListingTable" style="border-collapse: collapse; width: 100%;">
@@ -52,19 +57,15 @@
                   </tr>
                 </table>
 
-                <button class="button loadMoreButton" style="width: 100%" ng-if="isMoreLeft" ng-click="searchMore(searchKey)">Load More Results</button>
+                <button class="button loadMoreButton" style="width: 100%" ng-if="isMoreLeft" ng-click="searchMore(searchKey.value)">Load More Results</button>
 
-                <p ng-if="errorMessage && errorMessage != ''" style="color: gray; text-align: center">{{errorMessage}}</p>
+                <p ng-if="errorMessage && errorMessage != ''" style="margin: 20px 0; color: gray; text-align: center">{{errorMessage}}</p>
             </div>
           </div>
         </div>
 
         <!-- VIEWING A RESULT -->
         <div ng-if="isViewingProfile">
-
-            <button ng-click="goBackToResults()" class="clearSearchButton" style="width: 100%; height: 45px; text-align: center; color: gray; margin-top: -12px;" ng-if="!singleGuest">Back to Results</button>
-
-            <button ng-click="resetSearchView()" class="clearSearchButton" style="width: 100%; height: 45px; text-align: center; margin-top: -12px;" ng-if="singleGuest">Clear Search</button>
 
             <div class="infoTile" style="width: 100%; padding: 16px 5px 5px 5px">
               <div class="row user-info-row">
@@ -112,7 +113,7 @@
             <div class="infoTile" style="width: 100%;">
                 <div class="infoTileIcon"><i class="icon ion-fork"></i></div>
                 <div class="infoTileHead"><span>Total Visits</span></div>
-                <div class="tinfoTileBody">{{viewingGuestData.totalVisits}}</div>
+                <div class="tinfoTileBody">{{viewingGuestData.totalVisits && viewingGuestData.totalVisits != undefined ? viewingGuestData.totalVisits : '...'}}</div>
                 <div class="infoTileFoot">
                   <span style="color: gray">Times visited</span>
                 </div>
@@ -123,7 +124,7 @@
             <div class="infoTile" style="width: 100%;">
                 <div class="infoTileIcon"><i class="icon fa fa-truck"></i></div>
                 <div class="infoTileHead"><span>Online Orders</span></div>
-                <div class="tinfoTileBody">{{viewingGuestData.totalOnlineOrders}}</div>
+                <div class="tinfoTileBody">{{viewingGuestData.totalOnlineOrders && viewingGuestData.totalOnlineOrders != undefined ? viewingGuestData.totalOnlineOrders : '...'}}</div>
                 <div class="infoTileFoot">
                   <span style="color: gray">Orders made online</span>
                 </div>
@@ -134,14 +135,14 @@
             <div class="infoTile" style="width: 100%;">
                 <div class="infoTileIcon"><i class="icon fa fa-inr"></i></div>
                 <div class="infoTileHead"><span>Total Volume</span></div>
-                <div class="tinfoTileBody"><i class="fa fa-inr lightRupees"></i>{{viewingGuestData.totalVolume}}</div>
+                <div class="tinfoTileBody"><i class="fa fa-inr lightRupees" ng-show="{{viewingGuestData.totalVolume && viewingGuestData.totalVolume != undefined}}"></i>{{viewingGuestData.totalVolume && viewingGuestData.totalVolume != undefined ? viewingGuestData.totalVolume : '...'}}</div>
                 <div class="infoTileFoot">
                   <span style="color: gray">Worth revenue</span>
                 </div>
             </div>
           </div>                                       
 
-          <div class="row" style="padding: 10px 10px 0 10px">
+          <div class="row" style="padding: 10px 10px 0 10px" ng-show="{{viewingGuestData.averageRating && viewingGuestData.averageRating != undefined}}">
             <div class="infoTile" style="width: 100%;">
                 <div class="infoTileIcon" ng-style="getRatingColor(viewingGuestData.averageRating)">{{viewingGuestData.averageRating}}</div>
                 <div class="infoTileHead"><span>Average Rating</span></div>
@@ -224,7 +225,7 @@
             </div>
           </div>
 
-          <div class="row" style="padding: 10px 10px 0 10px">
+          <div class="row" style="padding: 10px 10px 0 10px" ng-show="{{viewingGuestData.lastVisitOutlet && viewingGuestData.lastVisitOutlet != undefined}}">
             <div class="infoTile" style="width: 100%;">
                 <div class="infoTileIcon"><i class="icon fa fa-map-marker"></i></div>
                 <div class="infoTileHead"><span>Recently Visited Outlet</span></div>
@@ -240,9 +241,25 @@
 
       </div> <!-- searched case -->
 
+
+
       <!-- NOT SEARCHED CASE -->
       <div ng-if="!isSearched">
-          <div class="row" style="padding: 10px 10px 0 10px">
+
+
+          <!-- Loader Dummy Tiles -->
+          <div ng-if="!isRenderLoaded && !renderFailed">
+              <div class="row" style="padding: 10px 10px 0 10px"> <div class="infoTile" style="width: 100%;"> <div class="infoTileHead" style="width: 40%; height: 18px; display: inline-block;"> <div class="loaderDummyTile" style="height: 18px"></div> </div> <div class="infoTileHead" style="margin-top: 10px; width: 100%; height: 15px; display: inline-block;"> <div class="loaderDummyTile" style="height: 15px"></div> </div> <div class="infoTileHead" style="width: 100%; height: 15px; display: inline-block;"> <div class="loaderDummyTile" style="height: 15px"></div> </div> </div> </div>
+
+              <div class="row" style="padding: 10px 10px 0 10px"> <div class="infoTile" style="width: 100%;"> <div class="infoTileHead" style="width: 40%; height: 18px; display: inline-block;"> <div class="loaderDummyTile" style="height: 18px"></div> </div> <div class="infoTileHead" style="margin-top: 10px; width: 100%; height: 15px; display: inline-block;"> <div class="loaderDummyTile" style="height: 15px"></div> </div> <div class="infoTileHead" style="width: 100%; height: 15px; display: inline-block;"> <div class="loaderDummyTile" style="height: 15px"></div> </div> </div> </div>
+
+              <div class="row" style="padding: 10px 10px 0 10px"> <div class="infoTile" style="width: 100%;"> <div class="infoTileHead" style="width: 40%; height: 18px; display: inline-block;"> <div class="loaderDummyTile" style="height: 18px"></div> </div> <div class="infoTileHead" style="margin-top: 10px; width: 100%; height: 15px; display: inline-block;"> <div class="loaderDummyTile" style="height: 15px"></div> </div> <div class="infoTileHead" style="width: 100%; height: 15px; display: inline-block;"> <div class="loaderDummyTile" style="height: 15px"></div> </div> </div> </div>
+
+              <div class="row" style="padding: 10px 10px 0 10px"> <div class="infoTile" style="width: 100%;"> <div class="infoTileHead" style="width: 40%; height: 18px; display: inline-block;"> <div class="loaderDummyTile" style="height: 18px"></div> </div> <div class="infoTileHead" style="margin-top: 10px; width: 100%; height: 15px; display: inline-block;"> <div class="loaderDummyTile" style="height: 15px"></div> </div> <div class="infoTileHead" style="width: 100%; height: 15px; display: inline-block;"> <div class="loaderDummyTile" style="height: 15px"></div> </div> </div> </div>
+          </div>
+
+
+          <div class="row" style="padding: 10px 10px 0 10px" ng-if="isRenderLoaded">
             <div class="infoTile" style="width: 100%;">
                 <div class="infoTileIcon"><i class="icon ion-android-people"></i></div>
                 <div class="infoTileHead"><span>Dine-In Guests</span></div>
@@ -253,7 +270,7 @@
             </div>
           </div>
 
-          <div class="row" style="padding: 10px 10px 0 10px">
+          <div class="row" style="padding: 10px 10px 0 10px" ng-if="isRenderLoaded">
             <div class="infoTile" style="width: 100%;">
                 <div class="infoTileIcon"><i class="icon ion-fork"></i></div>
                 <div class="infoTileHead"><span>Guests Visited</span></div>
@@ -265,7 +282,7 @@
           </div>
 
 
-          <div class="row" style="padding: 10px 10px 0 10px">
+          <div class="row" style="padding: 10px 10px 0 10px" ng-if="isRenderLoaded">
             <div class="infoTile" style="width: 100%;">
                 <div class="infoTileIcon"><i class="icon fa fa-mobile"></i></div>
                 <div class="infoTileHead"><span>App Registrations</span></div>
@@ -277,7 +294,7 @@
           </div>
 
 
-          <div class="row" style="padding: 10px 10px 0 10px">
+          <div class="row" style="padding: 10px 10px 0 10px" ng-if="isRenderLoaded">
             <div class="infoTile" style="width: 100%;">
                 <div class="infoTileIcon"><i class="icon fa fa-truck"></i></div>
                 <div class="infoTileHead"><span>Delivery Through App</span></div>
