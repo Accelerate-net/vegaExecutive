@@ -3819,12 +3819,14 @@ console.log(data)
     */
 
 
+var TEMP_TOKEN = 'sHtArttc2ht+tMf9baAeQ9ukHnXtlsHfexmCWx5sJOikSRf7xi1G0alsgJTZKK9YvpLRtnhL5iK3X5xhKyQh5A==';
 
-var TEMP_TOKEN = 'sHtArttc2ht+tMf9baAeQ9ukHnXtlsHfexmCWx5sJOgFE1kpUfdk49ICSFMlFpeEQmANKHwckmtqJx2jKY6r1jd0GfFSLnBi7Lho856b/d8=';
-    
 
     //List or Details View?
     $scope.isViewingOrder = false;
+
+    $scope.isRenderLoaded = false;
+    $scope.renderFailed = false;
 
     $scope.searchKey = {};
     $scope.searchKey.value = '';
@@ -3832,24 +3834,63 @@ var TEMP_TOKEN = 'sHtArttc2ht+tMf9baAeQ9ukHnXtlsHfexmCWx5sJOgFE1kpUfdk49ICSFMlFp
 
     $scope.initializePendingOrders = function(){
 
+      $scope.isRenderLoaded = false;
+      $scope.renderFailed = false;
+
       var data = {};
       data.token = TEMP_TOKEN; //$cookies.get("zaitoonAdmin");
       data.status = 0;
+
+      //LOADING 
+      $ionicLoading.show({ template: '<ion-spinner></ion-spinner>' });
 
       $http({
         method  : 'POST',
         url     : 'https://zaitoon.online/services/fetchorders.php',
         data    : data,
-        headers : {'Content-Type': 'application/x-www-form-urlencoded'}
+        headers : {'Content-Type': 'application/x-www-form-urlencoded'},
+        timeout : 10000
        })
-       .then(function(response) {
-            $scope.pending_orders = response.data.response;
-            $scope.pending_orders_length = response.data.count;
-       });
+       .success(function(data) {
+            $ionicLoading.hide();
+
+            if(data.status){
+                $scope.pending_orders = data.response;
+                $scope.pending_orders_length = data.count;
+                $scope.isRenderLoaded = true;
+                $scope.renderFailed = false;
+            }
+            else{
+                $scope.pending_orders = [];
+                $scope.pending_orders_length = 0;
+                $scope.renderFailed = true;
+            }
+
+            $scope.$broadcast('scroll.refreshComplete');
+            
+       })
+       .error(function(data){
+              $ionicLoading.hide();
+              $ionicLoading.show({
+                template:  "Not responding. Check your connection.",
+                duration: 3000
+              });
+
+              $scope.isRenderLoaded = false;
+              $scope.renderFailed = true;
+              $scope.$broadcast('scroll.refreshComplete');
+        });
     }
 
 
     $scope.initializePendingOrders();
+
+
+      $scope.doRefresh = function(){
+        $scope.initializePendingOrders();
+      }
+
+
 
     $scope.openViewOrder = function (obj){
         $scope.isViewingOrder = true;
@@ -3919,12 +3960,15 @@ var TEMP_TOKEN = 'sHtArttc2ht+tMf9baAeQ9ukHnXtlsHfexmCWx5sJOgFE1kpUfdk49ICSFMlFp
     */
 
 
+var TEMP_TOKEN = 'sHtArttc2ht+tMf9baAeQ9ukHnXtlsHfexmCWx5sJOikSRf7xi1G0alsgJTZKK9YvpLRtnhL5iK3X5xhKyQh5A==';
 
-var TEMP_TOKEN = 'sHtArttc2ht+tMf9baAeQ9ukHnXtlsHfexmCWx5sJOgFE1kpUfdk49ICSFMlFpeEQmANKHwckmtqJx2jKY6r1jd0GfFSLnBi7Lho856b/d8=';
-    
 
     //List or Details View?
     $scope.isViewingOrder = false;
+
+
+    $scope.isRenderLoaded = false;
+    $scope.renderFailed = false;
 
     $scope.searchKey = {};
     $scope.searchKey.value = '';
@@ -3932,24 +3976,65 @@ var TEMP_TOKEN = 'sHtArttc2ht+tMf9baAeQ9ukHnXtlsHfexmCWx5sJOgFE1kpUfdk49ICSFMlFp
 
     $scope.initializeConfirmedOrders = function(){
 
+        $scope.isRenderLoaded = false;
+        $scope.renderFailed = false;
+
       var data = {};
       data.token = TEMP_TOKEN; //$cookies.get("zaitoonAdmin");
       data.status = 1;
+
+      //LOADING 
+      $ionicLoading.show({ template: '<ion-spinner></ion-spinner>' });
 
       $http({
         method  : 'POST',
         url     : 'https://zaitoon.online/services/fetchorders.php',
         data    : data,
-        headers : {'Content-Type': 'application/x-www-form-urlencoded'}
+        headers : {'Content-Type': 'application/x-www-form-urlencoded'},
+        timeout : 10000
        })
-       .then(function(response) {
-            $scope.confirmed_orders = response.data.response;
-            $scope.confirmed_orders_length = response.data.count;
-       });
+       .success(function(data) {
+            $ionicLoading.hide();
+
+            if(data.status){
+                $scope.confirmed_orders = data.response;
+                $scope.confirmed_orders_length = data.count;
+                $scope.isRenderLoaded = true;
+                $scope.renderFailed = false;
+            }
+            else{
+                $scope.confirmed_orders = [];
+                $scope.confirmed_orders_length = 0;
+                $scope.renderFailed = true;
+            }
+
+            $scope.$broadcast('scroll.refreshComplete');
+            
+       })
+       .error(function(data){
+              $ionicLoading.hide();
+              $ionicLoading.show({
+                template:  "Not responding. Check your connection.",
+                duration: 3000
+              });
+
+              $scope.isRenderLoaded = false;
+              $scope.renderFailed = true;
+              $scope.$broadcast('scroll.refreshComplete');
+        });
+
     }
 
 
     $scope.initializeConfirmedOrders();
+
+
+      $scope.doRefresh = function(){
+        $scope.initializeConfirmedOrders();
+      }
+
+
+
 
     $scope.openViewOrder = function (obj){
         $scope.isViewingOrder = true;
@@ -4096,12 +4181,15 @@ var TEMP_TOKEN = 'sHtArttc2ht+tMf9baAeQ9ukHnXtlsHfexmCWx5sJOgFE1kpUfdk49ICSFMlFp
     */
 
 
+var TEMP_TOKEN = 'sHtArttc2ht+tMf9baAeQ9ukHnXtlsHfexmCWx5sJOikSRf7xi1G0alsgJTZKK9YvpLRtnhL5iK3X5xhKyQh5A==';
 
-var TEMP_TOKEN = 'sHtArttc2ht+tMf9baAeQ9ukHnXtlsHfexmCWx5sJOgFE1kpUfdk49ICSFMlFpeEQmANKHwckmtqJx2jKY6r1jd0GfFSLnBi7Lho856b/d8=';
-    
+
 
     //List or Details View?
     $scope.isViewingOrder = false;
+
+      $scope.isRenderLoaded = false;
+      $scope.renderFailed = false;
 
     $scope.searchKey = {};
     $scope.searchKey.value = '';
@@ -4125,20 +4213,64 @@ var TEMP_TOKEN = 'sHtArttc2ht+tMf9baAeQ9ukHnXtlsHfexmCWx5sJOgFE1kpUfdk49ICSFMlFp
       data.status = 2;
       data.key = today;
 
+
+      $scope.isRenderLoaded = false;
+      $scope.renderFailed = false;
+
+      //LOADING 
+      $ionicLoading.show({ template: '<ion-spinner></ion-spinner>' });
+
       $http({
         method  : 'POST',
         url     : 'https://zaitoon.online/services/filterorders.php',
         data    : data,
-        headers : {'Content-Type': 'application/x-www-form-urlencoded'}
+        headers : {'Content-Type': 'application/x-www-form-urlencoded'},
+        timeout : 10000
        })
-       .then(function(response) {
-            $scope.completed_orders = response.data.response;
-            $scope.completed_orders_length = $scope.completed_orders.length;
-       });
+       .success(function(data) {
+            $ionicLoading.hide();
+
+            if(data.status){
+                $scope.completed_orders = data.response;
+                $scope.completed_orders_length = $scope.completed_orders.length;
+                $scope.isRenderLoaded = true;
+                $scope.renderFailed = false;
+            }
+            else{
+                $scope.completed_orders = [];
+                $scope.completed_orders_length = 0;
+                $scope.renderFailed = true;
+            }
+
+            $scope.$broadcast('scroll.refreshComplete');
+            
+       })
+       .error(function(data){
+              $ionicLoading.hide();
+              $ionicLoading.show({
+                template:  "Not responding. Check your connection.",
+                duration: 3000
+              });
+
+              $scope.isRenderLoaded = false;
+              $scope.renderFailed = true;
+              $scope.$broadcast('scroll.refreshComplete');
+        });
     }
 
 
     $scope.initializeCompletedOrders();
+
+
+      $scope.doRefresh = function(){
+        if($scope.isDateFilterApplied){
+            $scope.loadCompletedOrders();
+        }
+        else{
+            $scope.initializeCompletedOrders();
+        }
+        
+      }
 
     $scope.openViewOrder = function (obj){
         $scope.isViewingOrder = true;
@@ -4194,8 +4326,6 @@ var TEMP_TOKEN = 'sHtArttc2ht+tMf9baAeQ9ukHnXtlsHfexmCWx5sJOgFE1kpUfdk49ICSFMlFp
         return '';
       }
 
-      
-
       var temp_key = $scope.filterDate.replace(/-/g , "");
 
       if(temp_key != today){
@@ -4204,6 +4334,14 @@ var TEMP_TOKEN = 'sHtArttc2ht+tMf9baAeQ9ukHnXtlsHfexmCWx5sJOgFE1kpUfdk49ICSFMlFp
       else{
         $scope.isDateFilterApplied = false;
       }
+
+
+      $scope.isRenderLoaded = false;
+      $scope.renderFailed = false;
+
+      //LOADING 
+      $ionicLoading.show({ template: '<ion-spinner></ion-spinner>' });
+
 
       var data = {};
       data.token = TEMP_TOKEN; //$cookies.get("zaitoonAdmin");
@@ -4214,12 +4352,38 @@ var TEMP_TOKEN = 'sHtArttc2ht+tMf9baAeQ9ukHnXtlsHfexmCWx5sJOgFE1kpUfdk49ICSFMlFp
         method  : 'POST',
         url     : 'https://zaitoon.online/services/filterorders.php',
         data    : data,
-        headers : {'Content-Type': 'application/x-www-form-urlencoded'}
+        headers : {'Content-Type': 'application/x-www-form-urlencoded'},
+        timeout : 10000
        })
-       .then(function(response) {
-            $scope.completed_orders = response.data.response;
-            $scope.completed_orders_length = $scope.completed_orders.length;
-       });
+       .success(function(data) {
+            $ionicLoading.hide();
+
+            if(data.status){
+                $scope.completed_orders = data.response;
+                $scope.completed_orders_length = $scope.completed_orders.length;
+                $scope.isRenderLoaded = true;
+                $scope.renderFailed = false;
+            }
+            else{
+                $scope.completed_orders = [];
+                $scope.completed_orders_length = 0;
+                $scope.renderFailed = true;
+            }
+
+            $scope.$broadcast('scroll.refreshComplete');
+            
+       })
+       .error(function(data){
+              $ionicLoading.hide();
+              $ionicLoading.show({
+                template:  "Not responding. Check your connection.",
+                duration: 3000
+              });
+
+              $scope.isRenderLoaded = false;
+              $scope.renderFailed = true;
+              $scope.$broadcast('scroll.refreshComplete');
+        });
     }
 
 
