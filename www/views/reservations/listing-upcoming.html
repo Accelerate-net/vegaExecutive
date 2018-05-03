@@ -108,7 +108,7 @@
 
                     <tag ng-if="reservation.comments != '-' && reservation.statusCode == 0" ng-click="quickView(reservation)" style="display: block; height: 25px; width: 120px; color: #3498db; font-size: 12px; position: absolute; z-index: 100;" class="">  <i class="icon ion-android-hangout" style="font-size: 14px"></i> Comments</tag>
 
-                    <span class="reservationTileOptions" ng-click="openOptions('OPTIONS', reservation)"><i class="ion-more"></i></span>
+                    <span class="reservationTileOptions" ng-click="openOptions(reservation)"><i class="ion-more"></i></span>
                   </div>
 
                   <div class="reservationTileBody" style="text-align: right">
@@ -137,6 +137,7 @@
             </tag>
             <tag class="reservationAddButton" style="float: right" ng-click="newBook()"><i class="ion-plus"></i></tag>
             <tag class="reservationAddButton" style="float: right; margin-right: 10px; background: #a9adad" ng-click="quickSummary()"><i class="fa fa-file-text-o"></i></tag>
+            <tag class="reservationAddButton" style="float: right; margin-right: 10px; background: #a9adad" ng-click="openSeatPlanView()"><i class="fa fa-th"></i></tag>
          </div>
 
 
