@@ -8,41 +8,38 @@
             </button>
 
             <button class="button button-clear" style="text-align: left; margin-left: 10px; font-weight: 400; color: #FFF; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; font-size: 18px;">
-             Currently Seated
+             Seated Reservations
             </button>  
 
 
-            <button class="button button-clear" ng-click="triggerFilter()" ng-class='{clearFilterButton : isFilterEnabled, applyFilterButton : !isFilterEnabled}' style="position: absolute; top: 0px; right: 0px;">
-              {{isFilterEnabled ? 'Clear Filter' : 'Show Filters'}}
+            <!-- filter by date -->
+            <button class="button button-clear clearSearchFilterButton" ng-click="triggerFilter()" style="position: absolute; top: 0px; right: 0px;">
+              <i class="icon ion-ios-calendar-outline"></i> 
             </button>  
 
          </div>
 
-         <banner class="bannerHolder" ng-if="isFilterEnabled" ng-class="{bannerPendingChanges : filterPendingApply}">
+
+         <banner class="bannerHolder" ng-if="isFilterEnabled">
           <table style="width: 100%">
-            <col width = "40%">
-            <col width = "30%">
-            <col width = "30%">
+            <col width = "85%">
+            <col width = "15%">
             <tr>
-              <td class="bannerBranch" ng-click="changeFilterBranch()">
-                {{filterBranch}}
+              <td class="bannerBranch">
+                <span style="font-weight: 400">Reservations on</span> {{filterFancyDate}}
               </td>
-              <td class="bannerDate" ng-click="changeFilterFrom()">
-                <span class="bannerLabel">FROM</span>
-                <span style="display: block">{{filterFrom}}</span>
-              </td>
-              <td class="bannerDate" ng-click="changeFilterTo()">
-                <span class="bannerLabel">TO</span>
-                <span style="display: block">{{filterTo}}</span>
+              <td class="bannerDate" style="font-size: 21px; color: #41a284; text-align: right; padding: 0 18px;" ng-click="clearDateFilter()">
+                <i class="fa fa-times"></i>
               </td>
             <tr>
           </table>
         </banner>
 
+
       </ion-header-bar>
 
     <ion-nav-view animation="slide-left-right">
-         <ion-content class="categories-feeds-content" overflow-scroll="true" has-bouncing="false" delegate-handle="feeds-content" style="background: #f5f5f5;" ng-class='{hasBanner : isFilterEnabled, overflowDisabled : filterPendingApply}'>
+         <ion-content class="categories-feeds-content" overflow-scroll="true" has-bouncing="false" delegate-handle="feeds-content" style="background: #f5f5f5;" ng-class='{hasBanner : isFilterEnabled}'>
 
          <!-- Refresher -->
         <ion-refresher
@@ -77,21 +74,65 @@
 </div>
 
 
-          <div class="row" style="padding: 10px 10px 0 10px" ng-if="isRenderLoaded">
-            <div class="reservationTile" style="width: 100%;">
-                <div class="reservationTileIcon">52499</div>
-                <div class="reservationTileHead"><span>5</span></div>
-                <div class="reservationTileBody"><i class="fa fa-inr lightRupees"></i>{{getFancyAmount(overallData.grandSalesSum)}}</div>
-                <div class="reservationTileFoot">
-                  <span style="color: gray">worth Sales</span>
-                </div>
+
+          <!-- Search bar -->
+          <div class="row" style="padding: 0 10px" ng-if="reservationsFilteredList.length > 1">
+            <div class="input-group" style="padding: 10px 0 0 0; border: none;">
+              <input type="text" id="searchInputBox" ng-model="searchKey.value" class="form-control input-lg" style="text-align: center; width: 100%; height: 42px;" placeholder="Search Seated Reservations">
+              <span class="input-group-btn">
+                  <div ng-click="resetSearchKey()" class="button button-default btn-lg" type="button" style="min-height: 10px; height: 42px !important; color: gray; border-radius: 0"><i class="icon" ng-class="{'ion-android-search': searchKey.value == '', 'ion-android-refresh': searchKey.value != ''}"></i></div>
+              </span>
             </div>
           </div>
 
-          <div style="padding-bottom: 20px"></div>
+          <!-- No SEARCH RESULTS -->
+          <div ng-if="reservationsFilteredList.length != 0 && (reservationsFilteredList | filter: searchKey.value).length == 0" style="font-size: 12px; font-weight: 400; color: gray; text-align: center; padding: 15px 0;">No Search Results</div>  
+
+
+            <div class="row" style="padding: 10px 10px 0 10px" ng-repeat="reservation in allList = (reservationsFilteredList | filter: searchKey.value) track by $index" ng-if="isRenderLoaded">
+              <div class="reservationTile">
+                  <div class="reservationTileHead">
+                    
+                    <tag style="display: block; color: gray; font-size: 24px; font-weight: 300;"><i class="ion-ios-people-outline"></i> {{reservation.count}} People</tag>
+
+                    <tag ng-if="reservation.comments != '-' && reservation.statusCode == 0" ng-click="quickView(reservation)" style="display: block; height: 25px; width: 120px; color: #3498db; font-size: 12px; position: absolute; z-index: 100;" class="">  <i class="icon ion-android-hangout" style="font-size: 14px"></i> Comments</tag>
+
+                    <span class="reservationTileOptions" ng-click="openOptions('OPTIONS', reservation)"><i class="ion-more"></i></span>
+                  </div>
+
+                  <div class="reservationTileBody" style="text-align: right">
+                    <span style="display: block; color: #ab505d">{{reservation.user}}</span>
+                    <a href="tel:9790464526" style="display: block; font-size: 80%; letter-spacing: 2px; text-decoration: none; color: inherit; "><i class="fa fa-phone"></i> {{reservation.mobile}}</a>
+                  </div>
+
+                  <div class="reservationTileFoot" style="bottom: 15px">
+                    <tag style="display: block; color: #4ea4be; font-size: 18px; font-weight: 300;"><i class="ion-ios-clock-outline"></i> <span style="font-size: 18px">{{reservation.time}}</span></tag>
+                  </div>
+              </div>
+            </div>
+
+            <!-- No results -->
+             <div ng-if="reservationsFilteredList.length == 0">
+              <p style="padding: 40px 20px; text-align: center; font-size: 21px; font-weight: 300; color: #7b7b7b;">There are no Seated Reservations</p>
+             </div>
+
+
+          <div style="padding-bottom: 70px"></div>
 
 
          </ion-content>
+
+
+         <div class="reservationBottomFilterHolder">
+            <tag class="reservationSessionLabel" ng-click="changeTimeFilter()">
+                <tag ng-if="timeFilterFlag == 'All'" style="text-transform: none">All Sessions</tag>
+                <tag ng-if="timeFilterFlag != 'All'" style="text-transform: none">{{timeFilterFlag}} Session Only</tag>
+            </tag>
+            <tag class="reservationAddButton" style="float: right" ng-click="newBook()"><i class="ion-plus"></i></tag>
+            <tag class="reservationAddButton" style="float: right; margin-right: 10px; background: #a9adad" ng-click="quickSummary()"><i class="fa fa-file-text-o"></i></tag>
+         </div>
+
+
     </ion-nav-view>
   </ion-pane>
 

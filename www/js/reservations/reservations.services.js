@@ -56,6 +56,52 @@ angular.module('reservations.services', [])
 
 })
 
+
+
+.service('currentFilterService', function ($http, $q){
+
+    //Default Parameters
+    var currentSession = "All";
+    var currentDate = '';
+    var currentFancyDate = '';
+    var isFilterApplied = false;
+
+    this.setSession = function (session){
+      currentSession = session;
+    }
+
+    this.getSession = function(){
+      return currentSession;
+    }
+
+    this.setDate = function (date){
+      currentDate = date;
+    }
+
+    this.getDate = function(){
+      return currentDate;
+    }
+
+    this.setFancyDate = function (date){
+      currentFancyDate = date;
+    }
+
+    this.getFancyDate = function(){
+      return currentFancyDate;
+    }
+
+    this.setFilterFlag = function (flag){
+      isFilterApplied = flag;
+    }
+
+    this.getFilterFlag = function(){
+      return isFilterApplied;
+    }
+})
+
+
+
+
 .service('mappingService', function ($http, $q){
 
   //Default Parameters
