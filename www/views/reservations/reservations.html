@@ -1,3 +1,5 @@
+
+
 <ion-view class="feed-view" cache-view="false">
     <div class="bar bar-header" style="background: #2c3e50" style="margin-bottom: 20px">
       <button class="button icon ion-android-home" ng-click="goHome()"></button>
@@ -77,7 +79,7 @@
 <div class="list">
 
 
-<a class="item item-avatar" href="#" ng-repeat="reservation in allList = (reservationsList | filter:search.query)" track by $index" ng-if="getReservationsFiltered(reservation, showHistory)">
+<a class="item item-avatar" href="#" ng-repeat="reservation in allList = (reservationsList | filter:search.query) track by $index" ng-if="getReservationsFiltered(reservation, showHistory)">
    <tag class="countNormal" ng-class="getClass('COUNT', reservation.statusCode)" >{{reservation.count}}</tag>
    <h2>{{reservation.user}} <time style="font-size: 12px; font-weight: 300; color: #7f8c8d" ng-if="reservation.statusCode != 0">at {{reservation.time}}</time></h2>
    <tag class="clockResBase" ng-class="getClass('STATUS', reservation.statusCode)">{{getShortBrief(reservation)}}</tag>

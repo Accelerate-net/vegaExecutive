@@ -47,18 +47,37 @@
 
 				&.pending-icon
 				{
-					background-image: url('../img/feed/tabs-pending.png');
+					background-image: url('../img/feed/nav/orders/tabs-pending.png');
 				}
 
 				&.confirmed-icon
 				{
-					background-image: url('../img/feed/tabs-confirmed.png');
+					background-image: url('../img/feed/nav/orders/tabs-confirmed.png');
 				}
 
 				&.completed-icon
 				{
-					background-image: url('../img/feed/tabs-completed.png');
+					background-image: url('../img/feed/nav/orders/tabs-completed.png');
 				}
+
+				
+
+				&.pending-reservation-icon
+				{
+					background-image: url('../img/feed/nav/reservations/reserve_listing_upcoming.png');
+				}
+
+				&.confirmed-reservation-icon
+				{
+					background-image: url('../img/feed/nav/reservations/reserve_listing_seated.png');
+				}
+
+				&.completed-reservation-icon
+				{
+					background-image: url('../img/feed/nav/reservations/reserve_listing_completed.png');
+				}
+
+
 			}
 		}
 	}
