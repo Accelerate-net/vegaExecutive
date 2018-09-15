@@ -44,7 +44,10 @@ angular.module('manager.controllers', ['ionic', 'ui.router', 'ionic-timepicker',
 
         //Already Logged in case
         if (!_.isUndefined(window.localStorage.admin) && window.localStorage.admin != '') {
-            $state.go('main.app.landing');
+  
+        }
+        else{
+          $state.go('main.app.login');
         }
 
         $scope.loginError = "";
@@ -58,7 +61,7 @@ angular.module('manager.controllers', ['ionic', 'ui.router', 'ionic-timepicker',
             });
             $http({
                     method: 'POST',
-                    url: 'https://www.kopperkadai.online/services/adminlogin.php',
+                    url: 'https://www.zaitoon.online/services/adminlogin.php',
                     data: $scope.mydata,
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded'
@@ -93,10 +96,13 @@ angular.module('manager.controllers', ['ionic', 'ui.router', 'ionic-timepicker',
 
 
         //Already Logged in case
-      /*  if (!_.isUndefined(window.localStorage.admin) && window.localStorage.admin != '') {
-            $state.go('main.app.landing');
+        if (!_.isUndefined(window.localStorage.admin) && window.localStorage.admin != '') {
+  
         }
-    */
+        else{
+          $state.go('main.app.login');
+        }
+    
 
 
         $scope.openPage = function(id){
@@ -140,10 +146,13 @@ angular.module('manager.controllers', ['ionic', 'ui.router', 'ionic-timepicker',
 
 
         //Already Logged in case
-      /*  if (!_.isUndefined(window.localStorage.admin) && window.localStorage.admin != '') {
-            $state.go('main.app.landing');
+        if (!_.isUndefined(window.localStorage.admin) && window.localStorage.admin != '') {
+  
         }
-    */
+        else{
+          $state.go('main.app.login');
+        }
+    
 
 
 
@@ -322,19 +331,15 @@ angular.module('manager.controllers', ['ionic', 'ui.router', 'ionic-timepicker',
         }
 
 
-//Fetch Data
 
-var TEMP_TOKEN = 'sHtArttc2ht+tMf9baAeQ9ukHnXtlsHfexmCWx5sJOikSRf7xi1G0alsgJTZKK9YvpLRtnhL5iK3X5xhKyQh5A==';
-
-
-      
-      $scope.fetchData = function(){
+    //Fetch Data
+    $scope.fetchData = function(){
 
             $scope.isRenderLoaded = false;
             $scope.renderFailed = false;
 
             var data = {};
-            data.token = TEMP_TOKEN; //$cookies.get("dashManager");
+            data.token =  window.localStorage.admin;
 
             if($scope.isFilterEnabled){
                 data.filterBranch = $scope.filterBranchCode;
@@ -717,10 +722,13 @@ var TEMP_TOKEN = 'sHtArttc2ht+tMf9baAeQ9ukHnXtlsHfexmCWx5sJOikSRf7xi1G0alsgJTZKK
 
 
         //Already Logged in case
-      /*  if (!_.isUndefined(window.localStorage.admin) && window.localStorage.admin != '') {
-            $state.go('main.app.landing');
+        if (!_.isUndefined(window.localStorage.admin) && window.localStorage.admin != '') {
+  
         }
-    */
+        else{
+          $state.go('main.app.login');
+        }
+    
 
 
 $scope.getRatingColor = function(rating){
@@ -940,19 +948,15 @@ $scope.getRatingColor = function(rating){
         }
 
 
-//Fetch Data
+    //Fetch Data
 
-var TEMP_TOKEN = 'sHtArttc2ht+tMf9baAeQ9ukHnXtlsHfexmCWx5sJOikSRf7xi1G0alsgJTZKK9YvpLRtnhL5iK3X5xhKyQh5A==';
-
-
-      
       $scope.fetchData = function(){
 
             $scope.isRenderLoaded = false;
             $scope.renderFailed = false;
 
             var data = {};
-            data.token = TEMP_TOKEN; //$cookies.get("dashManager");
+            data.token = window.localStorage.admin;
 
             if($scope.isFilterEnabled){
                 data.filterBranch = $scope.filterBranchCode;
@@ -1134,10 +1138,13 @@ var TEMP_TOKEN = 'sHtArttc2ht+tMf9baAeQ9ukHnXtlsHfexmCWx5sJOikSRf7xi1G0alsgJTZKK
 
 
         //Already Logged in case
-      /*  if (!_.isUndefined(window.localStorage.admin) && window.localStorage.admin != '') {
-            $state.go('main.app.landing');
+        if (!_.isUndefined(window.localStorage.admin) && window.localStorage.admin != '') {
+  
         }
-    */
+        else{
+          $state.go('main.app.login');
+        }
+    
 
 
 $scope.getRatingColor = function(rating){
@@ -1350,19 +1357,15 @@ $scope.getFancyCurrency = function(x){
         }
 
 
-//Fetch Data
+    //Fetch Data
 
-var TEMP_TOKEN = 'sHtArttc2ht+tMf9baAeQ9ukHnXtlsHfexmCWx5sJOikSRf7xi1G0alsgJTZKK9YvpLRtnhL5iK3X5xhKyQh5A==';
-
-
-      
       $scope.fetchData = function(){
 
             $scope.isRenderLoaded = false;
             $scope.renderFailed = false;
 
             var data = {};
-            data.token = TEMP_TOKEN; //$cookies.get("dashManager");
+            data.token = window.localStorage.admin;
 
             if($scope.isFilterEnabled){
                 data.filterBranch = $scope.filterBranchCode;
@@ -1489,19 +1492,20 @@ var TEMP_TOKEN = 'sHtArttc2ht+tMf9baAeQ9ukHnXtlsHfexmCWx5sJOikSRf7xi1G0alsgJTZKK
 
 
         //Already Logged in case
-      /*  if (!_.isUndefined(window.localStorage.admin) && window.localStorage.admin != '') {
-            $state.go('main.app.landing');
+        if (!_.isUndefined(window.localStorage.admin) && window.localStorage.admin != '') {
+  
         }
-    */
+        else{
+          $state.go('main.app.login');
+        }
+    
 
 $scope.getFancyCommaNumber = function(x){
     return x.toLocaleString('en-US', {maximumSignificantDigits : 12});
 }
 
 
-//Fetch Data
-
-      var TEMP_TOKEN = 'sHtArttc2ht+tMf9baAeQ9ukHnXtlsHfexmCWx5sJOikSRf7xi1G0alsgJTZKK9YvpLRtnhL5iK3X5xhKyQh5A==';
+    //Fetch Data
 
       $scope.fetchData = function(){
 
@@ -1509,7 +1513,7 @@ $scope.getFancyCommaNumber = function(x){
             $scope.renderFailed = false;
 
             var data = {};
-            data.token = TEMP_TOKEN; //$cookies.get("dashManager");
+            data.token = window.localStorage.admin;
 
             //LOADING 
             $ionicLoading.show({ template: '<ion-spinner></ion-spinner>' });
@@ -1638,7 +1642,7 @@ $scope.getFancyCommaNumber = function(x){
             $scope.limiter = 0;
 
             var data = {};
-            data.token = TEMP_TOKEN; //$cookies.get("dashManager");
+            data.token = window.localStorage.admin;
             data.key = search_key;
             data.id = $scope.limiter;
 
@@ -1702,7 +1706,7 @@ $scope.getFancyCommaNumber = function(x){
 
 
             var data = {};
-            data.token = TEMP_TOKEN; //$cookies.get("dashManager");
+            data.token = window.localStorage.admin;
             data.key = search_key;
             data.id = $scope.limiter;
 
@@ -1782,10 +1786,13 @@ $scope.getFancyCommaNumber = function(x){
 
 
         //Already Logged in case
-      /*  if (!_.isUndefined(window.localStorage.admin) && window.localStorage.admin != '') {
-            $state.go('main.app.landing');
+        if (!_.isUndefined(window.localStorage.admin) && window.localStorage.admin != '') {
+  
         }
-    */
+        else{
+          $state.go('main.app.login');
+        }
+    
 
 
   $scope.getMyFancyDate = function(date){
@@ -1979,11 +1986,7 @@ $scope.getFancyCommaNumber = function(x){
         }
 
 
-//Fetch Data
-
-var TEMP_TOKEN = 'sHtArttc2ht+tMf9baAeQ9ukHnXtlsHfexmCWx5sJOikSRf7xi1G0alsgJTZKK9YvpLRtnhL5iK3X5xhKyQh5A==';
-
-
+    //Fetch Data
       
       $scope.fetchData = function(){
 
@@ -1991,7 +1994,7 @@ var TEMP_TOKEN = 'sHtArttc2ht+tMf9baAeQ9ukHnXtlsHfexmCWx5sJOikSRf7xi1G0alsgJTZKK
             $scope.renderFailed = false;
 
             var data = {};
-            data.token = TEMP_TOKEN; //$cookies.get("dashManager");
+            data.token = window.localStorage.admin;
 
             if($scope.isFilterEnabled){
                 data.filterBranch = $scope.filterBranchCode;
@@ -2151,14 +2154,13 @@ var TEMP_TOKEN = 'sHtArttc2ht+tMf9baAeQ9ukHnXtlsHfexmCWx5sJOikSRf7xi1G0alsgJTZKK
 
 
         //Already Logged in case
-      /*  if (!_.isUndefined(window.localStorage.admin) && window.localStorage.admin != '') {
-            $state.go('main.app.landing');
+        if (!_.isUndefined(window.localStorage.admin) && window.localStorage.admin != '') {
+  
         }
-    */
-
-      var TEMP_TOKEN = 'sHtArttc2ht+tMf9baAeQ9ukHnXtlsHfexmCWx5sJOikSRf7xi1G0alsgJTZKK9YvpLRtnhL5iK3X5xhKyQh5A==';
-
-
+        else{
+          $state.go('main.app.login');
+        }
+    
 
       $scope.day = moment();
 
@@ -2171,7 +2173,7 @@ var TEMP_TOKEN = 'sHtArttc2ht+tMf9baAeQ9ukHnXtlsHfexmCWx5sJOikSRf7xi1G0alsgJTZKK
             $scope.isViewingProfile = false; //to be safe
 
             var data = {};
-            data.token = TEMP_TOKEN; //$cookies.get("dashManager");
+            data.token = window.localStorage.admin;
             data.key = search_key;
 
 
@@ -2275,12 +2277,10 @@ var TEMP_TOKEN = 'sHtArttc2ht+tMf9baAeQ9ukHnXtlsHfexmCWx5sJOikSRf7xi1G0alsgJTZKK
 
       $scope.showAttendanceSummary = function(){
 
-                    var TEMP_TOKEN = 'sHtArttc2ht+tMf9baAeQ9ukHnXtlsHfexmCWx5sJOikSRf7xi1G0alsgJTZKK9YvpLRtnhL5iK3X5xhKyQh5A==';
-
                     var tempFormattedMonth = moment($scope.day).format('YYYYMM');
 
                     var data = {};
-                    data.token = TEMP_TOKEN; //$cookies.get("dashManager");
+                    data.token = window.localStorage.admin;
                     data.month = tempFormattedMonth;
 
                     //LOADING 
@@ -2348,10 +2348,9 @@ var TEMP_TOKEN = 'sHtArttc2ht+tMf9baAeQ9ukHnXtlsHfexmCWx5sJOikSRf7xi1G0alsgJTZKK
                             var tempFormattedMonth = moment($scope.month).format('YYYYMM');
 
                             //Call POST method
-                            var TEMP_TOKEN = 'sHtArttc2ht+tMf9baAeQ9ukHnXtlsHfexmCWx5sJOikSRf7xi1G0alsgJTZKK9YvpLRtnhL5iK3X5xhKyQh5A==';
 
                             var data = {};
-                            data.token = TEMP_TOKEN; //$cookies.get("dashManager");
+                            data.token = window.localStorage.admin;
                             data.month = tempFormattedMonth;
 
                             //LOADING 
@@ -2402,10 +2401,9 @@ var TEMP_TOKEN = 'sHtArttc2ht+tMf9baAeQ9ukHnXtlsHfexmCWx5sJOikSRf7xi1G0alsgJTZKK
 
 
                             //Call POST method
-                            var TEMP_TOKEN = 'sHtArttc2ht+tMf9baAeQ9ukHnXtlsHfexmCWx5sJOikSRf7xi1G0alsgJTZKK9YvpLRtnhL5iK3X5xhKyQh5A==';
 
                             var data = {};
-                            data.token = TEMP_TOKEN; //$cookies.get("dashManager");
+                            data.token = window.localStorage.admin;
                             data.month = tempFormattedMonth;
 
                             //LOADING 
@@ -2595,7 +2593,7 @@ $scope.getRatingColor = function(rating){
 				
             $http({
                     method: 'POST',
-                    url: 'https://www.kopperkadai.online/services/deskfetchfeedbackfigures.php',
+                    url: 'https://www.zaitoon.online/services/deskfetchfeedbackfigures.php',
                     data: data,
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded'
@@ -2631,7 +2629,7 @@ $scope.getRatingColor = function(rating){
                 });
             $http({
                     method: 'POST',
-                    url: 'https://www.kopperkadai.online/services/deskfetchreviews.php',
+                    url: 'https://www.zaitoon.online/services/deskfetchreviews.php',
                     data: data,
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded'
@@ -2709,7 +2707,7 @@ $scope.getRatingColor = function(rating){
                 });			
             $http({
                     method: 'POST',
-                    url: 'https://www.kopperkadai.online/services/deskfetchreviews.php',
+                    url: 'https://www.zaitoon.online/services/deskfetchreviews.php',
                     data: data,
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded'
