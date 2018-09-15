@@ -157,7 +157,7 @@ angular.module('reservations.controllers', ['ionic', 'ionic-timepicker', 'ionic-
 				
 					$http({
                         method: 'POST',
-                        url: 'https://www.kopperkadai.online/services/deskreservationchannels.php',
+                        url: 'https://www.zaitoon.online/services/deskreservationchannels.php',
                         data: data,
                         headers: {
                             'Content-Type': 'application/x-www-form-urlencoded'
@@ -346,7 +346,7 @@ angular.module('reservations.controllers', ['ionic', 'ionic-timepicker', 'ionic-
                 });
                 $http({
                         method: 'POST',
-                        url: 'https://www.kopperkadai.online/services/newreservationsadmin.php',
+                        url: 'https://www.zaitoon.online/services/newreservationsadmin.php',
                         data: data,
                         headers: {
                             'Content-Type': 'application/x-www-form-urlencoded'
@@ -375,9 +375,9 @@ angular.module('reservations.controllers', ['ionic', 'ionic-timepicker', 'ionic-
 
 .controller('completedReservationsCtrl', function(changeSlotService, currentFilterService, $ionicSideMenuDelegate, $ionicLoading, ionicDatePicker, $scope, $interval, $ionicPopup, $state, $http, $ionicPopover, $ionicLoading, $timeout, mappingService, currentBooking) {
 
-        // if (_.isUndefined(window.localStorage.admin) || window.localStorage.admin == '') {
-        //     $state.go('main.app.login');
-        // }
+        if (_.isUndefined(window.localStorage.admin) || window.localStorage.admin == '') {
+            $state.go('main.app.login');
+        }
 
         $scope.myDate = mappingService.getFancyDate();
         $scope.myActualDate = mappingService.getDate();
@@ -501,11 +501,9 @@ angular.module('reservations.controllers', ['ionic', 'ionic-timepicker', 'ionic-
         }
 
 
-//Fetch Data
+  //Fetch Data
 
-var TEMP_TOKEN = 'sHtArttc2ht+tMf9baAeQ9ukHnXtlsHfexmCWx5sJOikSRf7xi1G0alsgJTZKK9YvpLRtnhL5iK3X5xhKyQh5A==';
-
-    //Number of Sessions by Default = 0
+  //Number of Sessions by Default = 0
       $scope.numberOfSessions = 0;
       $scope.sessionSummary = [];
 
@@ -515,7 +513,7 @@ var TEMP_TOKEN = 'sHtArttc2ht+tMf9baAeQ9ukHnXtlsHfexmCWx5sJOikSRf7xi1G0alsgJTZKK
             $scope.renderFailed = false;
 
             var data = {};
-            data.token = TEMP_TOKEN; //$cookies.get("dashManager");
+            data.token = window.localStorage.admin;
 
             if($scope.isFilterEnabled){
                 data.date = $scope.filterFrom;
@@ -972,7 +970,7 @@ var TEMP_TOKEN = 'sHtArttc2ht+tMf9baAeQ9ukHnXtlsHfexmCWx5sJOikSRf7xi1G0alsgJTZKK
                             });
                             $http({
                                     method: 'POST',
-                                    url: 'https://www.kopperkadai.online/services/deskmarkreservationcompleted.php',
+                                    url: 'https://www.zaitoon.online/services/deskmarkreservationcompleted.php',
                                     data: data,
                                     headers: {
                                         'Content-Type': 'application/x-www-form-urlencoded'
@@ -1029,7 +1027,7 @@ var TEMP_TOKEN = 'sHtArttc2ht+tMf9baAeQ9ukHnXtlsHfexmCWx5sJOikSRf7xi1G0alsgJTZKK
                             });
                             $http({
                                     method: 'POST',
-                                    url: 'https://www.kopperkadai.online/services/cancelreservationsadmin.php',
+                                    url: 'https://www.zaitoon.online/services/cancelreservationsadmin.php',
                                     data: data,
                                     headers: {
                                         'Content-Type': 'application/x-www-form-urlencoded'
@@ -1089,7 +1087,7 @@ var TEMP_TOKEN = 'sHtArttc2ht+tMf9baAeQ9ukHnXtlsHfexmCWx5sJOikSRf7xi1G0alsgJTZKK
                             });
                             $http({
                                     method: 'POST',
-                                    url: 'https://www.kopperkadai.online/services/deskdeletereservation.php',
+                                    url: 'https://www.zaitoon.online/services/deskdeletereservation.php',
                                     data: data,
                                     headers: {
                                         'Content-Type': 'application/x-www-form-urlencoded'
@@ -1135,9 +1133,9 @@ var TEMP_TOKEN = 'sHtArttc2ht+tMf9baAeQ9ukHnXtlsHfexmCWx5sJOikSRf7xi1G0alsgJTZKK
  
 .controller('seatedReservationsCtrl', function(changeSlotService, currentFilterService, $ionicSideMenuDelegate, $ionicLoading, ionicDatePicker, $scope, $interval, $ionicPopup, $state, $http, $ionicPopover, $ionicLoading, $timeout, mappingService, currentBooking) {
 
-        // if (_.isUndefined(window.localStorage.admin) || window.localStorage.admin == '') {
-        //     $state.go('main.app.login');
-        // }
+        if (_.isUndefined(window.localStorage.admin) || window.localStorage.admin == '') {
+            $state.go('main.app.login');
+        }
 
         $scope.myDate = mappingService.getFancyDate();
         $scope.myActualDate = mappingService.getDate();
@@ -1261,9 +1259,7 @@ var TEMP_TOKEN = 'sHtArttc2ht+tMf9baAeQ9ukHnXtlsHfexmCWx5sJOikSRf7xi1G0alsgJTZKK
         }
 
 
-//Fetch Data
-
-var TEMP_TOKEN = 'sHtArttc2ht+tMf9baAeQ9ukHnXtlsHfexmCWx5sJOikSRf7xi1G0alsgJTZKK9YvpLRtnhL5iK3X5xhKyQh5A==';
+    //Fetch Data
 
     //Number of Sessions by Default = 0
       $scope.numberOfSessions = 0;
@@ -1275,7 +1271,7 @@ var TEMP_TOKEN = 'sHtArttc2ht+tMf9baAeQ9ukHnXtlsHfexmCWx5sJOikSRf7xi1G0alsgJTZKK
             $scope.renderFailed = false;
 
             var data = {};
-            data.token = TEMP_TOKEN; //$cookies.get("dashManager");
+            data.token = window.localStorage.admin;
 
             if($scope.isFilterEnabled){
                 data.date = $scope.filterFrom;
@@ -1697,7 +1693,7 @@ var TEMP_TOKEN = 'sHtArttc2ht+tMf9baAeQ9ukHnXtlsHfexmCWx5sJOikSRf7xi1G0alsgJTZKK
                             });
                             $http({
                                     method: 'POST',
-                                    url: 'https://www.kopperkadai.online/services/deskmarkreservationcompleted.php',
+                                    url: 'https://www.zaitoon.online/services/deskmarkreservationcompleted.php',
                                     data: data,
                                     headers: {
                                         'Content-Type': 'application/x-www-form-urlencoded'
@@ -1754,7 +1750,7 @@ var TEMP_TOKEN = 'sHtArttc2ht+tMf9baAeQ9ukHnXtlsHfexmCWx5sJOikSRf7xi1G0alsgJTZKK
                             });
                             $http({
                                     method: 'POST',
-                                    url: 'https://www.kopperkadai.online/services/cancelreservationsadmin.php',
+                                    url: 'https://www.zaitoon.online/services/cancelreservationsadmin.php',
                                     data: data,
                                     headers: {
                                         'Content-Type': 'application/x-www-form-urlencoded'
@@ -1814,7 +1810,7 @@ var TEMP_TOKEN = 'sHtArttc2ht+tMf9baAeQ9ukHnXtlsHfexmCWx5sJOikSRf7xi1G0alsgJTZKK
                             });
                             $http({
                                     method: 'POST',
-                                    url: 'https://www.kopperkadai.online/services/deskdeletereservation.php',
+                                    url: 'https://www.zaitoon.online/services/deskdeletereservation.php',
                                     data: data,
                                     headers: {
                                         'Content-Type': 'application/x-www-form-urlencoded'
@@ -1859,9 +1855,9 @@ var TEMP_TOKEN = 'sHtArttc2ht+tMf9baAeQ9ukHnXtlsHfexmCWx5sJOikSRf7xi1G0alsgJTZKK
 
 .controller('upcomingReservationsCtrl', function(changeSlotService, currentFilterService, $ionicSideMenuDelegate, $ionicLoading, ionicDatePicker, $scope, $interval, $ionicPopup, $state, $http, $ionicPopover, $ionicLoading, $timeout, mappingService, currentBooking) {
 
-        // if (_.isUndefined(window.localStorage.admin) || window.localStorage.admin == '') {
-        //     $state.go('main.app.login');
-        // }
+        if (_.isUndefined(window.localStorage.admin) || window.localStorage.admin == '') {
+            $state.go('main.app.login');
+        }
 
         $scope.myDate = mappingService.getFancyDate();
         $scope.myActualDate = mappingService.getDate();
@@ -1985,9 +1981,7 @@ var TEMP_TOKEN = 'sHtArttc2ht+tMf9baAeQ9ukHnXtlsHfexmCWx5sJOikSRf7xi1G0alsgJTZKK
         }
 
 
-//Fetch Data
-
-var TEMP_TOKEN = 'sHtArttc2ht+tMf9baAeQ9ukHnXtlsHfexmCWx5sJOikSRf7xi1G0alsgJTZKK9YvpLRtnhL5iK3X5xhKyQh5A==';
+    //Fetch Data
 
     //Number of Sessions by Default = 0
       $scope.numberOfSessions = 0;
@@ -1999,7 +1993,7 @@ var TEMP_TOKEN = 'sHtArttc2ht+tMf9baAeQ9ukHnXtlsHfexmCWx5sJOikSRf7xi1G0alsgJTZKK
             $scope.renderFailed = false;
 
             var data = {};
-            data.token = TEMP_TOKEN; //$cookies.get("dashManager");
+            data.token = window.localStorage.admin;
 
             if($scope.isFilterEnabled){
                 data.date = $scope.filterFrom;
@@ -2420,7 +2414,7 @@ var TEMP_TOKEN = 'sHtArttc2ht+tMf9baAeQ9ukHnXtlsHfexmCWx5sJOikSRf7xi1G0alsgJTZKK
                             });
                             $http({
                                     method: 'POST',
-                                    url: 'https://www.kopperkadai.online/services/deskmarkreservationcompleted.php',
+                                    url: 'https://www.zaitoon.online/services/deskmarkreservationcompleted.php',
                                     data: data,
                                     headers: {
                                         'Content-Type': 'application/x-www-form-urlencoded'
@@ -2477,7 +2471,7 @@ var TEMP_TOKEN = 'sHtArttc2ht+tMf9baAeQ9ukHnXtlsHfexmCWx5sJOikSRf7xi1G0alsgJTZKK
                             });
                             $http({
                                     method: 'POST',
-                                    url: 'https://www.kopperkadai.online/services/cancelreservationsadmin.php',
+                                    url: 'https://www.zaitoon.online/services/cancelreservationsadmin.php',
                                     data: data,
                                     headers: {
                                         'Content-Type': 'application/x-www-form-urlencoded'
@@ -2537,7 +2531,7 @@ var TEMP_TOKEN = 'sHtArttc2ht+tMf9baAeQ9ukHnXtlsHfexmCWx5sJOikSRf7xi1G0alsgJTZKK
                             });
                             $http({
                                     method: 'POST',
-                                    url: 'https://www.kopperkadai.online/services/deskdeletereservation.php',
+                                    url: 'https://www.zaitoon.online/services/deskdeletereservation.php',
                                     data: data,
                                     headers: {
                                         'Content-Type': 'application/x-www-form-urlencoded'
@@ -2604,7 +2598,7 @@ var TEMP_TOKEN = 'sHtArttc2ht+tMf9baAeQ9ukHnXtlsHfexmCWx5sJOikSRf7xi1G0alsgJTZKK
       //           //Regenrating token
       //           $http({
       //                   method: 'POST',
-      //                   url: 'https://www.kopperkadai.online/services/admintokenregenerate.php',
+      //                   url: 'https://www.zaitoon.online/services/admintokenregenerate.php',
       //                   data: mydata,
       //                   headers: {
       //                       'Content-Type': 'application/x-www-form-urlencoded'
@@ -2767,9 +2761,9 @@ var TEMP_TOKEN = 'sHtArttc2ht+tMf9baAeQ9ukHnXtlsHfexmCWx5sJOikSRf7xi1G0alsgJTZKK
 
     .controller('TablesCtrl', function($scope, $http, $state, $rootScope, $ionicSlideBoxDelegate, $ionicPopup, $ionicLoading, currentBooking) {
 
-        // if (_.isUndefined(window.localStorage.admin) || window.localStorage.admin == '') {
-        //     $state.go('main.app.login');
-        // }
+        if (_.isUndefined(window.localStorage.admin) || window.localStorage.admin == '') {
+            $state.go('main.app.login');
+        }
 
 
         /**** ACTUAL BEGINNING ***/
@@ -3176,7 +3170,7 @@ console.log(data)
 
             $http({
                     method: 'POST',
-                    url: 'https://www.kopperkadai.online/services/deskreservationsummary.php',
+                    url: 'https://www.zaitoon.online/services/deskreservationsummary.php',
                     data: data,
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded'
@@ -3223,7 +3217,7 @@ console.log(data)
             
             $http({
                     method: 'POST',
-                    url: 'https://www.kopperkadai.online/services/deskreservationssummarygraph.php',
+                    url: 'https://www.zaitoon.online/services/deskreservationssummarygraph.php',
                     data: data,
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded'

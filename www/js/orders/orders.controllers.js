@@ -41,13 +41,14 @@ angular.module('orders.controllers', ['ionic', 'ui.router', 'ionic-timepicker', 
 
 
         //Already Logged in case
-      /*  if (!_.isUndefined(window.localStorage.admin) && window.localStorage.admin != '') {
-            $state.go('main.app.landing');
+        if (!_.isUndefined(window.localStorage.admin) && window.localStorage.admin != '') {
+  
         }
-    */
+        else{
+          $state.go('main.app.login');
+        }
+      
 
-
-var TEMP_TOKEN = 'sHtArttc2ht+tMf9baAeQ9ukHnXtlsHfexmCWx5sJOikSRf7xi1G0alsgJTZKK9YvpLRtnhL5iK3X5xhKyQh5A==';
 
 
     //List or Details View?
@@ -66,7 +67,7 @@ var TEMP_TOKEN = 'sHtArttc2ht+tMf9baAeQ9ukHnXtlsHfexmCWx5sJOikSRf7xi1G0alsgJTZKK
       $scope.renderFailed = false;
 
       var data = {};
-      data.token = TEMP_TOKEN; //$cookies.get("zaitoonAdmin");
+      data.token = window.localStorage.admin;
       data.status = 0;
 
       //LOADING 
@@ -182,14 +183,13 @@ var TEMP_TOKEN = 'sHtArttc2ht+tMf9baAeQ9ukHnXtlsHfexmCWx5sJOikSRf7xi1G0alsgJTZKK
 
 
         //Already Logged in case
-      /*  if (!_.isUndefined(window.localStorage.admin) && window.localStorage.admin != '') {
-            $state.go('main.app.landing');
+        if (!_.isUndefined(window.localStorage.admin) && window.localStorage.admin != '') {
+  
         }
-    */
-
-
-var TEMP_TOKEN = 'sHtArttc2ht+tMf9baAeQ9ukHnXtlsHfexmCWx5sJOikSRf7xi1G0alsgJTZKK9YvpLRtnhL5iK3X5xhKyQh5A==';
-
+        else{
+          $state.go('main.app.login');
+        }
+    
 
     //List or Details View?
     $scope.isViewingOrder = false;
@@ -208,7 +208,7 @@ var TEMP_TOKEN = 'sHtArttc2ht+tMf9baAeQ9ukHnXtlsHfexmCWx5sJOikSRf7xi1G0alsgJTZKK
         $scope.renderFailed = false;
 
       var data = {};
-      data.token = TEMP_TOKEN; //$cookies.get("zaitoonAdmin");
+      data.token = window.localStorage.admin;
       data.status = 1;
 
       //LOADING 
@@ -403,15 +403,13 @@ var TEMP_TOKEN = 'sHtArttc2ht+tMf9baAeQ9ukHnXtlsHfexmCWx5sJOikSRf7xi1G0alsgJTZKK
 
 
         //Already Logged in case
-      /*  if (!_.isUndefined(window.localStorage.admin) && window.localStorage.admin != '') {
-            $state.go('main.app.landing');
+        if (!_.isUndefined(window.localStorage.admin) && window.localStorage.admin != '') {
+  
         }
-    */
-
-
-var TEMP_TOKEN = 'sHtArttc2ht+tMf9baAeQ9ukHnXtlsHfexmCWx5sJOikSRf7xi1G0alsgJTZKK9YvpLRtnhL5iK3X5xhKyQh5A==';
-
-
+        else{
+          $state.go('main.app.login');
+        }
+    
 
     //List or Details View?
     $scope.isViewingOrder = false;
@@ -437,7 +435,7 @@ var TEMP_TOKEN = 'sHtArttc2ht+tMf9baAeQ9ukHnXtlsHfexmCWx5sJOikSRf7xi1G0alsgJTZKK
     $scope.initializeCompletedOrders = function(){
 
       var data = {};
-      data.token = TEMP_TOKEN; //$cookies.get("zaitoonAdmin");
+      data.token = window.localStorage.admin;
       data.status = 2;
       data.key = today;
 
@@ -572,7 +570,7 @@ var TEMP_TOKEN = 'sHtArttc2ht+tMf9baAeQ9ukHnXtlsHfexmCWx5sJOikSRf7xi1G0alsgJTZKK
 
 
       var data = {};
-      data.token = TEMP_TOKEN; //$cookies.get("zaitoonAdmin");
+      data.token = window.localStorage.admin;
       data.status = 2;
       data.key = temp_key;
 
