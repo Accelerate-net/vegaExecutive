@@ -24,3 +24,5 @@ www/js/app/tracking-config.js
 
 .DS_Store
 ._DS_Store
+ionic.project
+npm-debug.log
