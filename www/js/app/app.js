@@ -3,18 +3,18 @@ angular.module('underscore', [])
   return window._; // assumes underscore has already been loaded on the page
 });
 
-angular.module('zaitoonFirst', [
+angular.module('vegaExecutive', [
   'ngCordova',
 
   'ionic',
-  'zaitoonFirst.views',
+  // 'vegaExecutive.views',
   'common.directives',
+  'common.controllers',
 
-  'manager.controllers',
-  'manager.services',
+  'summary.controllers',
+  'summary.services',
 
-  'reservations.controllers',
-  'reservations.services',
+  'feedbacks.controllers',
 
   'orders.controllers',
   'orders.services',
@@ -89,18 +89,6 @@ angular.module('zaitoonFirst', [
         }
     })
 
-
-    .state('main.reservationsapp', {
-        url: '/reservationsapp',
-        abstract: true,
-        views: {
-            'main-view@main': {
-                templateUrl: 'views/common/app-reservations.html',
-                controller: 'AppCtrl'
-            }
-        }
-    })
-
     /**********************
              LOGIN
     ***********************/
@@ -120,17 +108,6 @@ angular.module('zaitoonFirst', [
     /**********************
           MAIN LAYOUT
     ***********************/
-
-    .state('main.app.landing', {
-        url: '/landing',
-        views: {
-            'main-view@main': {
-                templateUrl: 'views/home/landing.html',
-                controller: 'landingCtrl'
-            }
-        }
-    })
-
 
     .state('main.app.tiles', {
         url: '/tiles',
@@ -182,82 +159,16 @@ angular.module('zaitoonFirst', [
     })
 
 
-
-
     /**********************
-          RESERVATIONS
+            FEEDBACKS
     ***********************/
 
-
-    .state('main.reservationsapp.upcoming', {
-        url: '/reservationsupcoming',
-        views: {
-            'reservations-upcoming@main.reservationsapp': {
-                templateUrl: 'views/reservations/listing-upcoming.html',
-                controller: 'upcomingReservationsCtrl'
-            }
-        }
-    })
-
-
-    .state('main.reservationsapp.seated', {
-        url: '/reservationsseated',
-        views: {
-            'reservations-seated@main.reservationsapp': {
-                templateUrl: 'views/reservations/listing-seated.html',
-                controller: 'seatedReservationsCtrl'
-            }
-        }
-    })
-
-    
-    .state('main.reservationsapp.completed', {
-        url: '/reservationscompleted',
-        views: {
-            'reservations-completed@main.reservationsapp': {
-                templateUrl: 'views/reservations/listing-completed.html',
-                controller: 'completedReservationsCtrl'
-            }
-        }
-    })
-
-
-    .state('main.reservationsapp.map', {
-        url: '/map',
+    .state('main.app.feedbacks', {
+        url: '/feedbacks',
         views: {
             'main-view@main': {
-                templateUrl: 'views/reservations/tables.html',
-                controller: 'TablesCtrl'
-            }
-        }
-    })
-
-    .state('main.app.summary', {
-        url: '/summary',
-        views: {
-            'main-view@main': {
-                templateUrl: 'views/reservations/summary.html',
-                controller: 'summaryCtrl'
-            }
-        }
-    })
-
-    .state('main.app.walkin', {
-        url: '/walkin',
-        views: {
-            'main-view@main': {
-                templateUrl: 'views/reservations/newreservation.html',
-                controller: 'NewReservationsCtrl'
-            }
-        }
-    })
-
-    .state('main.app.change', {
-        url: '/change',
-        views: {
-            'main-view@main': {
-                templateUrl: 'views/reservations/editreservation.html',
-                controller: 'EditReservationsCtrl'
+                templateUrl: 'views/feedbacks/feedbacks.html',
+                controller: 'feedbacksCtrl'
             }
         }
     })
@@ -270,21 +181,11 @@ angular.module('zaitoonFirst', [
     ***********************/
 
 
-    .state('main.app.feedbacks', {
-        url: '/feedbacks',
-        views: {
-            'main-view@main': {
-                templateUrl: 'views/pages/feedbacks.html',
-                controller: 'feedbacksCtrl'
-            }
-        }
-    })
-
     .state('main.app.overall', {
         url: '/overall',
         views: {
             'main-view@main': {
-                templateUrl: 'views/pages/overall.html',
+                templateUrl: 'views/summary/overall.html',
                 controller: 'overallCtrl'
             }
         }
@@ -294,7 +195,7 @@ angular.module('zaitoonFirst', [
         url: '/sales',
         views: {
             'main-view@main': {
-                templateUrl: 'views/pages/sales.html',
+                templateUrl: 'views/summary/sales.html',
                 controller: 'salesCtrl'
             }
         }
@@ -304,7 +205,7 @@ angular.module('zaitoonFirst', [
         url: '/accounts',
         views: {
             'main-view@main': {
-                templateUrl: 'views/pages/accounts.html',
+                templateUrl: 'views/summary/accounts.html',
                 controller: 'accountsCtrl'
             }
         }
@@ -314,7 +215,7 @@ angular.module('zaitoonFirst', [
         url: '/customers',
         views: {
             'main-view@main': {
-                templateUrl: 'views/pages/customers.html',
+                templateUrl: 'views/summary/customers.html',
                 controller: 'customersCtrl'
             }
         }
@@ -324,7 +225,7 @@ angular.module('zaitoonFirst', [
         url: '/staff',
         views: {
             'main-view@main': {
-                templateUrl: 'views/pages/staff.html',
+                templateUrl: 'views/summary/staff.html',
                 controller: 'staffCtrl'
             }
         }
@@ -334,7 +235,7 @@ angular.module('zaitoonFirst', [
         url: '/staffinfo',
         views: {
             'main-view@main': {
-                templateUrl: 'views/pages/staffinfo.html',
+                templateUrl: 'views/summary/staffinfo.html',
                 controller: 'staffInfoCtrl'
             }
         }

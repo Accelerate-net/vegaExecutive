@@ -1,7 +1,7 @@
 {
-    "name": "bazaar",
-    "version": "1.0.2",
-    "description": "bazaar: An Ionic Multi App Template",
+    "name": "vegaExecutive",
+    "version": "1.0.0",
+    "description": "Mobile App for the stakeholders of restaurants which are using Accelerate Vega POS",
     "dependencies": {
         "angular-chart.js": "^1.1.1",
         "async": "^1.4.0",
